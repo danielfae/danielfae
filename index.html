@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel | Lead Product Experience Designer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vellum-base: #f4f1ea;
+            --vellum-highlight: #ffffff;
+            --ink-deep: #1a1c1e;
+            --ink-faded: #4a4d52;
+            --etched-line: rgba(26, 28, 30, 0.15);
+            --copper-accent: #b87333;
+            --hazard-amber: #d4a017;
+            --grain-opacity: 0.06;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--vellum-base);
+            color: var(--ink-deep);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Vellum Texture Overlay */
+        .vellum-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: var(--grain-opacity);
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            mix-blend-mode: multiply;
+        }
+
+        /* Topographic Lines Background */
+        .topography-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.12;
+            background-image: url("data:image/svg+xml,%3Csvg width='1000' height='1000' viewBox='0 0 1000 1000' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 200 Q 250 150 500 200 T 1000 200' fill='none' stroke='%231a1c1e' stroke-width='1'/%3E%3Cpath d='M0 400 Q 250 350 500 400 T 1000 400' fill='none' stroke='%231a1c1e' stroke-width='1'/%3E%3Cpath d='M0 600 Q 250 550 500 600 T 1000 600' fill='none' stroke='%231a1c1e' stroke-width='1'/%3E%3Cpath d='M0 800 Q 250 750 500 800 T 1000 800' fill='none' stroke='%231a1c1e' stroke-width='1'/%3E%3Cpath d='M200 0 Q 150 250 200 500 T 200 1000' fill='none' stroke='%231a1c1e' stroke-width='0.5'/%3E%3C/svg%3E");
+            background-size: cover;
+            filter: contrast(120%);
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        /* Typography & Components */
+        .mono {
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.75rem;
+            color: var(--ink-faded);
+        }
+
+        header {
+            border-bottom: 0.5px solid var(--etched-line);
+            padding-bottom: 4rem;
+            margin-bottom: 4rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            align-items: end;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            max-width: 500px;
+            color: var(--ink-faded);
+        }
+
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+            margin-bottom: 8rem;
+        }
+
+        .manifesto {
+            grid-column: 1 / 8;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 0.5px solid var(--etched-line);
+            position: relative;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.03);
+            transition: transform 0.4s ease;
+        }
+
+        .manifesto:hover {
+            transform: translateY(-5px);
+        }
+
+        .manifesto::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 20px;
+            height: 20px;
+            border-top: 1px solid var(--ink-deep);
+            border-left: 1px solid var(--ink-deep);
+        }
+
+        .manifesto h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+        }
+
+        .manifesto p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-text {
+            color: var(--hazard-amber);
+            font-weight: 600;
+        }
+
+        .sidebar-data {
+            grid-column: 9 / 13;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .data-card {
+            padding: 1.5rem;
+            border-left: 3px solid var(--ink-deep);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .data-card h3 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .data-card p {
+            font-size: 0.85rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Modules Section */
+        .module-section {
+            margin-bottom: 8rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--ink-deep);
+            padding-bottom: 0.5rem;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .module-card {
+            background: var(--vellum-highlight);
+            padding: 2.5rem;
+            border: 0.5px solid var(--etched-line);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer;
+        }
+
+        .module-card:hover {
+            background: var(--ink-deep);
+            color: var(--vellum-base);
+        }
+
+        .module-card:hover .mono {
+            color: var(--hazard-amber);
+        }
+
+        .module-number {
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            font-size: 8rem;
+            font-weight: 800;
+            opacity: 0.05;
+        }
+
+        .module-card h4 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .module-card p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            z-index: 2;
+            position: relative;
+        }
+
+        /* Engagement List */
+        .engagement-list {
+            list-style: none;
+        }
+
+        .engagement-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 0;
+            border-bottom: 0.5px dashed var(--etched-line);
+            transition: padding-left 0.3s ease;
+        }
+
+        .engagement-item:hover {
+            padding-left: 1rem;
+            border-bottom-color: var(--ink-deep);
+        }
+
+        .engagement-item .date {
+            width: 150px;
+        }
+
+        .engagement-item .event {
+            flex-grow: 1;
+            font-weight: 600;
+        }
+
+        .engagement-item .topic {
+            width: 300px;
+            text-align: right;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        /* Tool Stack */
+        .tool-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .tool-tag {
+            padding: 0.4rem 1rem;
+            border: 0.5px solid var(--ink-deep);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 8rem;
+            padding: 4rem 0;
+            border-top: 0.5px solid var(--etched-line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .coordinates {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--ink-faded);
+        }
+
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animations */
+        @keyframes lineFlow {
+            0% { stroke-dashoffset: 1000; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        @media (max-width: 900px) {
+            header { grid-template-columns: 1fr; gap: 2rem; }
+            .philosophy-grid { grid-template-columns: 1fr; }
+            .manifesto { grid-column: 1 / -1; }
+            .sidebar-data { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; }
+            .module-grid { grid-template-columns: 1fr; }
+            .engagement-item { flex-direction: column; gap: 0.5rem; }
+            .engagement-item .topic { text-align: left; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="vellum-texture"></div>
+    <div class="topography-bg"></div>
+
+    <div class="container">
+        <header>
+            <div>
+                <p class="mono">Lead Product Experience Designer // Omny Security</p>
+                <h1 class="hero-title">DANIEL</h1>
+                <p class="tagline">Protecting critical infrastructure through high-stakes design at the intersection of OT, IT, and physical security.</p>
+            </div>
+            <div class="coordinates">
+                LOC: OSLO, NORWAY [59.9139° N, 10.7522° E]<br>
+                ALT: DESIGN LEADERSHIP
+            </div>
+        </header>
+
+        <main>
+            <section class="philosophy-grid">
+                <div class="manifesto scroll-reveal">
+                    <p class="mono" style="margin-bottom: 1rem; color: var(--hazard-amber);">Core Philosophy</p>
+                    <h2>Amplification <br><span style="font-weight: 300; font-style: italic;">over</span> Automation</h2>
+                    <p>AI should enhance human expertise rather than replace it. In high-stakes environments—where poor decisions lead to <strong>explosions, environmental disasters, or grid failures</strong>—human-in-the-loop is not a workaround, it's intrinsic architecture.</p>
+                    <p>I challenge the "automate everything" mentality, translating complex security data into the operational language of engineers who manage physical systems.</p>
+                </div>
+
+                <div class="sidebar-data scroll-reveal" style="transition-delay: 0.2s;">
+                    <div class="data-card">
+                        <h3>Background</h3>
+                        <p>Electronics Engineering + Interaction Design (NTNU) + Innovation Management (UiO). Studies at Harvard & MIT.</p>
+                    </div>
+                    <div class="data-card">
+                        <h3>Focus</h3>
+                        <p>Oil & Gas, Manufacturing, Utilities. Zero-error tolerance systems.</p>
+                    </div>
+                    <div class="data-card">
+                        <h3>Partnerships</h3>
+                        <p>Coached by Anton Sten on product strategy and organizational complexity.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="module-section scroll-reveal">
+                <div class="section-header">
+                    <h2 class="mono">Educational Framework</h2>
+                    <p class="mono">Designers Transitioning to Cyber</p>
+                </div>
+                <div class="module-grid">
+                    <div class="module-card">
+                        <div class="module-number">01</div>
+                        <p class="mono">Foundation</p>
+                        <h4>OT vs IT Context</h4>
+                        <p>Bridging the gap between software security and physical infrastructure production processes.</p>
+                    </div>
+                    <div class="module-card">
+                        <div class="module-number">02</div>
+                        <p class="mono">Strategy</p>
+                        <h4>Operational Language</h4>
+                        <p>Translating abstract threats into physical system impacts that OT engineers can act upon.</p>
+                    </div>
+                    <div class="module-card">
+                        <div class="module-number">03</div>
+                        <p class="mono">Execution</p>
+                        <h4>Zero-Error UX</h4>
+                        <p>Creating interfaces for mission-critical systems where cognitive load management is life-or-death.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="scroll-reveal">
+                <div class="section-header">
+                    <h2 class="mono">Speaking & Advocacy</h2>
+                    <p class="mono">Signature Talk: "The Human Factor in AI-Powered OT"</p>
+                </div>
+                <ul class="engagement-list">
+                    <li class="engagement-item">
+                        <span class="date mono">Event</span>
+                        <span class="event">Tekna AI & Cybersecurity</span>
+                        <span class="topic">Operationalizing AI for Engineers</span>
+                    </li>
+                    <li class="engagement-item">
+                        <span class="date mono">Event</span>
+                        <span class="event">RunwayFBU Founder Events</span>
+                        <span class="topic">The Designer's Role in High-Stakes Tech</span>
+                    </li>
+                    <li class="engagement-item">
+                        <span class="date mono">Event</span>
+                        <span class="event">ProductTank Riga</span>
+                        <span class="topic">Amplification vs Automation Architecture</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section style="margin-top: 8rem;" class="scroll-reveal">
+                <div class="section-header">
+                    <h2 class="mono">Technical Stack</h2>
+                    <p class="mono">Practitioner + Thought Leader</p>
+                </div>
+                <p style="max-width: 700px; margin-bottom: 2rem;">I leverage AI tools to demonstrate practical implementation while maintaining human-centered control. My workflow integrates high-fidelity prototyping with strategic research.</p>
+                <div class="tool-stack">
+                    <span class="tool-tag">ChatGPT (Research)</span>
+                    <span class="tool-tag">Google Nano Banana (JTBD)</span>
+                    <span class="tool-tag">Lovable (Prototyping)</span>
+                    <span class="tool-tag">Databutton</span>
+                    <span class="tool-tag">Claude (Figma MCP)</span>
+                    <span class="tool-tag">Linear Integration</span>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="mono">© 2024 Daniel // Omny Security</div>
+            <div class="mono" style="text-align: right;">
+                Refining Complex Systems<br>
+                Through Visual Storytelling
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Intersection Observer for Reveal Animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach((el) => observer.observe(el));
+
+        // Subtle Mouse Movement for Vellum Parallax
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 15;
+            const y = (e.clientY / window.innerHeight - 0.5) * 15;
+            document.querySelector('.topography-bg').style.transform = `translate(${x}px, ${y}px) scale(1.05)`;
+        });
+    </script>
+</body>
+</html>
