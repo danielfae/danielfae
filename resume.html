@@ -4,10 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daniel Fernando Arevalo Espinel - Resume</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        @page {
-            size: A4;
-            margin: 0;
+        :root {
+            --bg-base: #f4f1ea;
+            --bg-light: #ffffff;
+            --bg-dark: #ebe7de;
+            --text-primary: #1a1c1e;
+            --text-secondary: #4a4d52;
+            --text-muted: #6b6e73;
+            --accent-dark: #1a1c1e;
+            --accent-amber: #d4a017;
+            --line-color: rgba(26, 28, 30, 0.15);
+            --line-light: rgba(26, 28, 30, 0.1);
         }
 
         * {
@@ -17,39 +28,124 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #2c2c2c;
-            background: #f5f3ef;
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        /* Dot grid pattern background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                radial-gradient(circle, var(--line-light) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.5;
+        }
+
+        /* Decorative curved lines */
+        .deco-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .deco-lines::before {
+            content: '';
+            position: absolute;
+            top: 30%;
+            left: -10%;
+            width: 120%;
+            height: 400px;
+            border: 1px solid var(--line-light);
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        .deco-lines::after {
+            content: '';
+            position: absolute;
+            bottom: 20%;
+            right: -20%;
+            width: 80%;
+            height: 300px;
+            border: 1px solid var(--line-light);
+            border-radius: 50%;
+            opacity: 0.3;
         }
 
         .container {
-            max-width: 210mm;
+            max-width: 1000px;
             margin: 0 auto;
-            background: #ffffff;
-            min-height: 297mm;
+            padding: 3rem 2rem;
+            position: relative;
         }
 
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        .back-link::before {
+            content: '◀';
+            font-size: 0.6rem;
+        }
+
+        /* Main card */
+        .resume-card {
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-base) 100%);
+            position: relative;
+            padding: 0;
+        }
+
+        /* Top border decoration */
+        .top-border {
+            height: 3px;
+            background: var(--accent-dark);
+            margin-bottom: 0;
+        }
+
+        /* Header */
         .header {
-            background: #f5f3ef;
-            padding: 60px 60px 40px;
-            border-bottom: 1px solid #e0ddd7;
-        }
-
-        .header-content {
+            padding: 2.5rem 3rem;
             display: flex;
-            align-items: flex-start;
-            gap: 40px;
+            gap: 2rem;
+            align-items: center;
+            border-bottom: 1px solid var(--line-color);
         }
 
         .profile-photo {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            border-radius: 0;
             object-fit: cover;
-            flex-shrink: 0;
-            border: 3px solid #ffffff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            filter: grayscale(30%) contrast(1.1);
+            border: 2px solid var(--accent-dark);
         }
 
         .header-text {
@@ -57,508 +153,723 @@
         }
 
         .name {
-            font-size: 42px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-            color: #1a1a1a;
+            font-size: 2.4rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
 
         .tagline {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            max-width: 600px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 500px;
+            font-weight: 400;
         }
 
-        .contact-info {
+        .contact-row {
             display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            font-size: 13px;
-            color: #666;
-            margin-top: 20px;
+            gap: 2rem;
+            margin-top: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .contact-item a {
-            color: #666;
+        .contact-row a {
+            color: var(--text-secondary);
             text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
         }
 
-        .contact-item a:hover {
-            color: #1a1a1a;
+        .contact-row a:hover {
+            border-bottom-color: var(--text-secondary);
         }
 
-        .main-content {
-            padding: 50px 60px;
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid var(--line-color);
+            background: transparent;
+            padding: 0 3rem;
         }
 
+        .tab-btn {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 1.2rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            color: var(--text-primary);
+            background: var(--bg-dark);
+        }
+
+        .tab-btn::before {
+            content: '■';
+            font-size: 0.6rem;
+            margin-right: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+            color: var(--accent-amber);
+        }
+
+        .tab-btn.active::before {
+            opacity: 1;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            padding: 2.5rem 3rem;
+            min-height: 450px;
+        }
+
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section styling */
         .section {
-            margin-bottom: 45px;
-            page-break-inside: avoid;
+            margin-bottom: 2.5rem;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
         }
 
         .section-title {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 25px;
-            color: #1a1a1a;
-            border-bottom: 1px solid #e0ddd7;
-            padding-bottom: 10px;
-        }
-
-        .experience-item,
-        .education-item,
-        .activity-item {
-            margin-bottom: 30px;
-            page-break-inside: avoid;
-        }
-
-        .item-header {
-            margin-bottom: 8px;
-        }
-
-        .company-name,
-        .school-name {
-            font-size: 16px;
+            font-size: 0.8rem;
             font-weight: 600;
-            color: #1a1a1a;
-        }
-
-        .job-title,
-        .degree-title {
-            font-size: 14px;
-            font-style: italic;
-            color: #666;
-            margin-top: 4px;
-        }
-
-        .date-location {
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--line-light);
             display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: #999;
-            margin-top: 4px;
-            margin-bottom: 12px;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .description {
-            font-size: 13px;
-            line-height: 1.7;
-            color: #4a4a4a;
+        .section-title::before {
+            content: '—';
+            color: var(--accent-amber);
         }
 
-        .description ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .description li {
-            margin-bottom: 8px;
-            padding-left: 18px;
+        /* Experience items */
+        .item {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
             position: relative;
         }
 
-        .description li:before {
-            content: "•";
+        .item::before {
+            content: '■';
             position: absolute;
             left: 0;
-            color: #c9a961;
-            font-weight: bold;
+            top: 0.25rem;
+            font-size: 0.55rem;
+            color: var(--accent-amber);
         }
 
-        .awards-list,
-        .skills-text,
-        .languages-text,
-        .interests-text {
-            font-size: 13px;
-            line-height: 1.8;
-            color: #4a4a4a;
+        .item:last-child {
+            margin-bottom: 0;
         }
 
+        .item-company {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: 0.05em;
+        }
+
+        .item-title {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.2rem;
+            font-weight: 400;
+        }
+
+        .item-date {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin: 0.4rem 0 0.8rem;
+        }
+
+        .item-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .item-desc ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .item-desc li {
+            margin-bottom: 0.4rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .item-desc li::before {
+            content: '–';
+            position: absolute;
+            left: 0;
+            color: var(--accent-amber);
+        }
+
+        /* Skills styling */
+        .skill-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.05em;
+        }
+
+        .skill-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Awards list */
         .awards-list {
             list-style: none;
-            padding-left: 0;
         }
 
         .awards-list li {
-            margin-bottom: 6px;
-            padding-left: 18px;
-            position: relative;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--line-light);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
         }
 
-        .awards-list li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #c9a961;
-            font-weight: bold;
+        .awards-list li:last-child {
+            border-bottom: none;
         }
 
-        strong {
-            font-weight: 600;
-            color: #1a1a1a;
+        .awards-list li::before {
+            content: '■';
+            font-size: 0.55rem;
+            color: var(--accent-amber);
+            margin-right: 0.75rem;
+        }
+
+        .award-name {
+            color: var(--text-primary);
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .award-year {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Footer */
+        .resume-footer {
+            padding: 1rem 3rem;
+            border-top: 1px solid var(--line-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--bg-dark);
+        }
+
+        .resume-footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+        }
+
+        .resume-footer a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-hint {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-hint span {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .footer-hint .key {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--text-muted);
+            border-radius: 2px;
+            font-size: 0.65rem;
+        }
+
+        /* Bottom border */
+        .bottom-border {
+            height: 2px;
+            background: var(--accent-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem 1.5rem;
+            }
+
+            .tagline {
+                max-width: 100%;
+            }
+
+            .contact-row {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .tab-nav {
+                overflow-x: auto;
+                padding: 0 1rem;
+            }
+
+            .tab-btn {
+                padding: 1rem;
+                font-size: 0.75rem;
+                white-space: nowrap;
+            }
+
+            .tab-content {
+                padding: 1.5rem;
+            }
+
+            .name {
+                font-size: 1.6rem;
+                letter-spacing: 0.1em;
+            }
+
+            .awards-list li {
+                flex-direction: column;
+                gap: 0.25rem;
+                align-items: flex-start;
+            }
+
+            .resume-footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .footer-hint {
+                display: none;
+            }
         }
 
         @media print {
-            body {
-                background: white;
-            }
-
-            .container {
-                box-shadow: none;
-            }
-
-            .section {
-                page-break-inside: avoid;
-            }
+            .tab-nav { display: none; }
+            .tab-panel { display: block !important; }
+            .resume-card { box-shadow: none; }
+            .bg-pattern, .deco-lines { display: none; }
         }
     </style>
 </head>
 <body>
+    <div class="bg-pattern"></div>
+    <div class="deco-lines"></div>
+
     <div class="container">
+        <a href="index.html" class="back-link">Back to Portfolio</a>
+
+        <div class="resume-card">
+            <div class="top-border"></div>
+
         <div class="header">
-            <div class="header-content">
                 <img src="assets/DanitlPhotoContrast.png" alt="Daniel Arevalo" class="profile-photo">
                 <div class="header-text">
-                    <h1 class="name">DANIEL AREVALO</h1>
-                    <p class="tagline">Lead Product Experience Designer specializing in critical infrastructure security, bridging OT/IT environments through human-centered design at the intersection of operational technology and cybersecurity.</p>
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <span>📍</span>
+                    <h1 class="name">Daniel Arevalo</h1>
+                    <p class="tagline">Lead Product Experience Designer specializing in critical infrastructure security, bridging OT/IT environments through human-centered design.</p>
+                    <div class="contact-row">
                             <span>Oslo, Norway</span>
-                        </div>
-                        <div class="contact-item">
-                            <span>📧</span>
-                            <a href="mailto:danielfaeco@icloud.com">danielfaeco@icloud.com</a>
-                        </div>
-                        <div class="contact-item">
-                            <span>📱</span>
+                        <span><a href="mailto:danielfaeco@icloud.com">danielfaeco@icloud.com</a></span>
                             <span>+47 99 12 7001</span>
-                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="main-content">
-            <section class="section">
+            <nav class="tab-nav">
+                <button class="tab-btn active" data-tab="experience">Experience</button>
+                <button class="tab-btn" data-tab="education">Education</button>
+                <button class="tab-btn" data-tab="activities">Activities</button>
+                <button class="tab-btn" data-tab="skills">Skills</button>
+                <button class="tab-btn" data-tab="awards">Awards</button>
+            </nav>
+
+            <div class="tab-content">
+                <!-- Experience Tab -->
+                <div class="tab-panel active" id="experience">
+                    <div class="section">
                 <h2 class="section-title">Work Experience</h2>
 
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div class="company-name">Omny AS, Oslo, Norway</div>
-                        <div class="job-title">Lead Product Experience designer</div>
-                        <div class="date-location">
-                            <span>2024 - 2026</span>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Product experience designer of software securing critical infrastructure operations (energy, manufacturing, utilities) against cyber threats across operational technology environments.</li>
-                            <li>Established discovery-execution framework bridging Professional Services field insights with engineering roadmaps across 3 development teams, translating customer workflows into prioritized product requirements.</li>
-                            <li>Designed end-to-end user experiences for Asset Owner, IT/OT Engineers, CISO, and SOC Operator personas aligned with international security and compliance standards.</li>
-                            <li>Led product onboarding project through workflow mapping, UI design collaboration, and "ready-to-build" specification creation that reduced engineering clarification cycles.</li>
-                            <li>Facilitated cross-functional alignment between Customer Success, Professional Services, Tech Leads, and engineering teams while conducting user research sessions with critical infrastructure operators in European markets.</li>
+                        <div class="item">
+                            <div class="item-company">Omny AS</div>
+                            <div class="item-title">Lead Product Experience Designer</div>
+                            <div class="item-date">2024 – 2026 // Oslo, Norway</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Product experience designer of software securing critical infrastructure operations against cyber threats across OT environments.</li>
+                                    <li>Established discovery-execution framework bridging Professional Services field insights with engineering roadmaps.</li>
+                                    <li>Designed end-to-end user experiences for Asset Owner, IT/OT Engineers, CISO, and SOC Operator personas.</li>
+                                    <li>Led product onboarding project through workflow mapping and UI design collaboration.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div class="company-name">Forsta AS, Oslo, Norway</div>
-                        <div class="job-title">Lead UX designer</div>
-                        <div class="date-location">
-                            <span>2021 - 2024</span>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Forsta provides Customer Experience and Research Technology for some of the world's most ambitious organisations. Leading all UI and UX design efforts regarding the Reporting Vertical conformed by Dashboard Studio, Genius Text Analytics and Forsta Visualizations.</li>
-                            <li>My role requires designing mockups or prototypes, conducting user research and coordinating teams to implement solutions to increase ease of use, user engagement and customer satisfaction so businesses can capture, analyse and respond to customer and market feedback across multiple channels and sources in real-time.</li>
-                            <li>Working together with product managers to apply methodologies, implement processes and coordinate different teams with a strategy that aims to augment the impact of design on the business and the company's culture.</li>
+                        <div class="item">
+                            <div class="item-company">Forsta AS</div>
+                            <div class="item-title">Lead UX Designer</div>
+                            <div class="item-date">2021 – 2024 // Oslo, Norway</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Led all UI and UX design efforts for the Reporting Vertical: Dashboard Studio, Genius Text Analytics and Forsta Visualizations.</li>
+                                    <li>Designed mockups, prototypes, conducted user research and coordinated teams.</li>
+                                    <li>Collaborated with product managers to apply methodologies and implement processes.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div class="company-name">Confirmit AS, Oslo, Norway</div>
-                        <div class="job-title">Senior UX designer</div>
-                        <div class="date-location">
-                            <span>2019 - 2021</span>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Confirmit's industry-leading insight software and services help businesses listen to customers, markets and employees. In charge of UX/UI design for Dashboard Studio and Genius Text Analytics that facilitate companies to process large amounts of quantitate and qualitative unstructured data and take action to drive business growth.</li>
-                            <li>I also contribute to building a unified design system to increase the productivity and efficiency of the tasks that require cooperation within the design team while ensuring consistency by frontend developers.</li>
+                        <div class="item">
+                            <div class="item-company">Confirmit AS</div>
+                            <div class="item-title">Senior UX Designer</div>
+                            <div class="item-date">2019 – 2021 // Oslo, Norway</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>UX/UI design for Dashboard Studio and Genius Text Analytics.</li>
+                                    <li>Built unified design system to increase productivity and ensure frontend consistency.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div class="company-name">AW Initiative AS, Oslo, Norway</div>
-                        <div class="job-title">Co-founder, Product Designer</div>
-                        <div class="date-location">
-                            <span>2018 - 2019</span>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Product Design and Development Agency. Developing Ruvikas, an Enterprise Blockchain Platform that supports transparent and accountable social development by connecting Communities, Companies and Contractors (NGOs) via smart contracts on a proprietary Blockchain to facilitate and automate the certification, management, and auditing of data of companies carrying out CSR projects. Other projects: Heibots.com, Recman.no, Arcomex.co.</li>
+                        <div class="item">
+                            <div class="item-company">AW Initiative AS</div>
+                            <div class="item-title">Co-founder, Product Designer</div>
+                            <div class="item-date">2018 – 2019 // Oslo, Norway</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Developed Ruvikas, an Enterprise Blockchain Platform supporting transparent social development.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div class="company-name">Glimty AS, Oslo, Norway</div>
-                        <div class="job-title">Co-founder, CPO</div>
-                        <div class="date-location">
-                            <span>2015 - 2018</span>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Online Marketplace of Norwegian Brands that want to sell their products as gift alternatives via e-commerce or a chatbot on Facebook Messenger.</li>
+                        <div class="item">
+                            <div class="item-company">Glimty AS</div>
+                            <div class="item-title">Co-founder, CPO</div>
+                            <div class="item-date">2015 – 2018 // Oslo, Norway</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Online Marketplace of Norwegian Brands selling products as gift alternatives via e-commerce.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div class="company-name">The Ivy Faculty Consortium, Cambridge, Massachusetts</div>
-                        <div class="job-title">IT Development Consultant</div>
-                        <div class="date-location">
-                            <span>2014 - 2017</span>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Design and implement solutions that improves the communication channel between the client companies and the network of leading educators affiliated with Ivy League universities.</li>
+                        <div class="item">
+                            <div class="item-company">The Ivy Faculty Consortium</div>
+                            <div class="item-title">IT Development Consultant</div>
+                            <div class="item-date">2014 – 2017 // Cambridge, MA</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Designed and implemented communication solutions between client companies and Ivy League educators.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div class="company-name">Electrical, Electronic & Telecommunications Engineering School (E3T-UIS), Santander, Colombia</div>
-                        <div class="job-title">Automation Engineer</div>
-                        <div class="date-location">
-                            <span>2013 - 2014</span>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Develop a user interface to display and interact with the Building Automation System (BAS) to monitor information and provide remote access to the operational data of a green building.</li>
+                        <div class="item">
+                            <div class="item-company">E3T-UIS</div>
+                            <div class="item-title">Automation Engineer</div>
+                            <div class="item-date">2013 – 2014 // Santander, Colombia</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Developed UI for Building Automation System to monitor green building data.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div class="company-name">Electrical & Computer Engineering Department at Texas A&M University, College Station, USA</div>
-                        <div class="job-title">Research Assistant</div>
-                        <div class="date-location">
-                            <span>2012 - 2013</span>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Conduct collaborative research on VLSI circuit design and mixed-signal interfaces. Collaborate with the proper development of proposals and journal articles.</li>
+                        <div class="item">
+                            <div class="item-company">Texas A&M University</div>
+                            <div class="item-title">Research Assistant</div>
+                            <div class="item-date">2012 – 2013 // College Station, USA</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Collaborative research on VLSI circuit design and mixed-signal interfaces.</li>
                         </ul>
                     </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <h2 class="section-title">Education</h2>
-
-                <div class="education-item">
-                    <div class="item-header">
-                        <div class="school-name">Norwegian University of Science and Technology (NTNU), Gjøvik, Norway</div>
-                        <div class="degree-title">Master's Degree in Interaction Design</div>
-                        <div class="date-location">
-                            <span>2014-2018</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="education-item">
-                    <div class="item-header">
-                        <div class="school-name">University of Oslo (UiO), Oslo, Norway</div>
-                        <div class="degree-title">Master's Degree in Innovation and Entrepreneurship</div>
-                        <div class="date-location">
-                            <span>2015-2017</span>
+                <!-- Education Tab -->
+                <div class="tab-panel" id="education">
+                    <div class="section">
+                        <h2 class="section-title">Education</h2>
+
+                        <div class="item">
+                            <div class="item-company">Norwegian University of Science and Technology</div>
+                            <div class="item-title">Master's Degree in Interaction Design</div>
+                            <div class="item-date">2014 – 2018 // Gjøvik, Norway</div>
+                        </div>
+
+                        <div class="item">
+                            <div class="item-company">University of Oslo</div>
+                            <div class="item-title">Master's Degree in Innovation and Entrepreneurship</div>
+                            <div class="item-date">2015 – 2017 // Oslo, Norway</div>
+                </div>
+
+                        <div class="item">
+                            <div class="item-company">Harvard University Extension School</div>
+                            <div class="item-title">Instructional Design Studio, Creative Explorations in Screen-Based and Physical Computing</div>
+                            <div class="item-date">2013 – 2014 // Cambridge, MA</div>
+                </div>
+
+                        <div class="item">
+                            <div class="item-company">Universidad Industrial de Santander</div>
+                            <div class="item-title">Bachelor of Science in Electronic Engineering</div>
+                            <div class="item-date">2007 – 2013 // Bucaramanga, Colombia</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="education-item">
-                    <div class="item-header">
-                        <div class="school-name">Harvard University Extension School, Cambridge, Massachusetts</div>
-                        <div class="degree-title">Instructional Design Studio, Creative Explorations in Screen-Based and Physical Computing</div>
-                        <div class="date-location">
-                            <span>2013-2014</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="education-item">
-                    <div class="item-header">
-                        <div class="school-name">Universidad Industrial de Santander (UIS), Bucaramanga, Colombia</div>
-                        <div class="degree-title">Bachelor of Science in Electronic Engineering</div>
-                        <div class="date-location">
-                            <span>2007-2013</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
+                <!-- Activities Tab -->
+                <div class="tab-panel" id="activities">
+                    <div class="section">
                 <h2 class="section-title">Other Activities</h2>
 
-                <div class="activity-item">
-                    <div class="item-header">
-                        <div class="company-name">MITx Global Entrepreneurship Bootcamp, Cambridge, Massachusetts</div>
-                        <div class="job-title">Bootcamper</div>
-                        <div class="date-location">
-                            <span>2015</span>
+                        <div class="item">
+                            <div class="item-company">MITx Global Entrepreneurship Bootcamp</div>
+                            <div class="item-title">Bootcamper</div>
+                            <div class="item-date">2015 // Cambridge, MA</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Highly selective in-person training and intensive mentorship program at MIT for motivated entrepreneurs.</li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>The bootcamp is a talent reunion, in-person training and intensive mentorship program at MIT. This is a highly selective program for highly motivated entrepreneurs. Boot-campers are challenged to start a world-changing company.</li>
+
+                        <div class="item">
+                            <div class="item-company">Texas A&M University J. Wayne Stark Northeast Trip</div>
+                            <div class="item-title">Trip Director and Coordinator for Philadelphia</div>
+                            <div class="item-date">2012</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Coordinated campus tours and information sessions with prestigious business schools.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="activity-item">
-                    <div class="item-header">
-                        <div class="company-name">Texas A&M University J. Wayne Stark Northeast Trip, Memorial Student Center (MSC)</div>
-                        <div class="job-title">Trip Director and Coordinator for Philadelphia</div>
-                        <div class="date-location">
-                            <span>2012</span>
+                        <div class="item">
+                            <div class="item-company">Universidad de los Andes</div>
+                            <div class="item-title">Exchange Program for EE Students</div>
+                            <div class="item-date">2011 // Bogotá, Colombia</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Designed digital, analog and mixed signals systems. Implemented industrial instrumentation.</li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Working with nation's most outstanding and prestigious business schools and universities in Chicago, Boston, New York, and Philadelphia. Set up campus tours, information sessions, and class visits while overseeing travel from one school to another. Strengthening relations with contacts, universities and organisations after the trip was over.</li>
+
+                        <div class="item">
+                            <div class="item-company">Free Software University Community</div>
+                            <div class="item-title">Director and Event Coordinator</div>
+                            <div class="item-date">2010 // Bucaramanga, Colombia</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Promoted free software and hardware technologies. Coordinated the Free Software Culture Festival.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="activity-item">
-                    <div class="item-header">
-                        <div class="company-name">Universidad de los Andes, Bogotá, Colombia</div>
-                        <div class="job-title">Coveted Exchange Program for Electrical and Electronic Engineering Students</div>
-                        <div class="date-location">
-                            <span>2011</span>
+                        <div class="item">
+                            <div class="item-company">Electrical Energy Systems Research Group</div>
+                            <div class="item-title">Academic Researcher</div>
+                            <div class="item-date">2009 // UIS</div>
+                            <div class="item-desc">
+                                <ul>
+                                    <li>Research on building automation and process automation for electrical system efficiency.</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    <div class="description">
-                        <ul>
-                            <li>Design digital, analog and mixed signals systems. Implement industrial instrumentation and domotic installations and services. Work on several electronic engineering and design projects.</li>
+                </div>
+
+                <!-- Skills Tab -->
+                <div class="tab-panel" id="skills">
+                    <div class="section">
+                        <h2 class="section-title">Skills & Expertise</h2>
+
+                        <div class="skill-group">
+                            <div class="skill-label">Design & Research</div>
+                            <div class="skill-text">AI-native interaction design, prototyping with code, usability testing, synthesizing user research, physical computing, project management.</div>
+                        </div>
+
+                        <div class="skill-group">
+                            <div class="skill-label">Business</div>
+                            <div class="skill-text">Innovation management, strategic planning, entrepreneurship, leadership, negotiation, marketing.</div>
+                        </div>
+
+                        <div class="skill-group">
+                            <div class="skill-label">Tools</div>
+                            <div class="skill-text">Figma, Procreate, Webflow, Framer, Storybook, JIRA, Cursor, Claude Code, ChatGPT Codex, Gemini Nano Banana, Antigravity, Lovable, Github, N8N, Perplexity.</div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Languages</h2>
+                        <div class="skill-group">
+                            <div class="skill-text">
+                                <strong>English</strong> — Full Professional Proficiency<br>
+                                <strong>Spanish</strong> — Native<br>
+                                <strong>Norwegian</strong> — Intermediate<br>
+                                <strong>Japanese</strong> — Basic
+                </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Interests</h2>
+                        <div class="skill-text">Entrepreneurship and Innovation, Web Technologies, AI, Automation, Robotics, Machine Learning, Blockchain, Photography, Longboarding, Japanese Cuisine.</div>
+                    </div>
+                </div>
+
+                <!-- Awards Tab -->
+                <div class="tab-panel" id="awards">
+                    <div class="section">
+                        <h2 class="section-title">Awards & Recognition</h2>
+                        <ul class="awards-list">
+                            <li>
+                                <span class="award-name">Xynteo Exchange — Selected Startup</span>
+                                <span class="award-year">2018</span>
+                            </li>
+                            <li>
+                                <span class="award-name">HackN'Go — Most Social Potential Award</span>
+                                <span class="award-year">2018</span>
+                            </li>
+                            <li>
+                                <span class="award-name">Venture Cup — National Finalist, Business Model</span>
+                                <span class="award-year">2018</span>
+                            </li>
+                            <li>
+                                <span class="award-name">ChangemakerXchange Paris — Program Attendee</span>
+                                <span class="award-year">2018</span>
+                            </li>
+                            <li>
+                                <span class="award-name">Start-up Weekend Oslo — Best Idea Award</span>
+                                <span class="award-year">2018</span>
+                            </li>
+                            <li>
+                                <span class="award-name">Norwegian Research Council — STUD-ENT Grant</span>
+                                <span class="award-year">2017</span>
+                            </li>
+                            <li>
+                                <span class="award-name">Smart Mobility Hackathon — Winner</span>
+                                <span class="award-year">2016</span>
+                            </li>
+                            <li>
+                                <span class="award-name">Innovation Norway — Start-up Grant Phase 1</span>
+                                <span class="award-year">2015</span>
+                            </li>
+                            <li>
+                                <span class="award-name">Inven2Start Package — Funding for Entrepreneurs</span>
+                                <span class="award-year">2015</span>
+                            </li>
+                            <li>
+                                <span class="award-name">Harvard Extension School — Emanuel and Lilly Shinagel Prize</span>
+                                <span class="award-year">2014</span>
+                            </li>
+                            <li>
+                                <span class="award-name">Universidad Industrial de Santander — Distinguished GPA Scholarship</span>
+                                <span class="award-year">2010</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
-
-                <div class="activity-item">
-                    <div class="item-header">
-                        <div class="company-name">Free Software University Community (CUSOL), Bucaramanga, Colombia</div>
-                        <div class="job-title">Director and Event Coordinator</div>
-                        <div class="date-location">
-                            <span>2010</span>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Promote the use of free software and hardware technologies in developing countries. Logistic and Social Coordinator for the Free Software Culture Festival.</li>
-                        </ul>
-                    </div>
                 </div>
 
-                <div class="activity-item">
-                    <div class="item-header">
-                        <div class="company-name">Electrical and Electronic Engineering Student Center (UIS), Bucaramanga, Colombia</div>
-                        <div class="job-title">Academic Coordinator for E3T School</div>
-                        <div class="date-location">
-                            <span>2010</span>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Help in the Integration and Cooperation between teachers and Students. Design and Implement a database and virtual system for reservation and loan of books and equipment.</li>
-                        </ul>
-                    </div>
+            <div class="resume-footer">
+                <a href="assets/Daniel Arevalo CV Resume 2026.pdf" target="_blank">↓ Download PDF</a>
+                <span>© 2026 Daniel Arevalo</span>
+                <div class="footer-hint">
+                    <span><span class="key">↑↓</span> Select</span>
+                    <span><span class="key">◯</span> Confirm</span>
+                    <span><span class="key">✕</span> Back</span>
+                </div>
                 </div>
 
-                <div class="activity-item">
-                    <div class="item-header">
-                        <div class="company-name">Electrical Energy Systems Research Group (GISEL), Universidad Industrial de Santander</div>
-                        <div class="job-title">Academic Researcher</div>
-                        <div class="date-location">
-                            <span>2009</span>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <ul>
-                            <li>Research on building automation and process automation to implement an improvement in the efficiency of electrical and electronic systems.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <h2 class="section-title">Awards</h2>
-                <ul class="awards-list">
-                    <li><strong>Xynteo Exchange</strong>, selected startup 2018</li>
-                    <li><strong>HackN'Go</strong>, Award Most Social Potential 2018</li>
-                    <li><strong>Venture Cup 2018</strong>, National Finalist in Business Model competition</li>
-                    <li><strong>ChangemakerXchange Paris</strong>, Program attendee 2018</li>
-                    <li><strong>Start-up Weekend Oslo</strong>, Best Idea Award 2018</li>
-                    <li><strong>Norwegian Research Council</strong>, STUD-ENT Grant 2017</li>
-                    <li><strong>Smart Mobility Hackathon</strong>, Award Winner 2016</li>
-                    <li><strong>Start-up grant from Innovation Norway</strong>, Phase 1: Premarket Evaluation 2015</li>
-                    <li><strong>Inven2Start Package</strong>, Funding for entrepreneurs 2015</li>
-                    <li><strong>Harvard University Extension School</strong>, 1st place: Emanuel and Lilly Shinagel Prize Fund (Top Level) 2014</li>
-                    <li><strong>Universidad Industrial de Santander</strong>, Distinguished GPA Scholarship 2010</li>
-                </ul>
-            </section>
-
-            <section class="section">
-                <h2 class="section-title">Skills</h2>
-                <div class="skills-text">
-                    AI-native interaction designer, for prototyping with code, conducting usability testing and synthesizing large volumes of user research. Software development and physical computing, project management, marketing, innovation management, strategic planning, entrepreneurship, leadership and negotiation.<br><br>
-                    <strong>Tools:</strong> Figma, Procreate, Webflow, Framer, Storybook, JIRA, Cursor, Anthropic's Claude Code, OpenAI's ChatGPT Codex, Google's Gemini Nano Banana, Antigravity, Lovable, Github, N8N, Perplexity.
-                </div>
-            </section>
-
-            <section class="section">
-                <h2 class="section-title">Languages</h2>
-                <div class="languages-text">
-                    English (Full Professional Proficiency), Spanish (Native), Norwegian (Intermediate), Japanese (Basic).
-                </div>
-            </section>
-
-            <section class="section">
-                <h2 class="section-title">Interests</h2>
-                <div class="interests-text">
-                    Entrepreneurship and Innovation, Web Technologies, AI, Automation, Robotics, Machine Learning, Blockchain, Photography, Longboarding, and Japanese Cuisine.
-                </div>
-            </section>
+            <div class="bottom-border"></div>
         </div>
     </div>
+
+    <script>
+        // Tab functionality
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabPanels.forEach(p => p.classList.remove('active'));
+
+                btn.classList.add('active');
+                const tabId = btn.dataset.tab;
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
