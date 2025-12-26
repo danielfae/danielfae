@@ -189,7 +189,8 @@
 
         .tagline {
             font-size: 1.25rem;
-            max-width: 500px;
+            max-width: 900px;
+            margin-left:1rem;
             color: var(--ink-faded);
         }
 
@@ -274,9 +275,16 @@
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 3rem;
+            margin-bottom: 1.25rem;
             border-bottom: 1px solid var(--ink-deep);
             padding-bottom: 0.5rem;
+        }
+
+        .section-intro {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: var(--ink-faded);
+            margin-bottom: 2rem;
         }
 
         .module-grid {
@@ -392,6 +400,85 @@
             font-family: 'Space Mono', monospace;
             font-size: 0.7rem;
             color: var(--ink-faded);
+            position: absolute;
+            top: 4rem;
+            right: 2rem;
+            text-align: right;
+            max-width: 220px;
+        }
+
+        .coordinates .location-icon {
+            display: none;
+        }
+
+        .coordinates .resume-icon {
+            display: none;
+        }
+
+        .coordinates .coord-content {
+            display: block;
+        }
+
+        /* Mobile: Collapse coordinates to icon button */
+        @media (max-width: 1024px) {
+            .coordinates {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                max-width: none;
+                z-index: 100;
+                display: flex;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+
+            .coordinates .coord-content {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background: var(--vellum-highlight);
+                border: 1px solid var(--etched-line);
+                padding: 1rem;
+                margin-top: 0.5rem;
+                min-width: 200px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+
+            .coordinates:hover .coord-content,
+            .coordinates:focus-within .coord-content {
+                display: block;
+            }
+
+            .coordinates .location-icon,
+            .coordinates .resume-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                background: var(--vellum-highlight);
+                border: 1px solid var(--etched-line);
+                cursor: pointer;
+                transition: all 0.2s ease;
+                color: var(--ink-deep);
+            }
+
+            .coordinates .location-icon:hover,
+            .coordinates .resume-icon:hover {
+                background: var(--ink-deep);
+                color: var(--vellum-base);
+            }
+
+            .coordinates .location-icon svg,
+            .coordinates .resume-icon svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .coordinates .resume-icon {
+                text-decoration: none;
+            }
         }
 
         .scroll-reveal {
@@ -411,8 +498,11 @@
             100% { stroke-dashoffset: 0; }
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
             header { grid-template-columns: 1fr; gap: 2rem; }
+        }
+
+        @media (max-width: 900px) {
             .philosophy-grid { grid-template-columns: 1fr; }
             .manifesto { grid-column: 1 / -1; }
             .sidebar-data { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; }
@@ -436,12 +526,30 @@
             <div>
                 <p class="mono">Lead Product Experience Designer @ <a href="https://omnysecurity.com" target="_blank">OmnySecurity.com</a></p>
                 <h1 class="hero-title">DANIEL AREVALO</h1>
-                <p class="tagline">Protecting critical infrastructure through high-stakes design at the intersection of OT, IT, and physical security.</p>
+                <p class="tagline">Applying human-centered design and developing enterprise software that bridges OT/IT environments of critical industries with solutions that intersect AI, Data and CyberSecurity</p>
             </div>
             <div class="coordinates">
-                LOC: OSLO, NORWAY [59.9139° N, 10.7522° E]<br>
-                ALT: DESIGN LEADERSHIP<br>
-                <a href="resume.html" style="color: var(--hazard-amber); text-decoration: none; margin-top: 1rem; display: inline-block;">VIEW RESUME →</a>  
+                <a href="resume.html" class="resume-icon" aria-label="View Resume">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                </a>
+                <div class="location-icon" tabindex="0" aria-label="Location info">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </div>
+                <div class="coord-content">
+                    LOCATION: OSLO, NORWAY<br>
+                    [59.9139° N, 10.7522° E]<br>
+                    ORIGIN: CUCUTA, COLOMBIA<br>
+                    <a href="resume.html" style="color: var(--hazard-amber); text-decoration: none; margin-top: 1rem; display: inline-block;">VIEW RESUME →</a>
+                </div>
             </div>
         </header>
 
@@ -449,9 +557,9 @@
             <section class="philosophy-grid">
                 <div class="manifesto scroll-reveal">
                     <p class="mono" style="margin-bottom: 1rem; color: var(--hazard-amber);">Core Philosophy</p>
-                    <h2>Amplification <br><span style="font-weight: 300; font-style: italic;">over</span> Automation</h2>
-                    <p>AI should enhance human expertise rather than replace it. In high-stakes environments—where poor decisions lead to <strong>explosions, environmental disasters, or grid failures</strong>—human-in-the-loop is not a workaround, it's intrinsic architecture.</p>
-                    <p>I challenge the "automate everything" mentality, translating complex security data into the operational language of engineers who manage physical systems.</p>
+                    <h2>Human Amplification <br><span style="font-weight: 300; font-style: italic;">over </span>Full Automation</h2>
+                    <p>AI should enhance human expertise rather than replace it. In high-stakes environments where poor decisions can lead to <strong>explosions, environmental disasters, or expensive failures</strong>. Having a human-in-the-loop architexture is not a workaround, it's intrinsic part of Agentic architecture.</p>
+                    <p>Although people should embrace an AI-native mentality, I challenge the "automate everything" mentality, especially for translating complex security data into the operational language of engineers who manage physical systems. A human-centered design approach is key to success.</p>
                 </div>
 
                 <div class="sidebar-data scroll-reveal" style="transition-delay: 0.2s;">
@@ -460,12 +568,12 @@
                         <p>Electronics Engineering + Interaction Design (NTNU) + Innovation Management (UiO). Studies at Harvard & MIT.</p>
                     </div>
                     <div class="data-card">
-                        <h3>Focus</h3>
-                        <p>Oil & Gas, Manufacturing, Utilities. Zero-error tolerance systems.</p>
+                        <h3>Expertise</h3>
+                        <p>SaaS Enterprise Solutions for Oil & Gas, Maritime, Big Data, Manufacturing and Utilities industries. Focus on High Criticality, Enterprise Security, Zero-error tolerance systems.</p>
                     </div>
                     <div class="data-card">
-                        <h3>Partnerships</h3>
-                        <p>Coached by Anton Sten on product strategy and organizational complexity.</p>
+                        <h3>Coaching</h3>
+                        <p>Mentoring designers on product strategy and organizational complexity. Elevating their career growth and technical skills with the use of AI. Helping more product people enter the field of Cybersecurity.</p>
                     </div>
                 </div>
             </section>
@@ -475,24 +583,26 @@
                     <h2 class="mono">Educational Framework</h2>
                     <p class="mono">Designers Transitioning to Cyber</p>
                 </div>
+                <p class="section-intro">I enjoy designing functional, usable products that augment the human capacity with Agentic AI. My skills help teams learn, engage, and iterate until the best solutions are found.</p>
+
                 <div class="module-grid">
                     <div class="module-card">
                         <div class="module-number">01</div>
-                        <p class="mono">Foundation</p>
-                        <h4>OT vs IT Context</h4>
-                        <p>Bridging the gap between software security and physical infrastructure production processes.</p>
+                        <p class="mono">Strategy</p>
+                        <h4>User Research</h4>
+                        <p>Giving engaging presentations of data and insights from user research, I gather minds around good ideas and form concepts with the input of key stakeholders.</p>
                     </div>
                     <div class="module-card">
                         <div class="module-number">02</div>
-                        <p class="mono">Strategy</p>
-                        <h4>Operational Language</h4>
-                        <p>Translating abstract threats into physical system impacts that OT engineers can act upon.</p>
+                        <p class="mono">Discovery</p>
+                        <h4>Quick Prototyping</h4>
+                        <p>From research and rough sketches to pixels and motion, I collaborate with developers to take a concept or project from an idea to MVP prototypes ready for user testing.</p>
                     </div>
                     <div class="module-card">
                         <div class="module-number">03</div>
                         <p class="mono">Execution</p>
-                        <h4>Zero-Error UX</h4>
-                        <p>Creating interfaces for mission-critical systems where cognitive load management is life-or-death.</p>
+                        <h4>Iterative Development</h4>
+                        <p>Taking into account the end-user’s feedback, I develop concepts all the way to the release of mission-critical systems where cognitive load management is a matter of life-or-death.</p>
                     </div>
                 </div>
             </section>
@@ -500,7 +610,7 @@
             <section class="scroll-reveal">
                 <div class="section-header">
                     <h2 class="mono">Speaking & Advocacy</h2>
-                    <p class="mono">Signature Talk: "The Human Factor in AI-Powered OT"</p>
+                    <p class="mono">Signature Talk: "The Human Factor in AI-Powered IT/OT CyberSecurity</p>
                 </div>
                 <ul class="engagement-list">
                     <li class="engagement-item">
@@ -526,7 +636,7 @@
                     <h2 class="mono">Technical Stack</h2>
                     <p class="mono">Practitioner + Thought Leader</p>
                 </div>
-                <p style="max-width: 700px; margin-bottom: 2rem;">I leverage AI tools to demonstrate practical implementation while maintaining human-centered control. My workflow integrates high-fidelity prototyping with strategic research.</p>
+                <p class="section-intro">I leverage AI tools to demonstrate practical implementation while maintaining human-centered control. My workflow integrates high-fidelity prototyping with strategic research.</p>
                 <div class="tool-stack">
                     
                     <span class="tool-tag">OpenAI's ChatGPT & Codex (Research)</span>
@@ -540,10 +650,10 @@
         </main>
 
         <footer>
-            <div class="mono">© 2026 Daniel // Omny Security</div>
+            <div class="mono">© 2026 Daniel Arevalo @ Omny Security</div>
             <div class="mono" style="text-align: right;">
-                Refining Complex Systems<br>
-                Through Visual Storytelling
+                Building and Refining Complex Systems<br>
+                With AI and Human-Centered Design
             </div>
         </footer>
     </div>

@@ -261,6 +261,14 @@
         }
 
         /* Tab Navigation */
+        .tab-nav-wrapper {
+            position: relative;
+        }
+
+        .tab-nav-arrows {
+            display: none;
+        }
+
         .tab-nav {
             display: flex;
             border-bottom: 1px solid var(--line-color);
@@ -498,6 +506,43 @@
             color: var(--text-primary);
         }
 
+        .resume-footer .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .resume-footer .download-btn:hover {
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
+            color: var(--bg-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .resume-footer .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .footer-hint .back-link {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .footer-hint .back-link:hover {
+            color: var(--text-primary);
+        }
+
         .footer-hint {
             display: flex;
             gap: 1.5rem;
@@ -513,11 +558,14 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 18px;
+            min-width: 18px;
             height: 18px;
+            padding: 0 4px;
             border: 1px solid var(--text-muted);
             border-radius: 2px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
         /* Bottom border */
@@ -548,15 +596,82 @@
                 gap: 1rem;
             }
 
+            .tab-nav-wrapper {
+                position: relative;
+            }
+
             .tab-nav {
+                position: relative;
+                display: flex;
                 overflow-x: auto;
-                padding: 0 1rem;
+                scroll-snap-type: x mandatory;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding: 0;
+                gap: 0;
+            }
+
+            .tab-nav::-webkit-scrollbar {
+                display: none;
+            }
+
+            /* Arrow indicators */
+            .tab-nav-arrows {
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 1px;
+                pointer-events: none;
+                z-index: 3;
+            }
+
+            .tab-nav-arrows::before,
+            .tab-nav-arrows::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                width: 8px;
+                height: 8px;
+                border-style: solid;
+                border-color: var(--text-muted);
+                opacity: 0.6;
+                transition: opacity 0.2s;
+            }
+
+            .tab-nav-arrows::before {
+                left: 10px;
+                border-width: 0 0 2px 2px;
+                transform: translateY(-50%) rotate(45deg);
+            }
+
+            .tab-nav-arrows::after {
+                right: 10px;
+                border-width: 2px 2px 0 0;
+                transform: translateY(-50%) rotate(45deg);
             }
 
             .tab-btn {
-                padding: 1rem;
-                font-size: 0.75rem;
+                flex: 0 0 100%;
+                scroll-snap-align: center;
+                padding: 1.2rem 3rem;
+                font-size: 0.85rem;
                 white-space: nowrap;
+                text-align: center;
+                justify-content: center;
+                display: flex;
+                align-items: center;
+            }
+
+            .tab-btn::before {
+                display: none;
+            }
+
+            .tab-btn.active::before {
+                display: inline-block;
+                margin-right: 0.5rem;
             }
 
             .tab-content {
@@ -620,13 +735,16 @@
                 </div>
             </div>
 
-            <nav class="tab-nav">
-                <button class="tab-btn active" data-tab="experience">Experience</button>
-                <button class="tab-btn" data-tab="education">Education</button>
-                <button class="tab-btn" data-tab="activities">Activities</button>
-                <button class="tab-btn" data-tab="skills">Skills</button>
-                <button class="tab-btn" data-tab="awards">Awards</button>
-            </nav>
+            <div class="tab-nav-wrapper">
+                <div class="tab-nav-arrows"></div>
+                <nav class="tab-nav">
+                    <button class="tab-btn active" data-tab="experience">Experience</button>
+                    <button class="tab-btn" data-tab="education">Education</button>
+                    <button class="tab-btn" data-tab="activities">Activities</button>
+                    <button class="tab-btn" data-tab="skills">Skills</button>
+                    <button class="tab-btn" data-tab="awards">Awards</button>
+                </nav>
+            </div>
 
             <div class="tab-content">
                 <!-- Experience Tab -->
@@ -917,14 +1035,21 @@
                 </div>
 
             <div class="resume-footer">
-                <a href="assets/Daniel Arevalo CV Resume 2026.pdf" target="_blank">↓ Download PDF</a>
+                <a href="assets/Daniel Arevalo CV Resume 2026.pdf" target="_blank" class="download-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Download PDF
+                </a>
                 <span>© 2026 Daniel Arevalo</span>
                 <div class="footer-hint">
-                    <span><span class="key">↑↓</span> Select</span>
-                    <span><span class="key">◯</span> Confirm</span>
-                    <span><span class="key">✕</span> Back</span>
+                    <span><span class="key">Tab</span> Select</span>
+                    <span><span class="key">↵</span> Confirm</span>
+                    <a href="index.html" ><span class="key">←</span> Back</a>
                 </div>
-                </div>
+            </div>
 
             <div class="bottom-border"></div>
         </div>
