@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Fernando Arevalo Espinel - Resume</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c2c2c;
+            background: #f5f3ef;
+        }
+
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 297mm;
+        }
+
+        .header {
+            background: #f5f3ef;
+            padding: 60px 60px 40px;
+            border-bottom: 1px solid #e0ddd7;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 40px;
+        }
+
+        .profile-photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 3px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .name {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .tagline {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            max-width: 600px;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-item a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            color: #1a1a1a;
+        }
+
+        .main-content {
+            padding: 50px 60px;
+        }
+
+        .section {
+            margin-bottom: 45px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+            border-bottom: 1px solid #e0ddd7;
+            padding-bottom: 10px;
+        }
+
+        .experience-item,
+        .education-item,
+        .activity-item {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+
+        .item-header {
+            margin-bottom: 8px;
+        }
+
+        .company-name,
+        .school-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .job-title,
+        .degree-title {
+            font-size: 14px;
+            font-style: italic;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .date-location {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #999;
+            margin-top: 4px;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #4a4a4a;
+        }
+
+        .description ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .description li {
+            margin-bottom: 8px;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .description li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #c9a961;
+            font-weight: bold;
+        }
+
+        .awards-list,
+        .skills-text,
+        .languages-text,
+        .interests-text {
+            font-size: 13px;
+            line-height: 1.8;
+            color: #4a4a4a;
+        }
+
+        .awards-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .awards-list li {
+            margin-bottom: 6px;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .awards-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #c9a961;
+            font-weight: bold;
+        }
+
+        strong {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <img src="assets/DanitlPhotoContrast.png" alt="Daniel Arevalo" class="profile-photo">
+                <div class="header-text">
+                    <h1 class="name">DANIEL AREVALO</h1>
+                    <p class="tagline">Lead Product Experience Designer specializing in critical infrastructure security, bridging OT/IT environments through human-centered design at the intersection of operational technology and cybersecurity.</p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span>📍</span>
+                            <span>Oslo, Norway</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>📧</span>
+                            <a href="mailto:danielfaeco@icloud.com">danielfaeco@icloud.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <span>📱</span>
+                            <span>+47 99 12 7001</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <section class="section">
+                <h2 class="section-title">Work Experience</h2>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="company-name">Omny AS, Oslo, Norway</div>
+                        <div class="job-title">Lead Product Experience designer</div>
+                        <div class="date-location">
+                            <span>2024 - 2026</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Product experience designer of software securing critical infrastructure operations (energy, manufacturing, utilities) against cyber threats across operational technology environments.</li>
+                            <li>Established discovery-execution framework bridging Professional Services field insights with engineering roadmaps across 3 development teams, translating customer workflows into prioritized product requirements.</li>
+                            <li>Designed end-to-end user experiences for Asset Owner, IT/OT Engineers, CISO, and SOC Operator personas aligned with international security and compliance standards.</li>
+                            <li>Led product onboarding project through workflow mapping, UI design collaboration, and "ready-to-build" specification creation that reduced engineering clarification cycles.</li>
+                            <li>Facilitated cross-functional alignment between Customer Success, Professional Services, Tech Leads, and engineering teams while conducting user research sessions with critical infrastructure operators in European markets.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="company-name">Forsta AS, Oslo, Norway</div>
+                        <div class="job-title">Lead UX designer</div>
+                        <div class="date-location">
+                            <span>2021 - 2024</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Forsta provides Customer Experience and Research Technology for some of the world's most ambitious organisations. Leading all UI and UX design efforts regarding the Reporting Vertical conformed by Dashboard Studio, Genius Text Analytics and Forsta Visualizations.</li>
+                            <li>My role requires designing mockups or prototypes, conducting user research and coordinating teams to implement solutions to increase ease of use, user engagement and customer satisfaction so businesses can capture, analyse and respond to customer and market feedback across multiple channels and sources in real-time.</li>
+                            <li>Working together with product managers to apply methodologies, implement processes and coordinate different teams with a strategy that aims to augment the impact of design on the business and the company's culture.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="company-name">Confirmit AS, Oslo, Norway</div>
+                        <div class="job-title">Senior UX designer</div>
+                        <div class="date-location">
+                            <span>2019 - 2021</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Confirmit's industry-leading insight software and services help businesses listen to customers, markets and employees. In charge of UX/UI design for Dashboard Studio and Genius Text Analytics that facilitate companies to process large amounts of quantitate and qualitative unstructured data and take action to drive business growth.</li>
+                            <li>I also contribute to building a unified design system to increase the productivity and efficiency of the tasks that require cooperation within the design team while ensuring consistency by frontend developers.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="company-name">AW Initiative AS, Oslo, Norway</div>
+                        <div class="job-title">Co-founder, Product Designer</div>
+                        <div class="date-location">
+                            <span>2018 - 2019</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Product Design and Development Agency. Developing Ruvikas, an Enterprise Blockchain Platform that supports transparent and accountable social development by connecting Communities, Companies and Contractors (NGOs) via smart contracts on a proprietary Blockchain to facilitate and automate the certification, management, and auditing of data of companies carrying out CSR projects. Other projects: Heibots.com, Recman.no, Arcomex.co.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="company-name">Glimty AS, Oslo, Norway</div>
+                        <div class="job-title">Co-founder, CPO</div>
+                        <div class="date-location">
+                            <span>2015 - 2018</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Online Marketplace of Norwegian Brands that want to sell their products as gift alternatives via e-commerce or a chatbot on Facebook Messenger.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="company-name">The Ivy Faculty Consortium, Cambridge, Massachusetts</div>
+                        <div class="job-title">IT Development Consultant</div>
+                        <div class="date-location">
+                            <span>2014 - 2017</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Design and implement solutions that improves the communication channel between the client companies and the network of leading educators affiliated with Ivy League universities.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="company-name">Electrical, Electronic & Telecommunications Engineering School (E3T-UIS), Santander, Colombia</div>
+                        <div class="job-title">Automation Engineer</div>
+                        <div class="date-location">
+                            <span>2013 - 2014</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Develop a user interface to display and interact with the Building Automation System (BAS) to monitor information and provide remote access to the operational data of a green building.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="company-name">Electrical & Computer Engineering Department at Texas A&M University, College Station, USA</div>
+                        <div class="job-title">Research Assistant</div>
+                        <div class="date-location">
+                            <span>2012 - 2013</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Conduct collaborative research on VLSI circuit design and mixed-signal interfaces. Collaborate with the proper development of proposals and journal articles.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Education</h2>
+
+                <div class="education-item">
+                    <div class="item-header">
+                        <div class="school-name">Norwegian University of Science and Technology (NTNU), Gjøvik, Norway</div>
+                        <div class="degree-title">Master's Degree in Interaction Design</div>
+                        <div class="date-location">
+                            <span>2014-2018</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="education-item">
+                    <div class="item-header">
+                        <div class="school-name">University of Oslo (UiO), Oslo, Norway</div>
+                        <div class="degree-title">Master's Degree in Innovation and Entrepreneurship</div>
+                        <div class="date-location">
+                            <span>2015-2017</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="education-item">
+                    <div class="item-header">
+                        <div class="school-name">Harvard University Extension School, Cambridge, Massachusetts</div>
+                        <div class="degree-title">Instructional Design Studio, Creative Explorations in Screen-Based and Physical Computing</div>
+                        <div class="date-location">
+                            <span>2013-2014</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="education-item">
+                    <div class="item-header">
+                        <div class="school-name">Universidad Industrial de Santander (UIS), Bucaramanga, Colombia</div>
+                        <div class="degree-title">Bachelor of Science in Electronic Engineering</div>
+                        <div class="date-location">
+                            <span>2007-2013</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Other Activities</h2>
+
+                <div class="activity-item">
+                    <div class="item-header">
+                        <div class="company-name">MITx Global Entrepreneurship Bootcamp, Cambridge, Massachusetts</div>
+                        <div class="job-title">Bootcamper</div>
+                        <div class="date-location">
+                            <span>2015</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>The bootcamp is a talent reunion, in-person training and intensive mentorship program at MIT. This is a highly selective program for highly motivated entrepreneurs. Boot-campers are challenged to start a world-changing company.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="item-header">
+                        <div class="company-name">Texas A&M University J. Wayne Stark Northeast Trip, Memorial Student Center (MSC)</div>
+                        <div class="job-title">Trip Director and Coordinator for Philadelphia</div>
+                        <div class="date-location">
+                            <span>2012</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Working with nation's most outstanding and prestigious business schools and universities in Chicago, Boston, New York, and Philadelphia. Set up campus tours, information sessions, and class visits while overseeing travel from one school to another. Strengthening relations with contacts, universities and organisations after the trip was over.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="item-header">
+                        <div class="company-name">Universidad de los Andes, Bogotá, Colombia</div>
+                        <div class="job-title">Coveted Exchange Program for Electrical and Electronic Engineering Students</div>
+                        <div class="date-location">
+                            <span>2011</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Design digital, analog and mixed signals systems. Implement industrial instrumentation and domotic installations and services. Work on several electronic engineering and design projects.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="item-header">
+                        <div class="company-name">Free Software University Community (CUSOL), Bucaramanga, Colombia</div>
+                        <div class="job-title">Director and Event Coordinator</div>
+                        <div class="date-location">
+                            <span>2010</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Promote the use of free software and hardware technologies in developing countries. Logistic and Social Coordinator for the Free Software Culture Festival.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="item-header">
+                        <div class="company-name">Electrical and Electronic Engineering Student Center (UIS), Bucaramanga, Colombia</div>
+                        <div class="job-title">Academic Coordinator for E3T School</div>
+                        <div class="date-location">
+                            <span>2010</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Help in the Integration and Cooperation between teachers and Students. Design and Implement a database and virtual system for reservation and loan of books and equipment.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="item-header">
+                        <div class="company-name">Electrical Energy Systems Research Group (GISEL), Universidad Industrial de Santander</div>
+                        <div class="job-title">Academic Researcher</div>
+                        <div class="date-location">
+                            <span>2009</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <ul>
+                            <li>Research on building automation and process automation to implement an improvement in the efficiency of electrical and electronic systems.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Awards</h2>
+                <ul class="awards-list">
+                    <li><strong>Xynteo Exchange</strong>, selected startup 2018</li>
+                    <li><strong>HackN'Go</strong>, Award Most Social Potential 2018</li>
+                    <li><strong>Venture Cup 2018</strong>, National Finalist in Business Model competition</li>
+                    <li><strong>ChangemakerXchange Paris</strong>, Program attendee 2018</li>
+                    <li><strong>Start-up Weekend Oslo</strong>, Best Idea Award 2018</li>
+                    <li><strong>Norwegian Research Council</strong>, STUD-ENT Grant 2017</li>
+                    <li><strong>Smart Mobility Hackathon</strong>, Award Winner 2016</li>
+                    <li><strong>Start-up grant from Innovation Norway</strong>, Phase 1: Premarket Evaluation 2015</li>
+                    <li><strong>Inven2Start Package</strong>, Funding for entrepreneurs 2015</li>
+                    <li><strong>Harvard University Extension School</strong>, 1st place: Emanuel and Lilly Shinagel Prize Fund (Top Level) 2014</li>
+                    <li><strong>Universidad Industrial de Santander</strong>, Distinguished GPA Scholarship 2010</li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Skills</h2>
+                <div class="skills-text">
+                    AI-native interaction designer, for prototyping with code, conducting usability testing and synthesizing large volumes of user research. Software development and physical computing, project management, marketing, innovation management, strategic planning, entrepreneurship, leadership and negotiation.<br><br>
+                    <strong>Tools:</strong> Figma, Procreate, Webflow, Framer, Storybook, JIRA, Cursor, Anthropic's Claude Code, OpenAI's ChatGPT Codex, Google's Gemini Nano Banana, Antigravity, Lovable, Github, N8N, Perplexity.
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Languages</h2>
+                <div class="languages-text">
+                    English (Full Professional Proficiency), Spanish (Native), Norwegian (Intermediate), Japanese (Basic).
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Interests</h2>
+                <div class="interests-text">
+                    Entrepreneurship and Innovation, Web Technologies, AI, Automation, Robotics, Machine Learning, Blockchain, Photography, Longboarding, and Japanese Cuisine.
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

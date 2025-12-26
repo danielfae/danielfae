@@ -38,26 +38,34 @@ This portfolio showcases expertise in designing critical infrastructure security
 
 ## Running Locally
 
+> **Important**: Opening HTML files directly from Finder/Explorer (`file://` protocol) can cause navigation issues where links open in a different browser. Always use a local development server for proper functionality.
+
 ### Quick Start
 
 1. Clone the repository
-2. Navigate to the project directory
+2. Navigate to the project directory:
+   ```bash
+   cd /path/to/danielfae
+   ```
 3. Start a local web server:
-
-```bash
-python3 -m http.server 8000
-```
-
+   ```bash
+   python3 -m http.server 8000
+   ```
 4. Open your browser to `http://localhost:8000`
 
 ### Alternative Methods
 
-Using Node.js:
+**VS Code / Cursor Live Server Extension** (Recommended for development):
+1. Install the "Live Server" extension
+2. Right-click `index.html` → "Open with Live Server"
+3. The site will auto-reload when you make changes
+
+**Using Node.js:**
 ```bash
 npx serve
 ```
 
-Using PHP:
+**Using PHP:**
 ```bash
 php -S localhost:8000
 ```
@@ -66,8 +74,13 @@ php -S localhost:8000
 
 ```
 .
-├── index.html          # Main portfolio page (single-file application)
-└── README.md          # Project documentation
+├── index.html          # Main portfolio landing page
+├── resume.html         # Detailed resume/CV page
+├── README.md           # Project documentation
+├── SITEMAP.md          # Site architecture documentation
+└── assets/
+    ├── Daniel Arevalo CV Resume 2026.pdf   # Downloadable PDF resume
+    └── DanitlPhotoContrast.png             # Profile photo
 ```
 
 ## Browser Support
