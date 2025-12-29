@@ -184,13 +184,13 @@
             font-weight: 800;
             line-height: 0.9;
             letter-spacing: -0.04em;
+            margin-top: 1.5rem;
             margin-bottom: 1rem;
         }
 
         .tagline {
             font-size: 1.25rem;
             max-width: 900px;
-            margin-left:1rem;
             color: var(--ink-faded);
         }
 
@@ -498,6 +498,15 @@
             100% { stroke-dashoffset: 0; }
         }
 
+        @media (max-width: 1200px) {
+            .hero-title {
+                width: 100%;
+                max-width: 100vw;
+                white-space: nowrap;
+                font-size: clamp(2.5rem, 7vw, 5rem);
+            }
+        }
+
         @media (max-width: 1024px) {
             header { grid-template-columns: 1fr; gap: 2rem; }
         }
@@ -526,7 +535,7 @@
             <div>
                 <p class="mono">Lead Product Experience Designer @ <a href="https://omnysecurity.com" target="_blank">OmnySecurity.com</a></p>
                 <h1 class="hero-title">DANIEL AREVALO</h1>
-                <p class="tagline">Applying human-centered design and developing enterprise software that bridges OT/IT environments of critical industries with solutions that intersect AI, Data and CyberSecurity</p>
+                <p class="tagline">Applying human-centered design to develop enterprise software that intersects Artificial Intelligence, Data and CyberSecurity for OT/IT environments in critical infrastructure.</p>
             </div>
             <div class="coordinates">
                 <a href="resume.html" class="resume-icon" aria-label="View Resume">
@@ -580,8 +589,8 @@
 
             <section class="module-section scroll-reveal">
                 <div class="section-header">
-                    <h2 class="mono">Educational Framework</h2>
-                    <p class="mono">Designers Transitioning to Cyber</p>
+                    <h2 class="mono">Design Process</h2>
+                    <p class="mono">For Enterprise Cybersecurity Solutions</p>
                 </div>
                 <p class="section-intro">I enjoy designing functional, usable products that augment the human capacity with Agentic AI. My skills help teams learn, engage, and iterate until the best solutions are found.</p>
 
