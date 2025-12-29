@@ -370,20 +370,170 @@
         }
 
         /* Tool Stack */
-        .tool-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 2rem;
+        .tool-section {
+            margin-top: 2.5rem;
         }
 
-        .tool-tag {
-            padding: 0.4rem 1rem;
-            border: 0.5px solid var(--ink-deep);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            background: rgba(255,255,255,0.5);
-            backdrop-filter: blur(5px);
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--etched-line);
+        }
+
+        .filter-btn {
+            padding: 0.65rem 1.25rem;
+            border: 1px solid var(--ink-deep);
+            border-right: none;
+            background: var(--vellum-highlight);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            color: var(--ink-deep);
+        }
+
+        .filter-btn:last-child {
+            border-right: 1px solid var(--ink-deep);
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -1px;
+            height: 3px;
+            background: transparent;
+            transition: background 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(26, 28, 30, 0.08);
+        }
+
+        .filter-btn.active {
+            background: var(--ink-deep);
+            color: var(--vellum-base);
+            font-weight: 700;
+        }
+
+        .filter-btn.active::before {
+            background: var(--hazard-amber);
+        }
+
+        .filter-btn[data-filter="all"].active {
+            background: var(--copper-accent);
+        }
+
+        .filter-btn[data-filter="all"].active::before {
+            background: var(--ink-deep);
+        }
+
+        .tool-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .tool-card {
+            padding: 1.5rem;
+            background: var(--vellum-highlight);
+            border: 0.5px solid var(--etched-line);
+            position: relative;
+            transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .tool-card.hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+            position: absolute;
+            visibility: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .tool-card:hover::before {
+            width: 6px;
+        }
+
+        .tool-card[data-category="research"]::before { background: #4a90d9; }
+        .tool-card[data-category="strategy"]::before { background: #d4a017; }
+        .tool-card[data-category="development"]::before { background: #7cb342; }
+        .tool-card[data-category="prototyping"]::before { background: #ab47bc; }
+        .tool-card[data-category="editors"]::before { background: #ff7043; }
+        .tool-card[data-category="integrations"]::before { background: #26a69a; }
+
+        .tool-card-category {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2px;
+        }
+
+        .tool-card[data-category="research"] .tool-card-category { background: rgba(74, 144, 217, 0.15); color: #4a90d9; }
+        .tool-card[data-category="strategy"] .tool-card-category { background: rgba(212, 160, 23, 0.15); color: #b8860b; }
+        .tool-card[data-category="development"] .tool-card-category { background: rgba(124, 179, 66, 0.15); color: #558b2f; }
+        .tool-card[data-category="prototyping"] .tool-card-category { background: rgba(171, 71, 188, 0.15); color: #7b1fa2; }
+        .tool-card[data-category="editors"] .tool-card-category { background: rgba(255, 112, 67, 0.15); color: #e64a19; }
+        .tool-card[data-category="integrations"] .tool-card-category { background: rgba(38, 166, 154, 0.15); color: #00897b; }
+
+        .tool-card-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .tool-card-desc {
+            font-size: 0.85rem;
+            color: var(--ink-faded);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .filter-controls {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .filter-btn {
+                border: 1px solid var(--ink-deep);
+                padding: 0.5rem 0.85rem;
+                font-size: 0.6rem;
+            }
+            .filter-btn:last-child {
+                border-right: 1px solid var(--ink-deep);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .tool-stack {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Footer */
@@ -645,16 +795,54 @@
                     <h2 class="mono">Technical Stack</h2>
                     <p class="mono">Practitioner + Thought Leader</p>
                 </div>
-                <p class="section-intro">I leverage AI tools to demonstrate practical implementation while maintaining human-centered control. My workflow integrates high-fidelity prototyping with strategic research.</p>
-                <div class="tool-stack">
+                <p class="section-intro">My workflow integrates high-fidelity prototyping with strategic research. I leverage AI tools to facilitate practical implementation while maintaining human-centered control.</p>
+                
+                <div class="tool-section">
+                    <div class="filter-controls">
+                        <button class="filter-btn active" data-filter="all">All Tools</button>
+                        <button class="filter-btn" data-filter="research">Research</button>
+                        <button class="filter-btn" data-filter="strategy">Strategy</button>
+                        <button class="filter-btn" data-filter="development">Development</button>
+                        <button class="filter-btn" data-filter="prototyping">Prototyping</button>
+                        <button class="filter-btn" data-filter="editors">Code Editors</button>
+                        <button class="filter-btn" data-filter="integrations">Integrations</button>
+                    </div>
                     
-                    <span class="tool-tag">OpenAI's ChatGPT & Codex (Research)</span>
-                    <span class="tool-tag">Google's Gemini & Nano Banana (Strategy & JTBD)</span>
-                    <span class="tool-tag">Antropic's Claude Code (Development)</span>
-                    <span class="tool-tag">Databutton/Riff and Lovable (Prototyping)</span>
-                    <span class="tool-tag">Cursor and Antigravity(Code Editors)</span>
-                    <span class="tool-tag">Figma and Linear MCPs (Integrations)</span>
+                    <div class="tool-stack">
+                        <div class="tool-card" data-category="research">
+                            <span class="tool-card-category">Research</span>
+                            <div class="tool-card-name">OpenAI's ChatGPT & Codex</div>
+                            <p class="tool-card-desc">Deep research synthesis, literature review, and knowledge extraction for complex domains.</p>
+                        </div>
+                        <div class="tool-card" data-category="strategy">
+                            <span class="tool-card-category">Strategy & JTBD</span>
+                            <div class="tool-card-name">Google's Gemini & NotebookLM</div>
+                            <p class="tool-card-desc">Strategic planning, jobs-to-be-done analysis, and multi-modal reasoning.</p>
+                        </div>
+                        <div class="tool-card" data-category="development">
+                            <span class="tool-card-category">Development</span>
+                            <div class="tool-card-name">Anthropic's Claude Code</div>
+                            <p class="tool-card-desc">Code generation, architectural decisions, and technical documentation.</p>
+                        </div>
+                        <div class="tool-card" data-category="prototyping">
+                            <span class="tool-card-category">Prototyping</span>
+                            <div class="tool-card-name">Databutton, Riff & Lovable</div>
+                            <p class="tool-card-desc">Rapid MVP creation and high-fidelity interactive prototypes for user testing.</p>
+                        </div>
+                        <div class="tool-card" data-category="editors">
+                            <span class="tool-card-category">Code Editors</span>
+                            <div class="tool-card-name">Cursor & Antigravity</div>
+                            <p class="tool-card-desc">AI-augmented development environments for accelerated coding workflows.</p>
+                        </div>
+                        <div class="tool-card" data-category="integrations">
+                            <span class="tool-card-category">Integrations</span>
+                            <div class="tool-card-name">Figma & Linear MCPs</div>
+                            <p class="tool-card-desc">Design-to-code pipelines and project management integrations via Model Context Protocol.</p>
+                        </div>
+                    </div>
                 </div>
+                
+                <p class="section-intro" style="margin-top: 2.5rem;">I use AI to accelerate the learning loops that connect what we build to the impact it has on customers and the business. Research synthesis, assumption testing, and rapid prototyping.</p>
             </section>
         </main>
 
@@ -696,6 +884,28 @@
             
             // Circuit nodes have subtle movement
             document.querySelector('.circuit-nodes').style.transform = `translate(${x * 5}px, ${y * 5}px)`;
+        });
+
+        // Tool Stack Filter Functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const toolCards = document.querySelectorAll('.tool-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+
+                toolCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
         });
     </script>
 </body>
