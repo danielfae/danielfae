@@ -1,119 +1,28 @@
-# Daniel's Portfolio Website
+# Hi, I'm Daniel Arevalo 👋
 
-A professional portfolio website for a Lead Product Experience Designer specializing in high-stakes cybersecurity and operational technology (OT) systems.
+**Lead Product Experience Designer** at [Omny Security](https://omnysecurity.com)
 
-## Overview
+I design enterprise software for critical infrastructure — where AI, Data, and Cybersecurity intersect OT/IT environments.
 
-This portfolio showcases expertise in designing critical infrastructure security solutions at the intersection of OT, IT, and physical security. The site emphasizes a core philosophy of "Amplification over Automation" - using AI to enhance human expertise rather than replace it.
+## What I Do
 
-## Features
+🔐 **Cybersecurity UX** — Designing human-centered interfaces for high-stakes security systems  
+🤖 **AI + Human Collaboration** — Advocating for amplification over full automation  
+🏭 **Critical Infrastructure** — Oil & Gas, Maritime, Manufacturing, Utilities  
+🎤 **Speaking** — Sharing insights on the human factor in AI-powered security
 
-- **Vellum-Inspired Design**: Sophisticated aesthetic with grain texture overlay and topographic background
-- **Interactive Animations**:
-  - Scroll reveal animations for sections
-  - Mouse-tracking parallax effects
-  - Smooth hover transitions on cards and elements
-- **Responsive Layout**: Fully mobile-responsive design that adapts to all screen sizes
-- **Key Sections**:
-  - Core Philosophy & Manifesto
-  - Educational Framework for designers transitioning to cybersecurity
-  - Speaking & Advocacy engagements
-  - Technical Stack showcase
+## Philosophy
 
-## Design Highlights
+> *"AI should enhance human expertise, not replace it."*
 
-### Visual Elements
-- Custom CSS variables for easy theming
-- Google Fonts integration (Outfit & Space Mono)
-- Topographic line patterns with SVG backgrounds
-- Grain texture overlay for tactile feel
-- Copper and amber accent colors for emphasis
+In environments where poor decisions lead to explosions, disasters, or expensive failures — having a human-in-the-loop architecture isn't a workaround, it's essential.
 
-### Technical Implementation
-- Pure HTML/CSS/JavaScript (no frameworks required)
-- Intersection Observer API for scroll animations
-- CSS Grid and Flexbox for responsive layouts
-- CSS custom properties for maintainable theming
-- Backdrop filters for glass morphism effects
+## Connect
 
-## Running Locally
+- 🌐 [Portfolio](https://danielfae.github.io/danielfae)
+- 🐦 [Twitter/X](https://x.com/danielfae)
+- 📍 Oslo, Norway
 
-> **Important**: Opening HTML files directly from Finder/Explorer (`file://` protocol) can cause navigation issues where links open in a different browser. Always use a local development server for proper functionality.
+---
 
-### Quick Start
-
-1. Clone the repository
-2. Navigate to the project directory:
-   ```bash
-   cd /path/to/danielfae
-   ```
-3. Start a local web server:
-   ```bash
-   python3 -m http.server 8000
-   ```
-4. Open your browser to `http://localhost:8000`
-
-### Alternative Methods
-
-**VS Code / Cursor Live Server Extension** (Recommended for development):
-1. Install the "Live Server" extension
-2. Right-click `index.html` → "Open with Live Server"
-3. The site will auto-reload when you make changes
-
-**Using Node.js:**
-```bash
-npx serve
-```
-
-**Using PHP:**
-```bash
-php -S localhost:8000
-```
-
-## File Structure
-
-```
-.
-├── index.html          # Main portfolio landing page
-├── resume.html         # Detailed resume/CV page
-├── README.md           # Project documentation
-├── SITEMAP.md          # Site architecture documentation
-└── assets/
-    ├── Daniel Arevalo CV Resume 2026.pdf   # Downloadable PDF resume
-    └── DanitlPhotoContrast.png             # Profile photo
-```
-
-## Browser Support
-
-- Chrome/Edge (latest)
-- Firefox (latest)
-- Safari (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## Customization
-
-The website uses CSS custom properties for easy customization:
-
-```css
-:root {
-    --vellum-base: #f4f1ea;      /* Background color */
-    --ink-deep: #1a1c1e;         /* Primary text */
-    --hazard-amber: #d4a017;     /* Accent color */
-    /* ... more variables */
-}
-```
-
-## Performance
-
-- No external dependencies except Google Fonts
-- Inline SVG for graphics
-- Optimized animations with CSS transforms
-- Lazy loading with Intersection Observer
-
-## License
-
-© 2024 Daniel - All rights reserved
-
-## Contact
-
-For inquiries about design services or speaking engagements, visit the portfolio website.
+*For technical documentation on running this portfolio locally, see [DEVELOPMENT.md](./DEVELOPMENT.md)*
