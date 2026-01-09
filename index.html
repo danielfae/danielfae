@@ -561,12 +561,53 @@
             display: none;
         }
 
-        .coordinates .resume-icon {
+        .coordinates .resume-icon,
+        .coordinates .blog-icon {
             display: none;
         }
 
         .coordinates .coord-content {
             display: block;
+        }
+
+        .coord-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .coord-link {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--hazard-amber);
+            background: rgba(212, 160, 23, 0.08);
+            border: 1px solid var(--hazard-amber);
+            transition: all 0.2s ease;
+        }
+
+        .coord-link:hover {
+            background: var(--hazard-amber);
+            color: var(--ink-deep);
+        }
+
+        .coord-link--blog {
+            color: var(--copper-accent);
+            background: rgba(184, 115, 51, 0.08);
+            border-color: var(--copper-accent);
+        }
+
+        .coord-link--blog:hover {
+            background: var(--copper-accent);
+            color: var(--vellum-base);
         }
 
         /* Mobile: Collapse coordinates to icon button */
@@ -601,7 +642,8 @@
             }
 
             .coordinates .location-icon,
-            .coordinates .resume-icon {
+            .coordinates .resume-icon,
+            .coordinates .blog-icon {
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -615,18 +657,21 @@
             }
 
             .coordinates .location-icon:hover,
-            .coordinates .resume-icon:hover {
+            .coordinates .resume-icon:hover,
+            .coordinates .blog-icon:hover {
                 background: var(--ink-deep);
                 color: var(--vellum-base);
             }
 
             .coordinates .location-icon svg,
-            .coordinates .resume-icon svg {
+            .coordinates .resume-icon svg,
+            .coordinates .blog-icon svg {
                 width: 18px;
                 height: 18px;
             }
 
-            .coordinates .resume-icon {
+            .coordinates .resume-icon,
+            .coordinates .blog-icon {
                 text-decoration: none;
             }
         }
@@ -697,6 +742,14 @@
                         <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
                 </a>
+                <a href="https://daeblog.vercel.app/" class="blog-icon" aria-label="Read Blog">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                        <path d="M2 2l7.586 7.586"></path>
+                        <circle cx="11" cy="11" r="2"></circle>
+                    </svg>
+                </a>
                 <div class="location-icon" tabindex="0" aria-label="Location info">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -707,7 +760,10 @@
                     LOCATION: OSLO, NORWAY<br>
                     [59.9139° N, 10.7522° E]<br>
                     ORIGIN: CUCUTA, COLOMBIA<br>
-                    <a href="resume.html" style="color: var(--hazard-amber); text-decoration: none; margin-top: 1rem; display: inline-block;">VIEW RESUME →</a>
+                    <div class="coord-links">
+                        <a href="resume.html" class="coord-link">VIEW RESUME →</a>
+                        <a href="https://daeblog.vercel.app/" class="coord-link coord-link--blog">READ BLOG →</a>
+                    </div>
                 </div>
             </div>
         </header>
