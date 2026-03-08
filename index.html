@@ -187,14 +187,30 @@
             font-weight: 800;
             line-height: 0.9;
             letter-spacing: -0.04em;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
+            margin-top: 0;
+            margin-bottom: 0.35rem;
+        }
+
+        .hero-last-name {
+            display: inline;
         }
 
         .tagline {
             font-size: 1.25rem;
             max-width: 900px;
             color: var(--ink-faded);
+            margin-top: 0.25rem;
+            grid-column: 1 / -1;
+        }
+
+        .hero-subheader {
+            display: block;
+            font-size: 1.7rem;
+            font-weight: 300;
+            line-height: 1.18;
+            letter-spacing: 0;
+            color: var(--ink-deep);
+            margin-bottom: 0.35rem;
         }
 
         .philosophy-grid {
@@ -625,8 +641,8 @@
             color: var(--vellum-base);
         }
 
-        /* Mobile: Collapse coordinates to icon button */
-        @media (max-width: 1024px) {
+        /* Collapse coordinates to icon buttons from 1200px and below */
+        @media (max-width: 1200px) {
             .coordinates {
                 position: fixed;
                 top: 1rem;
@@ -713,12 +729,26 @@
                 width: 100%;
                 max-width: 100vw;
                 white-space: nowrap;
-                font-size: clamp(2.5rem, 7vw, 5rem);
+                font-size: 6.72rem;
             }
         }
 
         @media (max-width: 1024px) {
-            header { grid-template-columns: 1fr; gap: 2rem; }
+            header { grid-template-columns: 1fr; gap: 10px; }
+
+            .hero-title {
+                white-space: normal;
+                line-height: 0.88;
+                margin-bottom: 0;
+            }
+
+            .hero-last-name {
+                display: block;
+            }
+
+            .tagline {
+                margin-top: 0;
+            }
         }
 
         @media (max-width: 900px) {
@@ -728,6 +758,20 @@
             .module-grid { grid-template-columns: 1fr; }
             .engagement-item { flex-direction: column; gap: 0.5rem; }
             .engagement-item .topic { text-align: left; width: 100%; }
+        }
+
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 6.72rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-subheader {
+                font-size: 1.25rem;
+                line-height: 1.3;
+                opacity: 0.92;
+            }
         }
     </style>
 </head>
@@ -743,9 +787,8 @@
     <div class="container">
         <header>
             <div>
+                <h1 class="hero-title">DANIEL <span class="hero-last-name">AREVALO</span></h1>
                 <p class="mono">Lead Product Experience Designer @ <a href="https://omnysecurity.com" target="_blank">OmnySecurity.com</a></p>
-                <h1 class="hero-title">DANIEL AREVALO</h1>
-                <p class="tagline">Applying human-centered design to develop enterprise software that intersects Artificial Intelligence, Data and CyberSecurity for OT/IT environments in critical infrastructure.</p>
             </div>
             <div class="coordinates">
                 <a href="resume.html" class="resume-icon" aria-label="View Resume">
@@ -781,6 +824,7 @@
                     </div>
                 </div>
             </div>
+            <p class="tagline"><span class="hero-subheader">I design enterprise software that protects society's most critical infrastructure by applying a human-centered approach to AI in cybersecurity in complex OT/IT environments.</span></p>
         </header>
 
         <main>
@@ -788,22 +832,23 @@
                 <div class="manifesto scroll-reveal">
                     <p class="mono" style="margin-bottom: 1rem; color: var(--hazard-amber);">Core Philosophy</p>
                     <h2>Human Amplification <br><span style="font-weight: 300; font-style: italic;">over </span>Full Automation</h2>
-                    <p>AI should enhance human expertise rather than replace it. In high-stakes environments where poor decisions can lead to <strong>explosions, environmental disasters, or expensive failures</strong>. Having a <span style="font-style: italic;">human-in-the-loop architecture</span> is not a workaround, it's intrinsic part of Agentic architecture.</p>
-                    <p>Although people should embrace an <span style="font-style: italic;">AI-native mentality</span>, I challenge the "automate everything" mentality, especially for translating complex security data into the operational language of engineers who manage physical systems. A <span style="font-style: italic;">human-centered design approach</span> is key to success.</p>
+                    <p>AI should strengthen human expertise, not replace it. In high-stakes environments, bad decisions or direct attacks can lead to <strong>explosions, environmental damage, or costly failures</strong>. That is why <span style="font-style: italic;">human-in-the-loop architecture</span> is essential to the operation and safety of agentic systems.</p>
+                    <p>I support an <span style="font-style: italic;">AI-native mindset</span>, but not an "automate everything" approach. Teams still need clear decisions, shared context, and human judgment. Maintaining a <span style="font-style: italic;">human-centered design approach</span> is key to make advanced agentic systems trustworthy, reliable and more useful.</p>
+                    <p class="mono" style="margin-top: 1rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.72rem; text-align: right; padding-right: 5px;">- Daniel Arevalo, October 2025</p>
                 </div>
 
                 <div class="sidebar-data scroll-reveal" style="transition-delay: 0.2s;">
                     <div class="data-card">
                         <h3>Background</h3>
-                        <p>Electronics Engineering + Interaction Design (NTNU) + Innovation Management (UiO). Studies at Harvard & MIT.</p>
+                        <p>Electronics Engineering (TexasA&M) + Interaction Design (NTNU) + Innovation Management (UiO). Studies at Harvard & MIT.</p>
                     </div>
                     <div class="data-card">
                         <h3>Expertise</h3>
-                        <p>SaaS Enterprise Solutions for Oil & Gas, Maritime, Big Data, Manufacturing and Utilities industries. Focus on High Criticality, Enterprise Security, Zero-error tolerance systems.</p>
+                        <p>Enterprise SaaS across Oil & Gas, Maritime, Manufacturing, Utilities, and data-heavy systems. Focused on high-criticality security products where minimal failures can be costly and fatal.</p>
                     </div>
                     <div class="data-card">
                         <h3>Coaching</h3>
-                        <p>Mentoring designers on product strategy and organizational complexity. Elevating their career growth and technical skills with the use of AI. Helping more product people enter the field of Cybersecurity.</p>
+                        <p>I mentor designers in product strategy, technical depth, and organizational complexity. I also help more product professionals transition into cybersecurity.</p>
                     </div>
                 </div>
             </section>
@@ -813,26 +858,26 @@
                     <h2 class="mono">Design Process</h2>
                     <p class="mono">For Enterprise Cybersecurity Solutions</p>
                 </div>
-                <p class="section-intro">I enjoy designing functional, usable products that augment the human capacity with Agentic AI. My skills help teams learn, engage, and iterate until the best solutions are found.</p>
+                <p class="section-intro">I design usable products that enhance human expertise with agentic AI. My skills enable teams to execute fast, correct direction, align quickly, and iterate with high velocity towards practical solutions.</p>
 
                 <div class="module-grid">
                     <div class="module-card">
                         <div class="module-number">01</div>
                         <p class="mono">Strategy</p>
                         <h4>User Research</h4>
-                        <p>Giving engaging presentations of data and insights from user research, I gather minds around good ideas and form concepts with the input of key stakeholders.</p>
+                        <p> Analyzing data from user interviews and interaction, I turn research into actionable insights and align stakeholders around the right problems, opportunities, and direction.</p>
                     </div>
                     <div class="module-card">
                         <div class="module-number">02</div>
                         <p class="mono">Discovery</p>
                         <h4>Quick Prototyping</h4>
-                        <p>From research and rough sketches to pixels and motion, I collaborate with developers to take a concept or project from an idea to MVP prototypes ready for user testing.</p>
+                        <p>From research and rough sketches to pixels and motion, I collaborate with developers to take concepts, user flows, or entire products from ideas to MVPs ready for user testing.</p>
                     </div>
                     <div class="module-card">
                         <div class="module-number">03</div>
                         <p class="mono">Execution</p>
                         <h4>Iterative Development</h4>
-                        <p>Taking into account the end-user’s feedback, I develop concepts all the way to the release of mission-critical systems where cognitive load management is a matter of life-or-death.</p>
+                        <p>Taking into account a wide range of end-user’s feedback, I refine concepts all the way through launch, with special attention to cognitive load in mission-critical systems.</p>
                     </div>
                 </div>
             </section>
@@ -866,7 +911,7 @@
                     <h2 class="mono">Technical Stack</h2>
                     <p class="mono">Practitioner + Thought Leader</p>
                 </div>
-                <p class="section-intro">My workflow integrates high-fidelity prototyping with strategic research. I leverage AI tools to facilitate practical implementation while maintaining human-centered control.</p>
+                <p class="section-intro">My workflow combines strategic research with high-fidelity or production-ready prototyping with code. I use coding agents and generative AI to ship faster while keeping a <span style="font-style: italic;">human-centered approach</span> to decision-making.</span></p>
                 
                 <div class="tool-section">
                     <div class="filter-controls">
@@ -883,45 +928,45 @@
                         <div class="tool-card" data-category="research">
                             <span class="tool-card-category">Research</span>
                             <div class="tool-card-name">OpenAI's ChatGPT & Codex</div>
-                            <p class="tool-card-desc">Deep research synthesis, literature review, and knowledge extraction for complex domains.</p>
+                            <p class="tool-card-desc">Research synthesis, literature review, and fast knowledge extraction for complex topics.</p>
                         </div>
                         <div class="tool-card" data-category="strategy">
                             <span class="tool-card-category">Strategy & JTBD</span>
                             <div class="tool-card-name">Google's Gemini & NotebookLM</div>
-                            <p class="tool-card-desc">Strategic planning, jobs-to-be-done analysis, and multi-modal reasoning.</p>
+                            <p class="tool-card-desc">Strategic planning, jobs-to-be-done analysis, and structured reasoning.</p>
                         </div>
                         <div class="tool-card" data-category="development">
                             <span class="tool-card-category">Development</span>
                             <div class="tool-card-name">Anthropic's Claude Code</div>
-                            <p class="tool-card-desc">Code generation, architectural decisions, and technical documentation.</p>
+                            <p class="tool-card-desc">Code generation, architecture support, and technical documentation.</p>
                         </div>
                         <div class="tool-card" data-category="prototyping">
                             <span class="tool-card-category">Prototyping</span>
-                            <div class="tool-card-name">Databutton, Riff & Lovable</div>
-                            <p class="tool-card-desc">Rapid MVP creation and high-fidelity interactive prototypes for user testing.</p>
+                            <div class="tool-card-name">Replit, Riff & Lovable</div>
+                            <p class="tool-card-desc">Rapid MVP builds and interactive prototypes for user testing.</p>
                         </div>
                         <div class="tool-card" data-category="editors">
                             <span class="tool-card-category">Code Editors</span>
                             <div class="tool-card-name">Cursor & Antigravity</div>
-                            <p class="tool-card-desc">AI-augmented development environments for accelerated coding workflows.</p>
+                            <p class="tool-card-desc">AI-assisted development environments that speed up coding workflows.</p>
                         </div>
                         <div class="tool-card" data-category="integrations">
                             <span class="tool-card-category">Integrations</span>
                             <div class="tool-card-name">Figma & Linear MCPs</div>
-                            <p class="tool-card-desc">Design-to-code pipelines and project management integrations via Model Context Protocol.</p>
+                            <p class="tool-card-desc">Design-to-code workflows and project integrations through Model Context Protocol.</p>
                         </div>
                     </div>
                 </div>
                 
-                <p class="section-intro" style="margin-top: 2.5rem;">I use AI to accelerate the learning loops that connect what we build to the impact it has on customers and the business. Research synthesis, assumption testing, and rapid prototyping.</p>
+                <p class="section-intro" style="margin-top: 2.5rem;">AI is the key to speed up learning loops between product decisions and business impact. Particularly, for research synthesis, assumption testing, and rapid prototyping.</p>
             </section>
         </main>
 
         <footer>
             <div class="mono">© 2026 Daniel Arevalo @ Omny Security</div>
             <div class="mono" style="text-align: right;">
-                Building and Refining Complex Systems<br>
-                With AI and Human-Centered Design
+                Building and improving complex systems<br>
+                with AI and human-centered design
             </div>
         </footer>
     </div>
