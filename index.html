@@ -251,6 +251,10 @@
             color: var(--copper-accent);
         }
 
+        .hero-first-name {
+            display: block;
+        }
+
         .hero-last-name {
             display: inline;
         }
@@ -710,6 +714,7 @@
                 display: flex;
                 gap: 0.5rem;
                 align-items: flex-start;
+                grid-column: 1 / -1;
             }
 
             .coordinates .coord-content {
@@ -875,7 +880,7 @@
             <div class="hero-left">
                 <div>
                     <h1 class="hero-title">
-                        <span style="display:block">DANIEL</span>
+                        <span class="hero-first-name">DANIEL</span>
                         <span style="display:block" class="hero-last-name">AREVALO</span>
                     </h1>
                     <p class="mono">Lead Product Experience Designer @ <a href="https://omnysecurity.com" target="_blank">OmnySecurity.com</a></p>
