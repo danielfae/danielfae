@@ -203,6 +203,29 @@
             justify-content: center;
             grid-column: 2;
             grid-row: 1;
+            position: relative;
+        }
+
+        .hero-tagline {
+            font-size: 1.05rem;
+            font-weight: 300;
+            line-height: 1.45;
+            color: var(--ink-faded);
+            margin-top: 1.25rem;
+            max-width: 480px;
+        }
+
+        .hero-statement {
+            position: absolute;
+            bottom: 4rem;
+            right: 0;
+            text-align: right;
+            max-width: 300px;
+            font-size: 0.88rem;
+            font-weight: 300;
+            line-height: 1.65;
+            color: var(--ink-faded);
+            font-family: 'Outfit', sans-serif;
         }
 
         .hero-crosshair {
@@ -814,6 +837,14 @@
                 margin-bottom: 2rem;
             }
 
+            .hero-statement {
+                display: none;
+            }
+
+            .hero-tagline {
+                font-size: 0.95rem;
+            }
+
             .hero-left {
                 padding: 2rem 0;
             }
@@ -874,6 +905,7 @@
                     <line x1="88"  y1="88"  x2="512" y2="512" stroke="currentColor" stroke-width="0.3"/>
                     <line x1="512" y1="88"  x2="88"  y2="512" stroke="currentColor" stroke-width="0.3"/>
                 </svg>
+                <p class="hero-statement">With a human-centered approach, I ensure that IT/OT environments become safer while making people more efficient in complex industrial operations.</p>
             </div>
 
             <!-- Left column: name, role, hero links -->
@@ -884,6 +916,7 @@
                         <span style="display:block" class="hero-last-name">AREVALO</span>
                     </h1>
                     <p class="mono">Lead Product Experience Designer @ <a href="https://omnysecurity.com" target="_blank">OmnySecurity.com</a></p>
+                    <p class="hero-tagline">Building AI-powered cybersecurity products to protect society's most critical infrastructure.</p>
                 </div>
                 <div class="hero-links">
                     <a href="resume.html" class="hero-link">Resume →</a>
@@ -929,7 +962,6 @@
         </header>
 
         <main>
-            <p class="tagline"><span class="hero-subheader">I design and build AI-powered cybersecurity products to protect society's most critical infrastructure. With a human-centered approach, I ensure that IT/OT environments become safer while making people more efficient in complex industrial operations.</span></p>
             <section class="philosophy-grid">
                 <div class="manifesto scroll-reveal">
                     <p class="mono" style="margin-bottom: 1rem; color: var(--hazard-amber);">Core Philosophy</p>
