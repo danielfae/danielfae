@@ -249,7 +249,7 @@
             border-left: 4px solid var(--card-accent, var(--copper-accent));
             background: linear-gradient(135deg, rgba(184, 115, 51, 0.04) 0%, transparent 50%);
             box-shadow: 0 0 40px rgba(26, 28, 30, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-            transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, border-left 0.3s ease, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: grab;
         }
 
@@ -273,6 +273,8 @@
         .hero-card:hover {
             background: var(--vellum-highlight);
             box-shadow: 0 4px 24px rgba(26, 28, 30, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(26, 28, 30, 0.2);
+            border-left: 4px solid var(--card-accent, var(--copper-accent));
         }
 
         .hero-card-close {
@@ -421,6 +423,7 @@
             grid-template-columns: repeat(12, 1fr);
             gap: 2rem;
             margin-bottom: 8rem;
+            border: none;
         }
 
         .manifesto {
@@ -971,7 +974,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 2rem 1rem 6rem;
+                padding: 2rem 2.5rem 6rem calc(3rem + 2px);
             }
 
             .hero-card {
@@ -979,13 +982,15 @@
                 transform: none;
                 width: 100%;
                 min-width: 280px;
-                max-width: min(420px, calc(100vw - 2rem));
+                max-width: 100%;
+                margin: 0;
                 height: auto;
                 max-height: none;
                 display: block;
                 text-align: center;
                 font-size: 1.35rem;
                 margin: 0;
+                box-sizing: border-box;
                 padding: 0;
                 cursor: default;
                 flex-shrink: 0;
@@ -1118,7 +1123,8 @@
             <div class="hero-location-widget" aria-label="Location">
                 LOCATION: OSLO, NORWAY<br>
                 <span class="coords">[59.9139° N, 10.7522° E]</span><br>
-                ORIGIN: CUCUTA, COLOMBIA
+                ORIGIN: CUCUTA, COLOMBIA<br>
+                <span class="coords">[7.8939° N, 72.5078° W]</span>
             </div>
 
             <!-- Coordinates widget (mobile/tablet only, hidden on desktop via CSS) -->
@@ -1150,6 +1156,7 @@
                     LOCATION: OSLO, NORWAY<br>
                     [59.9139° N, 10.7522° E]<br>
                     ORIGIN: CUCUTA, COLOMBIA<br>
+                    [7.8939° N, 72.5078° W]<br>
                     <div class="coord-links">
                         <a href="resume.html" class="coord-link">VIEW RESUME →</a>
                         <a href="https://daeblog.vercel.app/" class="coord-link coord-link--blog">READ BLOG →</a>
