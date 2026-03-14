@@ -856,10 +856,37 @@
 
     <div class="container">
         <header>
-            <div>
-                <h1 class="hero-title">DANIEL <span class="hero-last-name">AREVALO</span></h1>
-                <p class="mono">Lead Product Experience Designer @ <a href="https://omnysecurity.com" target="_blank">OmnySecurity.com</a></p>
+            <!-- Right column: crosshair (first in DOM for mobile stacking) -->
+            <div class="hero-right">
+                <svg class="hero-crosshair" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="300" cy="300" r="280" stroke="currentColor" stroke-width="0.5"/>
+                    <circle cx="300" cy="300" r="220" stroke="currentColor" stroke-width="0.5"/>
+                    <circle cx="300" cy="300" r="160" stroke="currentColor" stroke-width="0.5"/>
+                    <circle cx="300" cy="300" r="100" stroke="currentColor" stroke-width="0.5"/>
+                    <circle cx="300" cy="300" r="40"  stroke="currentColor" stroke-width="0.5"/>
+                    <line x1="300" y1="0"   x2="300" y2="600" stroke="currentColor" stroke-width="0.3"/>
+                    <line x1="0"   y1="300" x2="600" y2="300" stroke="currentColor" stroke-width="0.3"/>
+                    <line x1="88"  y1="88"  x2="512" y2="512" stroke="currentColor" stroke-width="0.3"/>
+                    <line x1="512" y1="88"  x2="88"  y2="512" stroke="currentColor" stroke-width="0.3"/>
+                </svg>
             </div>
+
+            <!-- Left column: name, role, hero links -->
+            <div class="hero-left">
+                <div>
+                    <h1 class="hero-title">
+                        <span style="display:block">DANIEL</span>
+                        <span style="display:block" class="hero-last-name">AREVALO</span>
+                    </h1>
+                    <p class="mono">Lead Product Experience Designer @ <a href="https://omnysecurity.com" target="_blank">OmnySecurity.com</a></p>
+                </div>
+                <div class="hero-links">
+                    <a href="resume.html" class="hero-link">Resume →</a>
+                    <a href="https://daeblog.vercel.app/" class="hero-link">Blog →</a>
+                </div>
+            </div>
+
+            <!-- Coordinates widget (mobile/tablet only, hidden on desktop via CSS) -->
             <div class="coordinates">
                 <a href="resume.html" class="resume-icon" aria-label="View Resume">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -894,10 +921,10 @@
                     </div>
                 </div>
             </div>
-            <p class="tagline"><span class="hero-subheader">I design and build AI-powered cybersecurity products to protect society's most critical infrastructure. With a human-centered approach, I ensure that IT/OT environments become safer while making people more efficient in complex industrial operations.</span></p>
         </header>
 
         <main>
+            <p class="tagline"><span class="hero-subheader">I design and build AI-powered cybersecurity products to protect society's most critical infrastructure. With a human-centered approach, I ensure that IT/OT environments become safer while making people more efficient in complex industrial operations.</span></p>
             <section class="philosophy-grid">
                 <div class="manifesto scroll-reveal">
                     <p class="mono" style="margin-bottom: 1rem; color: var(--hazard-amber);">Core Philosophy</p>
