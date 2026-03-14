@@ -236,12 +236,10 @@
             top: 50%;
             right: 2rem;
             transform: translateY(-50%);
+            min-width: 280px;
             max-width: 420px;
-            height: min(85vh, 570px);
             max-height: min(85vh, 570px);
             overflow: visible;
-            display: flex;
-            flex-direction: column;
             font-size: 1.65rem;
             font-weight: 300;
             line-height: 1.65;
@@ -315,8 +313,7 @@
         }
 
         .hero-card-scroll {
-            flex: 1;
-            min-height: 0;
+            max-height: min(85vh, 570px);
             overflow-y: auto;
             padding: 1.75rem 2.75rem 1.75rem 2rem;
         }
@@ -443,14 +440,7 @@
         }
 
         .manifesto::before {
-            content: "";
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            width: 20px;
-            height: 20px;
-            border-top: 1px solid var(--ink-deep);
-            border-left: 1px solid var(--ink-deep);
+            content: none;
         }
 
         .manifesto h2 {
@@ -953,6 +943,14 @@
                 overflow: visible;
             }
 
+            .hero-right {
+                order: 1;
+            }
+
+            .hero-left {
+                order: 2;
+            }
+
             .hero-crosshair {
                 width: min(50vw, 300px);
                 height: min(50vw, 300px);
@@ -961,26 +959,51 @@
 
             .hero-card-zone {
                 position: static;
+                order: 3;
+                width: 100%;
+                min-height: 50vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem 1rem 6rem;
             }
 
             .hero-card {
                 position: relative;
                 transform: none;
-                max-width: 100%;
+                width: 100%;
+                min-width: 280px;
+                max-width: min(420px, calc(100vw - 2rem));
                 height: auto;
                 max-height: none;
                 display: block;
-                text-align: left;
+                text-align: center;
                 font-size: 1.35rem;
-                margin-top: 4rem;
-                margin-bottom: 5rem;
-                margin-left: 1rem;
+                margin: 0;
                 padding: 0;
                 cursor: default;
+                flex-shrink: 0;
             }
 
             .hero-card-scroll {
-                padding: 1.5rem 2.5rem 1.5rem 1.25rem;
+                padding: 1.5rem 1.5rem;
+                text-align: left;
+            }
+
+            .hero-card-zone::after {
+                display: none;
+            }
+
+            .hero-location-widget {
+                order: 4;
+            }
+
+            .coordinates {
+                order: 5;
+            }
+
+            main {
+                padding-top: 2rem;
             }
 
             .hero-card-close {
@@ -1310,16 +1333,24 @@
 
         function showCard(index) {
             heroCard.classList.add('swapping');
+            const isMobile = window.matchMedia('(max-width: 1024px)').matches;
             setTimeout(() => {
                 cardIndex = index % heroCards.length;
                 const card = heroCards[cardIndex];
                 heroCardText.textContent = card.text;
                 heroCard.style.setProperty('--card-accent', card.accent);
                 heroCard.dataset.index = cardIndex;
-                heroCard.style.left = '';
-                heroCard.style.top = '';
-                heroCard.style.right = '2rem';
-                heroCard.style.transform = 'translateY(-50%)';
+                if (!isMobile) {
+                    heroCard.style.left = '';
+                    heroCard.style.top = '';
+                    heroCard.style.right = '2rem';
+                    heroCard.style.transform = 'translateY(-50%)';
+                } else {
+                    heroCard.style.left = '';
+                    heroCard.style.top = '';
+                    heroCard.style.right = '';
+                    heroCard.style.transform = '';
+                }
                 heroCard.classList.remove('swapping');
             }, 350);
         }
@@ -1358,9 +1389,11 @@
             const dy = e.clientY - dragStartY;
             const zoneRect = heroCardZone.getBoundingClientRect();
             const cardRect = heroCard.getBoundingClientRect();
+            const minCardWidth = 280;
+            const cardWidth = Math.max(cardRect.width, minCardWidth);
             let newX = cardStartX + dx;
             let newY = cardStartY + dy;
-            newX = Math.max(0, Math.min(zoneRect.width - cardRect.width, newX));
+            newX = Math.max(0, Math.min(zoneRect.width - cardWidth, newX));
             newY = Math.max(0, Math.min(zoneRect.height - cardRect.height, newY));
             heroCard.style.left = newX + 'px';
             heroCard.style.top = newY + 'px';
