@@ -228,6 +228,31 @@
             font-family: 'Outfit', sans-serif;
         }
 
+        .hero-location-widget {
+            position: absolute;
+            top: 2.5rem;
+            right: 2rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            line-height: 1.8;
+            color: var(--ink-faded);
+            text-align: right;
+            display: none;
+        }
+
+        .hero-location-widget .coords {
+            color: var(--copper-accent);
+            letter-spacing: 0.04em;
+        }
+
+        @media (min-width: 1201px) {
+            .hero-location-widget {
+                display: block;
+            }
+        }
+
         .hero-crosshair {
             width: min(90%, 500px);
             height: min(90%, 500px);
@@ -922,6 +947,13 @@
                     <a href="resume.html" class="hero-link">Resume →</a>
                     <a href="https://daeblog.vercel.app/" class="hero-link">Blog →</a>
                 </div>
+            </div>
+
+            <!-- Location widget: desktop only, top-right of hero -->
+            <div class="hero-location-widget" aria-label="Location">
+                LOCATION: OSLO, NORWAY<br>
+                <span class="coords">[59.9139° N, 10.7522° E]</span><br>
+                ORIGIN: CUCUTA, COLOMBIA
             </div>
 
             <!-- Coordinates widget (mobile/tablet only, hidden on desktop via CSS) -->
