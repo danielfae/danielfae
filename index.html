@@ -1014,13 +1014,12 @@
                 width: 100%;
                 min-width: 280px;
                 max-width: 100%;
-                margin: 0;
+                margin: 30px 0 0 0;
                 height: auto;
                 max-height: none;
                 display: block;
                 text-align: center;
                 font-size: 1.35rem;
-                margin: 0;
                 box-sizing: border-box;
                 padding: 0;
                 cursor: default;
@@ -1385,24 +1384,44 @@
         let dragStartX = 0, dragStartY = 0;
         let cardStartX = 0, cardStartY = 0;
 
-        window._heroCards = heroCards;
-        window.showHeroCard = function(index) { showCard(index); };
+        // Hidden until first Spline click
+        heroCard.style.display = 'none';
 
-        function showCard(index) {
+        window._heroCards = heroCards;
+        window.showHeroCard = function(index, clickPos) { showCard(index, clickPos); };
+
+        function showCard(index, clickPos) {
+            heroCard.style.display = '';
             heroCard.classList.add('swapping');
             const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+
+            // Position above the click point on desktop before content swaps in
+            if (!isMobile && clickPos) {
+                const zoneRect = heroCardZone.getBoundingClientRect();
+                const cardW = heroCard.offsetWidth || 320;
+                const cardH = heroCard.offsetHeight || 200;
+                let left = clickPos.x - cardW / 2;
+                let top  = clickPos.y - cardH - 20;
+                left = Math.max(0, Math.min(zoneRect.width  - cardW, left));
+                top  = Math.max(0, Math.min(zoneRect.height - cardH, top));
+                heroCard.style.right = '';
+                heroCard.style.transform = '';
+                heroCard.style.left = left + 'px';
+                heroCard.style.top  = top  + 'px';
+            }
+
             setTimeout(() => {
                 cardIndex = index % heroCards.length;
                 const card = heroCards[cardIndex];
                 heroCardText.textContent = card.text;
                 heroCard.style.setProperty('--card-accent', card.accent);
                 heroCard.dataset.index = cardIndex;
-                if (!isMobile) {
+                if (!isMobile && !clickPos) {
                     heroCard.style.left = '';
                     heroCard.style.top = '';
                     heroCard.style.right = '2rem';
                     heroCard.style.transform = 'translateY(-50%)';
-                } else {
+                } else if (isMobile) {
                     heroCard.style.left = '';
                     heroCard.style.top = '';
                     heroCard.style.right = '';
@@ -1428,6 +1447,7 @@
             if (e.target.closest('.hero-card-close')) return;
             if (window.matchMedia('(max-width: 1024px)').matches) return;
             isDragging = true;
+            document.body.style.userSelect = 'none';
             dragStartX = e.clientX;
             dragStartY = e.clientY;
             const rect = heroCard.getBoundingClientRect();
@@ -1458,6 +1478,7 @@
 
         document.addEventListener('mouseup', () => {
             isDragging = false;
+            document.body.style.userSelect = '';
         });
 
         function resetCardPositionForMobile() {
@@ -1513,11 +1534,15 @@
         // Any click anywhere on the Spline scene cycles the hero card.
         let splineCardIndex = 0;
 
-        document.getElementById('spline-viewer').addEventListener('click', () => {
+        document.getElementById('spline-viewer').addEventListener('click', (e) => {
             const total = window._heroCards?.length ?? 4;
             splineCardIndex = (splineCardIndex + 1) % total;
             if (typeof window.showHeroCard === 'function') {
-                window.showHeroCard(splineCardIndex);
+                const zone = document.getElementById('heroCardZone').getBoundingClientRect();
+                window.showHeroCard(splineCardIndex, {
+                    x: e.clientX - zone.left,
+                    y: e.clientY - zone.top
+                });
             }
         });
     </script>
