@@ -1509,35 +1509,16 @@
         });
     </script>
 
-    <script type="module">
-        // Map Spline object names → card index (0-based).
-        // Click objects in the scene and check DevTools console to discover names,
-        // then add entries: e.g. 'Sphere': 1, 'Cube': 2
-        const CARD_BY_OBJECT = {};
-
-        const viewer = document.getElementById('spline-viewer');
+    <script>
+        // Any click anywhere on the Spline scene cycles the hero card.
         let splineCardIndex = 0;
 
-        function attachSplineEvents(app) {
-            app.addEventListener('mouseDown', (e) => {
-                const name = e.target?.name ?? '';
-                console.log('[Spline] clicked object:', name);
-
-                const mapped = CARD_BY_OBJECT[name];
-                const total = window._heroCards?.length ?? 4;
-                const nextIndex = mapped !== undefined ? mapped : (splineCardIndex + 1) % total;
-                splineCardIndex = nextIndex;
-
-                if (typeof window.showHeroCard === 'function') {
-                    window.showHeroCard(nextIndex);
-                }
-            });
-        }
-
-        // spline-viewer fires 'load' once the scene and application are ready
-        viewer.addEventListener('load', () => {
-            const app = viewer._spline;
-            if (app) attachSplineEvents(app);
+        document.getElementById('spline-viewer').addEventListener('click', () => {
+            const total = window._heroCards?.length ?? 4;
+            splineCardIndex = (splineCardIndex + 1) % total;
+            if (typeof window.showHeroCard === 'function') {
+                window.showHeroCard(splineCardIndex);
+            }
         });
     </script>
 </body>
