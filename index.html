@@ -181,7 +181,7 @@
         header {
             height: 100svh;
             min-height: 600px;
-            overflow: hidden;
+            overflow: visible;
             display: grid;
             grid-template-columns: 55fr 45fr;
             align-items: center;
@@ -989,8 +989,15 @@
             }
 
             .hero-spline {
-                width: 100%;
-                height: min(60vw, 340px);
+                position: relative;
+                left: auto;
+                transform: none;
+                width: 100vw;
+                margin-left: -2rem;
+                height: min(70vw, 420px);
+                order: 10;
+                margin-top: 2.5rem;
+                z-index: 0;
             }
 
             .hero-card-zone {
