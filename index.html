@@ -197,13 +197,20 @@
             grid-row: 1;
         }
 
+        .hero-left > div {
+            container-type: inline-size;
+            width: 100%;
+        }
+
         .hero-right {
             display: flex;
-            align-items: center;
+            align-items: stretch;
             justify-content: center;
             grid-column: 2;
             grid-row: 1;
             position: relative;
+            align-self: stretch;
+            overflow: hidden;
         }
 
         .hero-tagline {
@@ -348,14 +355,10 @@
             }
         }
 
-        .hero-crosshair {
-            width: min(90%, 500px);
-            height: min(90%, 500px);
+        .hero-spline {
+            width: 100%;
+            height: 100%;
             display: block;
-            color: var(--ink-deep);
-            opacity: 0.15;
-            transform-origin: 50% 50%;
-            animation: slowRotate 120s linear infinite;
         }
 
         .hero-links {
@@ -381,12 +384,19 @@
         }
 
         .hero-title {
-            font-size: clamp(5rem, 10vw, 9rem);
             font-weight: 800;
             line-height: 0.88;
             letter-spacing: -0.04em;
             margin-top: 0;
             margin-bottom: 0;
+        }
+
+        /* Desktop / wide viewports: proportional title (container + viewport clamp) */
+        @media (min-width: 1025px) {
+            .hero-title {
+                font-size: clamp(2.75rem, 10vw, 9rem);
+                font-size: clamp(2.75rem, 12cqw + 0.5rem, 9rem);
+            }
         }
 
         .hero-left .mono {
@@ -960,10 +970,9 @@
                 order: 2;
             }
 
-            .hero-crosshair {
-                width: min(50vw, 300px);
-                height: min(50vw, 300px);
-                margin-bottom: 2rem;
+            .hero-spline {
+                width: 100%;
+                height: min(60vw, 340px);
             }
 
             .hero-card-zone {
@@ -1032,16 +1041,33 @@
 
             .hero-left {
                 padding: 2rem 0;
+                align-self: stretch;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
             }
 
+            .hero-left > div {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            /* Small screens & mobile: fixed title size */
             .hero-title {
-                font-size: clamp(3rem, 10vw, 6.4rem);
+                font-size: 84px;
                 white-space: normal;
                 line-height: 0.88;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
             }
 
+            .hero-first-name,
             .hero-last-name {
                 display: block;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
             }
 
             .tagline {
@@ -1077,19 +1103,9 @@
 
     <div class="container">
         <header>
-            <!-- Right column: crosshair (first in DOM for mobile stacking) -->
+            <!-- Right column: Spline 3D scene (first in DOM for mobile stacking) -->
             <div class="hero-right">
-                <svg class="hero-crosshair" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <circle cx="300" cy="300" r="280" stroke="currentColor" stroke-width="0.5"/>
-                    <circle cx="300" cy="300" r="220" stroke="currentColor" stroke-width="0.5"/>
-                    <circle cx="300" cy="300" r="160" stroke="currentColor" stroke-width="0.5"/>
-                    <circle cx="300" cy="300" r="100" stroke="currentColor" stroke-width="0.5"/>
-                    <circle cx="300" cy="300" r="40"  stroke="currentColor" stroke-width="0.5"/>
-                    <line x1="300" y1="0"   x2="300" y2="600" stroke="currentColor" stroke-width="0.3"/>
-                    <line x1="0"   y1="300" x2="600" y2="300" stroke="currentColor" stroke-width="0.3"/>
-                    <line x1="88"  y1="88"  x2="512" y2="512" stroke="currentColor" stroke-width="0.3"/>
-                    <line x1="512" y1="88"  x2="88"  y2="512" stroke="currentColor" stroke-width="0.3"/>
-                </svg>
+                <canvas id="spline-canvas" class="hero-spline"></canvas>
             </div>
 
             <!-- Left column: name, role, hero links -->
@@ -1344,6 +1360,9 @@
         let dragStartX = 0, dragStartY = 0;
         let cardStartX = 0, cardStartY = 0;
 
+        window._heroCards = heroCards;
+        window.showHeroCard = function(index) { showCard(index); };
+
         function showCard(index) {
             heroCard.classList.add('swapping');
             const isMobile = window.matchMedia('(max-width: 1024px)').matches;
@@ -1462,6 +1481,37 @@
                     }
                 });
             });
+        });
+    </script>
+
+    <script type="module">
+        import { Application } from 'https://unpkg.com/@splinetool/runtime@1.9.82/build/runtime.module.js';
+
+        // Map Spline object names → card index (0-based).
+        // Open DevTools console and click objects in the scene to discover their names,
+        // then add entries here: e.g. 'Sphere': 1, 'Cube': 2
+        const CARD_BY_OBJECT = {};
+
+        const canvas = document.getElementById('spline-canvas');
+        const spline = new Application(canvas);
+
+        await spline.load('https://prod.spline.design/QLB5PwzK2mLB5klF/scene.splinecode');
+
+        let splineCardIndex = 0;
+
+        spline.addEventListener('mouseDown', (e) => {
+            const name = e.target?.name ?? '';
+            console.log('[Spline] clicked object:', name);
+
+            // If this object is mapped to a specific card, show it; otherwise cycle.
+            const mapped = CARD_BY_OBJECT[name];
+            const nextIndex = mapped !== undefined ? mapped : splineCardIndex + 1;
+            splineCardIndex = nextIndex % window._heroCards?.length ?? nextIndex;
+
+            // Trigger the existing card swap function exposed on window.
+            if (typeof window.showHeroCard === 'function') {
+                window.showHeroCard(nextIndex);
+            }
         });
     </script>
 </body>
