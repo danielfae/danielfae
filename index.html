@@ -181,7 +181,7 @@
         header {
             height: 100svh;
             min-height: 600px;
-            overflow: visible;
+            overflow: hidden;
             display: grid;
             grid-template-columns: 55fr 45fr;
             align-items: center;
@@ -196,6 +196,8 @@
             padding: 4rem 0;
             grid-column: 1;
             grid-row: 1;
+            position: relative;
+            z-index: 1;
         }
 
         .hero-left > div {
@@ -232,6 +234,7 @@
             grid-column: 1 / -1;
             grid-row: 1 / -1;
             pointer-events: none;
+            z-index: 1;
         }
 
         .hero-card-zone > * {
@@ -343,6 +346,7 @@
             color: var(--ink-faded);
             text-align: right;
             display: none;
+            z-index: 1;
         }
 
         .hero-location-widget .coords {
@@ -357,9 +361,15 @@
         }
 
         .hero-spline {
-            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
             height: 100%;
             display: block;
+            z-index: 0;
+            background: var(--vellum-base);
         }
 
         .hero-links {
@@ -1104,12 +1114,13 @@
 
     <div class="container">
         <header>
-            <!-- Right column: Spline 3D scene (first in DOM for mobile stacking) -->
-            <div class="hero-right">
-                <spline-viewer id="spline-viewer" class="hero-spline"
-                    url="https://prod.spline.design/QLB5PwzK2mLB5klF/scene.splinecode">
-                </spline-viewer>
-            </div>
+            <!-- Full-bleed Spline background, behind all hero content -->
+            <spline-viewer id="spline-viewer" class="hero-spline"
+                url="https://prod.spline.design/QLB5PwzK2mLB5klF/scene.splinecode">
+            </spline-viewer>
+
+            <!-- Right column: empty grid cell (Spline fills the background) -->
+            <div class="hero-right"></div>
 
             <!-- Left column: name, role, hero links -->
             <div class="hero-left">
