@@ -7,6 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon/ÆSquare.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/ÆSquare-32.png">
     <link rel="apple-touch-icon" href="favicon/ÆSquare-ios.png">
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -1105,7 +1106,9 @@
         <header>
             <!-- Right column: Spline 3D scene (first in DOM for mobile stacking) -->
             <div class="hero-right">
-                <canvas id="spline-canvas" class="hero-spline"></canvas>
+                <spline-viewer id="spline-viewer" class="hero-spline"
+                    url="https://prod.spline.design/QLB5PwzK2mLB5klF/scene.splinecode">
+                </spline-viewer>
             </div>
 
             <!-- Left column: name, role, hero links -->
@@ -1485,33 +1488,34 @@
     </script>
 
     <script type="module">
-        import { Application } from 'https://unpkg.com/@splinetool/runtime@1.9.82/build/runtime.module.js';
-
         // Map Spline object names → card index (0-based).
-        // Open DevTools console and click objects in the scene to discover their names,
-        // then add entries here: e.g. 'Sphere': 1, 'Cube': 2
+        // Click objects in the scene and check DevTools console to discover names,
+        // then add entries: e.g. 'Sphere': 1, 'Cube': 2
         const CARD_BY_OBJECT = {};
 
-        const canvas = document.getElementById('spline-canvas');
-        const spline = new Application(canvas);
-
-        await spline.load('https://prod.spline.design/QLB5PwzK2mLB5klF/scene.splinecode');
-
+        const viewer = document.getElementById('spline-viewer');
         let splineCardIndex = 0;
 
-        spline.addEventListener('mouseDown', (e) => {
-            const name = e.target?.name ?? '';
-            console.log('[Spline] clicked object:', name);
+        function attachSplineEvents(app) {
+            app.addEventListener('mouseDown', (e) => {
+                const name = e.target?.name ?? '';
+                console.log('[Spline] clicked object:', name);
 
-            // If this object is mapped to a specific card, show it; otherwise cycle.
-            const mapped = CARD_BY_OBJECT[name];
-            const nextIndex = mapped !== undefined ? mapped : splineCardIndex + 1;
-            splineCardIndex = nextIndex % window._heroCards?.length ?? nextIndex;
+                const mapped = CARD_BY_OBJECT[name];
+                const total = window._heroCards?.length ?? 4;
+                const nextIndex = mapped !== undefined ? mapped : (splineCardIndex + 1) % total;
+                splineCardIndex = nextIndex;
 
-            // Trigger the existing card swap function exposed on window.
-            if (typeof window.showHeroCard === 'function') {
-                window.showHeroCard(nextIndex);
-            }
+                if (typeof window.showHeroCard === 'function') {
+                    window.showHeroCard(nextIndex);
+                }
+            });
+        }
+
+        // spline-viewer fires 'load' once the scene and application are ready
+        viewer.addEventListener('load', () => {
+            const app = viewer._spline;
+            if (app) attachSplineEvents(app);
         });
     </script>
 </body>
