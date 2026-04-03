@@ -214,14 +214,9 @@
         }
 
         .hero-right {
-            display: flex;
-            align-items: stretch;
-            justify-content: center;
             grid-column: 2;
             grid-row: 1;
-            position: relative;
-            align-self: stretch;
-            overflow: hidden;
+            pointer-events: none;
         }
 
         .hero-tagline {
@@ -990,15 +985,7 @@
             }
 
             .hero-spline {
-                position: relative;
-                left: auto;
-                transform: none;
-                width: 100vw;
-                margin-left: -2rem;
-                height: min(70vw, 420px);
-                order: 10;
-                margin-top: 2.5rem;
-                z-index: 0;
+                height: 100%;
             }
 
             .hero-card-zone {
