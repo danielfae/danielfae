@@ -1400,9 +1400,8 @@
                 const zoneRect = heroCardZone.getBoundingClientRect();
                 const cardW = heroCard.offsetWidth || 320;
                 const cardH = heroCard.offsetHeight || 200;
-                const aboveHalf = clickPos.y < zoneRect.height / 2;
                 let left = clickPos.x - cardW / 2;
-                let top  = aboveHalf ? clickPos.y + 20 : clickPos.y - cardH - 20;
+                let top  = clickPos.y + 20;
                 left = Math.max(0, Math.min(zoneRect.width  - cardW, left));
                 top  = Math.max(0, Math.min(zoneRect.height - cardH, top));
                 heroCard.style.right = '';
