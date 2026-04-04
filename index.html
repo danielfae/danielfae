@@ -149,14 +149,8 @@
             background: linear-gradient(90deg, transparent, rgba(184, 115, 51, 0.25), transparent);
             z-index: 0;
             pointer-events: none;
-            animation: scanMove 8s ease-in-out infinite;
-        }
-
-        @keyframes scanMove {
-            0%, 100% { top: -2px; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 100vh; opacity: 0; }
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .container {
@@ -269,12 +263,27 @@
             border-left: 4px solid var(--card-accent, var(--copper-accent));
             background: linear-gradient(135deg, rgba(184, 115, 51, 0.04) 0%, transparent 50%);
             box-shadow: 0 0 40px rgba(26, 28, 30, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-            transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, border-left 0.3s ease, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background 0.3s ease, box-shadow 0.3s ease, border-left-color 0.8s ease, opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: grab;
         }
 
-        .hero-card.swapping {
-            opacity: 0.4;
+        /* Roaming (unpinned) card: fully invisible at rest, visible on hover */
+        .hero-card:not(.is-pinned) {
+            opacity: 0;
+        }
+
+        .hero-card:not(.is-pinned):hover {
+            opacity: 1;
+        }
+
+        /* Border flashes black → accent on first appearance */
+        @keyframes borderColorIn {
+            from { border-left-color: var(--ink-deep); }
+            to   { border-left-color: var(--card-accent, var(--copper-accent)); }
+        }
+
+        .hero-card.card-entering {
+            animation: borderColorIn 1s ease forwards;
         }
 
         .hero-card .hero-card-text {
@@ -297,16 +306,21 @@
             border-left: 4px solid var(--card-accent, var(--copper-accent));
         }
 
-        .hero-card-close {
+        /* Mobile close button hidden on desktop */
+        .hero-card-close-mobile {
+            display: none;
+        }
+
+        .hero-card-pin {
             position: absolute;
             top: -12px;
             right: -12px;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             z-index: 2;
             border: none;
             background: var(--vellum-highlight);
-            color: var(--ink-deep);
+            color: var(--ink-faded);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -314,23 +328,47 @@
             justify-content: center;
             opacity: 0;
             box-shadow: 0 2px 12px rgba(26, 28, 30, 0.15);
-            transition: opacity 0.25s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            transition: opacity 0.25s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
         }
 
-        .hero-card:hover .hero-card-close {
+        .hero-card:hover .hero-card-pin {
             opacity: 1;
         }
 
-        .hero-card-close:hover {
+        .hero-card-pin:hover {
             background: var(--ink-deep);
             color: var(--vellum-highlight);
             transform: scale(1.05);
-            box-shadow: 0 4px 16px rgba(26, 28, 30, 0.2);
         }
 
-        .hero-card-close svg {
-            width: 16px;
-            height: 16px;
+        .hero-card-pin svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Pinned card state */
+        .hero-card.is-pinned {
+            cursor: default;
+            background: #ffffff;
+            transform: none;
+            right: auto;
+            box-shadow: 0 4px 24px rgba(26, 28, 30, 0.14), inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+
+        .hero-card.is-pinned:hover {
+            background: #ffffff;
+        }
+
+        .hero-card.is-pinned:active { cursor: default; }
+
+        /* Pin icon on pinned card shows in copper to signal active state */
+        .hero-card.is-pinned .hero-card-pin {
+            color: var(--copper-accent);
+        }
+
+        .hero-card.is-pinned .hero-card-pin:hover {
+            background: var(--ink-deep);
+            color: var(--vellum-highlight);
         }
 
         .hero-card-scroll {
@@ -831,11 +869,6 @@
             display: none;
         }
 
-        .coordinates .resume-icon,
-        .coordinates .blog-icon {
-            display: none;
-        }
-
         .coordinates .coord-content {
             display: block;
         }
@@ -888,13 +921,92 @@
                 right: 1rem;
                 max-width: none;
                 z-index: 100;
-                display: flex;
-                gap: 0.5rem;
-                align-items: flex-start;
                 grid-column: 1 / -1;
             }
 
-            .coordinates .coord-content {
+            .coordinates-row {
+                display: flex;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+
+            /* Very small screens: one hamburger + unified panel (see @media max-width: 480px) */
+            .coordinates-compact {
+                display: none;
+                position: relative;
+                align-items: flex-start;
+            }
+
+            .coord-menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                margin: 0;
+                padding: 0;
+                background: var(--vellum-highlight);
+                border: 1px solid var(--etched-line);
+                color: var(--ink-deep);
+                cursor: pointer;
+                font: inherit;
+                appearance: none;
+                -webkit-appearance: none;
+                transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            }
+
+            .coord-menu-btn:hover {
+                background: var(--ink-deep);
+                color: var(--vellum-base);
+            }
+
+            .coord-menu-btn svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .coord-menu-panel {
+                display: none;
+                position: absolute;
+                top: calc(100% + 0.5rem);
+                right: 0;
+                min-width: min(90vw, 260px);
+                max-width: 90vw;
+                background: var(--vellum-highlight);
+                border: 1px solid var(--etched-line);
+                padding: 1rem;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                z-index: 101;
+            }
+
+            .coordinates-compact.coord-menu-open .coord-menu-panel {
+                display: block;
+            }
+
+            .coord-menu-panel .coord-link {
+                margin-bottom: 0.5rem;
+            }
+
+            .coord-menu-panel .coord-link:last-of-type {
+                margin-bottom: 1rem;
+            }
+
+            .coord-menu-location {
+                font-size: 0.7rem;
+                color: var(--ink-faded);
+                line-height: 1.6;
+                padding-top: 0.75rem;
+                border-top: 0.5px solid var(--etched-line);
+            }
+
+            /* Location popover only (pin button); resume/blog are separate links below */
+            .coord-location {
+                position: relative;
+                display: flex;
+                align-items: flex-start;
+            }
+
+            .coord-location .coord-content {
                 display: none;
                 position: absolute;
                 top: 100%;
@@ -907,47 +1019,173 @@
                 box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             }
 
-            .coordinates:hover .coord-content,
-            .coordinates:focus-within .coord-content {
+            .coord-location:hover .coord-content,
+            .coord-location:focus-within .coord-content,
+            .coord-location.coord-menu-open .coord-content {
                 display: block;
             }
 
-            .coordinates .location-icon,
-            .coordinates .resume-icon,
-            .coordinates .blog-icon {
+            .coordinates .location-icon {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 width: 40px;
                 height: 40px;
+                margin: 0;
                 background: var(--vellum-highlight);
                 border: 1px solid var(--etched-line);
                 cursor: pointer;
-                transition: all 0.2s ease;
+                transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
                 color: var(--ink-deep);
+                font: inherit;
+                padding: 0;
+                appearance: none;
+                -webkit-appearance: none;
             }
 
-            .coordinates .location-icon:hover,
-            .coordinates .resume-icon:hover,
-            .coordinates .blog-icon:hover {
+            .coordinates .location-icon:hover {
                 background: var(--ink-deep);
                 color: var(--vellum-base);
             }
 
-            .coordinates .location-icon svg,
-            .coordinates .resume-icon svg,
-            .coordinates .blog-icon svg {
+            .coordinates .location-icon svg {
                 width: 18px;
                 height: 18px;
             }
 
-            .coordinates .resume-icon,
-            .coordinates .blog-icon {
+            /* Resume / blog: icon chip on hover-capable desktop; full text on touch (no hover) */
+            .coord-nav-expand {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                width: 40px;
+                height: 40px;
+                box-sizing: border-box;
+                overflow: hidden;
                 text-decoration: none;
+                font-family: 'Space Mono', monospace;
+                font-size: 0.75rem;
+                font-weight: 700;
+                letter-spacing: 0.05em;
+                white-space: nowrap;
+                border: 1px solid var(--etched-line);
+                background: var(--vellum-highlight);
+                color: var(--ink-deep);
+                transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+            }
+
+            .coord-nav-expand__icon {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: opacity 0.15s ease;
+            }
+
+            .coord-nav-expand__icon svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .coord-nav-expand__label {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0 0.35rem;
+                opacity: 0;
+                pointer-events: none;
+                text-align: center;
+                line-height: 1.15;
+                transition: opacity 0.15s ease;
+            }
+
+            /* Touch, narrow viewports: full text pills (tap = navigate) */
+            @media (hover: none), (max-width: 639px) {
+                .coordinates .coord-nav-expand {
+                    width: auto;
+                    max-width: min(48vw, 11rem);
+                    min-height: 40px;
+                    height: auto;
+                    padding: 0.45rem 0.65rem;
+                    overflow: visible;
+                }
+
+                .coord-nav-expand__icon {
+                    display: none;
+                }
+
+                .coord-nav-expand__label {
+                    position: static;
+                    opacity: 1;
+                    pointer-events: auto;
+                    padding: 0;
+                }
+
+                .coord-nav-expand--resume {
+                    color: var(--hazard-amber);
+                    background: rgba(212, 160, 23, 0.08);
+                    border-color: var(--hazard-amber);
+                }
+
+                .coord-nav-expand--blog {
+                    color: var(--copper-accent);
+                    background: rgba(184, 115, 51, 0.08);
+                    border-color: var(--copper-accent);
+                }
+            }
+
+            /* Mouse + room: icon chip; fixed widths (no width transition — avoids jitter) */
+            @media (hover: hover) and (pointer: fine) and (min-width: 640px) {
+                .coord-nav-expand--resume:hover {
+                    width: 11.25rem;
+                    color: var(--hazard-amber);
+                    background: rgba(212, 160, 23, 0.08);
+                    border-color: var(--hazard-amber);
+                }
+
+                .coord-nav-expand--resume:hover .coord-nav-expand__icon {
+                    opacity: 0;
+                }
+
+                .coord-nav-expand--resume:hover .coord-nav-expand__label {
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+
+                .coord-nav-expand--blog:hover {
+                    width: 10.5rem;
+                    color: var(--copper-accent);
+                    background: rgba(184, 115, 51, 0.08);
+                    border-color: var(--copper-accent);
+                }
+
+                .coord-nav-expand--blog:hover .coord-nav-expand__icon {
+                    opacity: 0;
+                }
+
+                .coord-nav-expand--blog:hover .coord-nav-expand__label {
+                    opacity: 1;
+                    pointer-events: auto;
+                }
             }
 
             .hero-links {
                 display: none;
+            }
+
+            @media (max-width: 480px) {
+                .coordinates-row {
+                    display: none !important;
+                }
+
+                .coordinates-compact {
+                    display: block;
+                }
             }
         }
 
@@ -1001,11 +1239,11 @@
                 position: static;
                 order: 3;
                 width: 100%;
-                min-height: 50vh;
+                min-height: unset;
                 display: flex;
-                align-items: center;
+                align-items: flex-end;
                 justify-content: center;
-                padding: 2rem 2.5rem 6rem calc(3rem + 2px);
+                padding: 1.5rem 2.5rem 2.5rem calc(3rem + 2px);
             }
 
             .hero-card {
@@ -1014,7 +1252,7 @@
                 width: 100%;
                 min-width: 280px;
                 max-width: 100%;
-                margin: 30px 0 0 0;
+                margin: 0;
                 height: auto;
                 max-height: none;
                 display: block;
@@ -1022,8 +1260,10 @@
                 font-size: 1.35rem;
                 box-sizing: border-box;
                 padding: 0;
-                cursor: default;
+                cursor: pointer;
                 flex-shrink: 0;
+                /* Always fully visible on mobile */
+                opacity: 1 !important;
             }
 
             .hero-card-scroll {
@@ -1031,7 +1271,40 @@
                 text-align: left;
             }
 
+            /* Mobile close button */
+            .hero-card-close-mobile {
+                position: absolute;
+                top: -12px;
+                right: -12px;
+                width: 32px;
+                height: 32px;
+                z-index: 2;
+                border: none;
+                background: var(--vellum-highlight);
+                color: var(--ink-faded);
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 12px rgba(26, 28, 30, 0.15);
+            }
+
+            .hero-card-close-mobile svg {
+                width: 14px;
+                height: 14px;
+            }
+
             .hero-card-zone::after {
+                display: none;
+            }
+
+            /* Mobile: show close, hide pin */
+            .hero-card-close-mobile {
+                display: flex;
+            }
+
+            .hero-card-pin {
                 display: none;
             }
 
@@ -1047,14 +1320,6 @@
                 padding-top: 2rem;
             }
 
-            .hero-card-close {
-                opacity: 0;
-            }
-
-            .hero-card:hover .hero-card-close,
-            .hero-card.swap-btn-visible .hero-card-close {
-                opacity: 1;
-            }
 
             .hero-tagline {
                 font-size: 1.15rem;
@@ -1073,7 +1338,7 @@
                 max-width: 100%;
             }
 
-            /* Small screens & mobile: fixed title size */
+            /* Small screens & mobile: fixed title size (matches 84px at 440px when scaled) */
             .hero-title {
                 font-size: 84px;
                 white-space: normal;
@@ -1093,6 +1358,13 @@
 
             .tagline {
                 margin-top: 0;
+            }
+        }
+
+        /* Below 440px: scale title proportionally from 84px @ 440px */
+        @media (max-width: 440px) {
+            .hero-title {
+                font-size: calc(84px * (100vw / 440));
             }
         }
 
@@ -1150,7 +1422,10 @@
 
             <div class="hero-card-zone" id="heroCardZone">
                 <div class="hero-card" id="heroCard" data-index="0" style="--card-accent: #4a90d9;">
-                    <button class="hero-card-close" id="heroCardClose" type="button" aria-label="Close card">
+                    <button class="hero-card-pin" id="heroCardPin" type="button" aria-label="Pin card">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V17"/><path d="M5 17H19"/><path d="M10 5V11L7 17H17L14 11V5"/><path d="M10 5H14"/></svg>
+                    </button>
+                    <button class="hero-card-close-mobile" id="heroCardCloseMobile" type="button" aria-label="Close card">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                     <div class="hero-card-scroll">
@@ -1169,37 +1444,62 @@
 
             <!-- Coordinates widget (mobile/tablet only, hidden on desktop via CSS) -->
             <div class="coordinates">
-                <a href="resume.html" class="resume-icon" aria-label="View Resume">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10 9 9 9 8 9"></polyline>
-                    </svg>
-                </a>
-                <a href="https://daeblog.vercel.app/" class="blog-icon" aria-label="Read Blog">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                        <path d="M2 2l7.586 7.586"></path>
-                        <circle cx="11" cy="11" r="2"></circle>
-                    </svg>
-                </a>
-                <div class="location-icon" tabindex="0" aria-label="Location info">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
+                <div class="coordinates-row">
+                    <a href="resume.html" class="coord-nav-expand coord-nav-expand--resume" aria-label="View Resume">
+                        <span class="coord-nav-expand__icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </span>
+                        <span class="coord-nav-expand__label">VIEW RESUME →</span>
+                    </a>
+                    <a href="https://daeblog.vercel.app/" class="coord-nav-expand coord-nav-expand--blog" aria-label="Read Blog">
+                        <span class="coord-nav-expand__icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                                <path d="M2 2l7.586 7.586"></path>
+                                <circle cx="11" cy="11" r="2"></circle>
+                            </svg>
+                        </span>
+                        <span class="coord-nav-expand__label">READ BLOG →</span>
+                    </a>
+                    <div class="coord-location" id="coordLocation">
+                        <button type="button" class="location-icon" id="coordLocationBtn" aria-expanded="false" aria-controls="coord-popover" aria-label="Location info">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </button>
+                        <div class="coord-content" id="coord-popover" role="region" aria-label="Location">
+                            LOCATION: OSLO, NORWAY<br>
+                            [59.9139° N, 10.7522° E]<br>
+                            ORIGIN: CUCUTA, COLOMBIA<br>
+                            [7.8939° N, 72.5078° W]
+                        </div>
+                    </div>
                 </div>
-                <div class="coord-content">
-                    LOCATION: OSLO, NORWAY<br>
-                    [59.9139° N, 10.7522° E]<br>
-                    ORIGIN: CUCUTA, COLOMBIA<br>
-                    [7.8939° N, 72.5078° W]<br>
-                    <div class="coord-links">
+                <div class="coordinates-compact" id="coordCompact">
+                    <button type="button" class="coord-menu-btn" id="coordMenuBtn" aria-expanded="false" aria-controls="coord-menu-panel" aria-label="Open site menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="4" y1="8" x2="20" y2="8"></line>
+                            <line x1="4" y1="12" x2="20" y2="12"></line>
+                            <line x1="4" y1="16" x2="20" y2="16"></line>
+                        </svg>
+                    </button>
+                    <div class="coord-menu-panel" id="coord-menu-panel" role="region" aria-label="Resume, blog, and location">
                         <a href="resume.html" class="coord-link">VIEW RESUME →</a>
                         <a href="https://daeblog.vercel.app/" class="coord-link coord-link--blog">READ BLOG →</a>
+                        <div class="coord-menu-location">
+                            LOCATION: OSLO, NORWAY<br>
+                            [59.9139° N, 10.7522° E]<br>
+                            ORIGIN: CUCUTA, COLOMBIA<br>
+                            [7.8939° N, 72.5078° W]
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1305,13 +1605,28 @@
                     <div class="tool-stack">
                         <div class="tool-card" data-category="research">
                             <span class="tool-card-category">Research</span>
-                            <div class="tool-card-name">OpenAI's ChatGPT & Codex</div>
+                            <div class="tool-card-name">OpenAI's ChatGPT</div>
                             <p class="tool-card-desc">Research synthesis, literature review, and fast knowledge extraction for complex topics.</p>
+                        </div>
+                        <div class="tool-card" data-category="research">
+                            <span class="tool-card-category">Research</span>
+                            <div class="tool-card-name">OpenClaw</div>
+                            <p class="tool-card-desc">Agent and MCP-oriented workflows for structured experiments, tool integration, and reproducible research loops.</p>
+                        </div>
+                        <div class="tool-card" data-category="development">
+                            <span class="tool-card-category">Development</span>
+                            <div class="tool-card-name">OpenAI's Codex</div>
+                            <p class="tool-card-desc">IDE-native coding assistance, completions, and refactors grounded in the codebase and workflows.</p>
                         </div>
                         <div class="tool-card" data-category="strategy">
                             <span class="tool-card-category">Strategy & JTBD</span>
-                            <div class="tool-card-name">Google's Gemini & NotebookLM</div>
-                            <p class="tool-card-desc">Strategic planning, jobs-to-be-done analysis, and structured reasoning.</p>
+                            <div class="tool-card-name">Google's Gemini</div>
+                            <p class="tool-card-desc">Long-context reasoning, scenario exploration, and structured synthesis for strategy and stakeholder alignment.</p>
+                        </div>
+                        <div class="tool-card" data-category="strategy">
+                            <span class="tool-card-category">Strategy & JTBD</span>
+                            <div class="tool-card-name">NotebookLM</div>
+                            <p class="tool-card-desc">Source-grounded notebooks for themes, narratives, and evidence-backed JTBD and opportunity framing.</p>
                         </div>
                         <div class="tool-card" data-category="development">
                             <span class="tool-card-category">Development</span>
@@ -1320,18 +1635,48 @@
                         </div>
                         <div class="tool-card" data-category="prototyping">
                             <span class="tool-card-category">Prototyping</span>
-                            <div class="tool-card-name">Replit, Riff & Lovable</div>
-                            <p class="tool-card-desc">Rapid MVP builds and interactive prototypes for user testing.</p>
+                            <div class="tool-card-name">Replit</div>
+                            <p class="tool-card-desc">Cloud workspaces and instant deploys for quick experiments, MVPs, and shareable demos.</p>
+                        </div>
+                        <div class="tool-card" data-category="prototyping">
+                            <span class="tool-card-category">Prototyping</span>
+                            <div class="tool-card-name">Riff</div>
+                            <p class="tool-card-desc">AI-native app building for fast iteration on flows, UI, and interactive product experiments.</p>
+                        </div>
+                        <div class="tool-card" data-category="prototyping">
+                            <span class="tool-card-category">Prototyping</span>
+                            <div class="tool-card-name">Lovable</div>
+                            <p class="tool-card-desc">Prompt-to-full-stack builds for polished UI prototypes and rapid user validation.</p>
                         </div>
                         <div class="tool-card" data-category="editors">
                             <span class="tool-card-category">Code Editors</span>
-                            <div class="tool-card-name">Cursor & Antigravity</div>
-                            <p class="tool-card-desc">AI-assisted development environments that speed up coding workflows.</p>
+                            <div class="tool-card-name">Cursor</div>
+                            <p class="tool-card-desc">Agent-first editor for repo-wide context, inline AI, and fast iteration on production code.</p>
+                        </div>
+                        <div class="tool-card" data-category="editors">
+                            <span class="tool-card-category">Code Editors</span>
+                            <div class="tool-card-name">Antigravity</div>
+                            <p class="tool-card-desc">Google’s IDE for agentic workflows—multi-file edits, grounded context, and reviewable changes.</p>
                         </div>
                         <div class="tool-card" data-category="integrations">
                             <span class="tool-card-category">Integrations</span>
-                            <div class="tool-card-name">Figma & Linear MCPs</div>
-                            <p class="tool-card-desc">Design-to-code workflows and project integrations through Model Context Protocol.</p>
+                            <div class="tool-card-name">Figma MCP</div>
+                            <p class="tool-card-desc">Design context, components, and handoff in the agent loop via Model Context Protocol.</p>
+                        </div>
+                        <div class="tool-card" data-category="integrations">
+                            <span class="tool-card-category">Integrations</span>
+                            <div class="tool-card-name">Linear MCP</div>
+                            <p class="tool-card-desc">Issues, projects, and roadmaps available to agents for planning and delivery workflows.</p>
+                        </div>
+                        <div class="tool-card" data-category="integrations">
+                            <span class="tool-card-category">Integrations</span>
+                            <div class="tool-card-name">Supabase CLI</div>
+                            <p class="tool-card-desc">Local Postgres, migrations, and project scaffolding from the terminal for fast backend iteration.</p>
+                        </div>
+                        <div class="tool-card" data-category="integrations">
+                            <span class="tool-card-category">Integrations</span>
+                            <div class="tool-card-name">Stripe CLI</div>
+                            <p class="tool-card-desc">Webhook forwarding, test charges, and billing flows in local and staging environments.</p>
                         </div>
                     </div>
                 </div>
@@ -1365,7 +1710,65 @@
 
         document.querySelectorAll('.scroll-reveal').forEach((el) => observer.observe(el));
 
-        // Hero Card: cycle, dismiss, drag (hues from tool section)
+        // Location pin (≤1200px, wide row): tap toggles location popover only
+        (function () {
+            const wrap = document.getElementById('coordLocation');
+            const btn = document.getElementById('coordLocationBtn');
+            if (!wrap || !btn) return;
+            const mq = window.matchMedia('(max-width: 1200px)');
+
+            function setExpanded(open) {
+                wrap.classList.toggle('coord-menu-open', open);
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            }
+
+            btn.addEventListener('click', (e) => {
+                if (!mq.matches) return;
+                e.stopPropagation();
+                setExpanded(!wrap.classList.contains('coord-menu-open'));
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!mq.matches || !wrap.classList.contains('coord-menu-open')) return;
+                if (!wrap.contains(e.target)) setExpanded(false);
+            });
+        })();
+
+        // Very small screens (≤480px): single hamburger opens panel with resume, blog, location
+        (function () {
+            const compact = document.getElementById('coordCompact');
+            const menuBtn = document.getElementById('coordMenuBtn');
+            const panel = document.getElementById('coord-menu-panel');
+            if (!compact || !menuBtn || !panel) return;
+            const mq = window.matchMedia('(max-width: 480px)');
+
+            function setMenuOpen(open) {
+                compact.classList.toggle('coord-menu-open', open);
+                menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                menuBtn.setAttribute('aria-label', open ? 'Close site menu' : 'Open site menu');
+            }
+
+            menuBtn.addEventListener('click', (e) => {
+                if (!mq.matches) return;
+                e.stopPropagation();
+                setMenuOpen(!compact.classList.contains('coord-menu-open'));
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!mq.matches || !compact.classList.contains('coord-menu-open')) return;
+                if (!compact.contains(e.target)) setMenuOpen(false);
+            });
+
+            panel.querySelectorAll('a.coord-link').forEach((a) => {
+                a.addEventListener('click', () => setMenuOpen(false));
+            });
+
+            window.addEventListener('resize', () => {
+                if (!mq.matches && compact.classList.contains('coord-menu-open')) setMenuOpen(false);
+            });
+        })();
+
+        // Hero Card: cycle, pin, drag (hues from tool section)
         const heroCards = [
             { text: 'With a human-centered approach, I ensure that IT/OT environments become safer while making people more efficient in complex industrial operations.', accent: '#4a90d9' },
             { text: 'AI should strengthen human expertise, not replace it. Human-in-the-loop architecture is essential to the operation and safety of agentic systems.', accent: '#d4a017' },
@@ -1373,29 +1776,64 @@
             { text: 'Focused on high-criticality security products where minimal failures can be costly and fatal. Enterprise SaaS across Oil & Gas, Maritime, Manufacturing, Utilities.', accent: '#ab47bc' }
         ];
 
-        const heroCard = document.getElementById('heroCard');
-        const heroCardText = document.getElementById('heroCardText');
-        const heroCardClose = document.getElementById('heroCardClose');
-        const heroCardZone = document.getElementById('heroCardZone');
-        const headerEl = document.querySelector('header');
+        const heroCard            = document.getElementById('heroCard');
+        const heroCardText        = document.getElementById('heroCardText');
+        const heroCardPin         = document.getElementById('heroCardPin');
+        const heroCardCloseMobile = document.getElementById('heroCardCloseMobile');
+        const heroCardZone        = document.getElementById('heroCardZone');
 
-        let cardIndex = 0;
+        let cardIndex  = 0;
         let isDragging = false;
         let dragStartX = 0, dragStartY = 0;
         let cardStartX = 0, cardStartY = 0;
+        let zTop = 10; // z-index counter: newest card always above older ones
 
-        // Hidden until first Spline click
+        const pinnedIndices = new Set();
+
+        // Hidden until first Spline/pinned-card click
         heroCard.style.display = 'none';
 
-        window._heroCards = heroCards;
+        // Expose for shared advance logic and spline script block
+        window._heroCards     = heroCards;
+        window._pinnedIndices = pinnedIndices;
+        window._splineCardIndex = 0;
+
+        // Centralised "advance and show next card" — called by Spline click and pinned-card click
+        window.advanceHeroCard = function(clickPos) {
+            const total  = heroCards.length;
+            const pinned = pinnedIndices;
+            let next  = window._splineCardIndex;
+            let found = false;
+            for (let i = 0; i < total; i++) {
+                next = (next + 1) % total;
+                if (!pinned.has(next)) { found = true; break; }
+            }
+            if (!found) return;
+            window._splineCardIndex = next;
+            showCard(next, clickPos);
+        };
+
         window.showHeroCard = function(index, clickPos) { showCard(index, clickPos); };
 
         function showCard(index, clickPos) {
             heroCard.style.display = '';
             heroCard.classList.add('swapping');
+
+            // Make the card immediately visible and raise its z-index above all others
+            heroCard.style.opacity  = '1';
+            heroCard.style.zIndex   = ++zTop;
+
+            // Border flashes black → accent
+            heroCard.classList.remove('card-entering');
+            void heroCard.offsetWidth; // reflow to restart animation
+            heroCard.classList.add('card-entering');
+            heroCard.addEventListener('animationend', () => heroCard.classList.remove('card-entering'), { once: true });
+
+            // After first hover-out, hand opacity control back to CSS (→ fades to 0)
+            heroCard.addEventListener('mouseleave', () => { heroCard.style.opacity = ''; }, { once: true });
+
             const isMobile = window.matchMedia('(max-width: 1024px)').matches;
 
-            // Position above the click point on desktop before content swaps in
             if (!isMobile && clickPos) {
                 const zoneRect = heroCardZone.getBoundingClientRect();
                 const cardW = heroCard.offsetWidth || 320;
@@ -1404,7 +1842,7 @@
                 let top  = clickPos.y + 20;
                 left = Math.max(0, Math.min(zoneRect.width  - cardW, left));
                 top  = Math.max(0, Math.min(zoneRect.height - cardH, top));
-                heroCard.style.right = '';
+                heroCard.style.right     = '';
                 heroCard.style.transform = '';
                 heroCard.style.left = left + 'px';
                 heroCard.style.top  = top  + 'px';
@@ -1417,47 +1855,94 @@
                 heroCard.style.setProperty('--card-accent', card.accent);
                 heroCard.dataset.index = cardIndex;
                 if (!isMobile && !clickPos) {
-                    heroCard.style.left = '';
-                    heroCard.style.top = '';
-                    heroCard.style.right = '2rem';
+                    heroCard.style.left      = '';
+                    heroCard.style.top       = '';
+                    heroCard.style.right     = '2rem';
                     heroCard.style.transform = 'translateY(-50%)';
                 } else if (isMobile) {
-                    heroCard.style.left = '';
-                    heroCard.style.top = '';
-                    heroCard.style.right = '';
+                    heroCard.style.left      = '';
+                    heroCard.style.top       = '';
+                    heroCard.style.right     = '';
                     heroCard.style.transform = '';
                 }
                 heroCard.classList.remove('swapping');
             }, 350);
         }
 
-        heroCardClose.addEventListener('click', (e) => {
+        // Pin button: freeze roaming card as a locked pinned clone
+        heroCardPin.addEventListener('click', (e) => {
             e.stopPropagation();
+            const idx = parseInt(heroCard.dataset.index);
+            if (isNaN(idx)) return;
+            pinnedIndices.add(idx);
+
+            const card   = heroCards[idx];
+            const pinned = document.createElement('div');
+            pinned.className = 'hero-card is-pinned';
+            pinned.style.setProperty('--card-accent', card.accent);
+
+            // Snapshot exact visual position (getBoundingClientRect accounts for transform)
+            const rect     = heroCard.getBoundingClientRect();
+            const zoneRect = heroCardZone.getBoundingClientRect();
+            pinned.style.left      = (rect.left - zoneRect.left) + 'px';
+            pinned.style.top       = (rect.top  - zoneRect.top)  + 'px';
+            pinned.style.width     = rect.width + 'px';
+            pinned.style.transform = 'none';
+            pinned.style.right     = 'auto';
+            pinned.style.zIndex    = zTop; // same level as roaming card
+
+            pinned.innerHTML =
+                '<button class="hero-card-pin" type="button" aria-label="Unpin card">' +
+                    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                        '<path d="M12 22V17"/><path d="M5 17H19"/><path d="M10 5V11L7 17H17L14 11V5"/><path d="M10 5H14"/>' +
+                    '</svg>' +
+                '</button>' +
+                '<div class="hero-card-scroll"><p class="hero-card-text">' + card.text.replace(/</g, '&lt;') + '</p></div>';
+
+            // Clicking the pinned card body raises it to the top of the stack
+            pinned.addEventListener('click', (e) => {
+                if (e.target.closest('.hero-card-pin')) return;
+                pinned.style.zIndex = ++zTop;
+            });
+
+            // Unpin: return card to hover-fade behavior, remove from DOM once it fully fades
+            pinned.querySelector('.hero-card-pin').addEventListener('click', (e) => {
+                e.stopPropagation();
+                pinnedIndices.delete(idx);
+                pinned.classList.remove('is-pinned');
+                // Stay visible until user moves away
+                pinned.style.opacity = '1';
+                pinned.addEventListener('mouseleave', () => {
+                    pinned.style.opacity = '';
+                    pinned.addEventListener('transitionend', function cleanup(ev) {
+                        if (ev.propertyName !== 'opacity') return;
+                        if (parseFloat(getComputedStyle(pinned).opacity) < 0.05) {
+                            pinned.remove();
+                        }
+                    });
+                }, { once: true });
+            });
+
+            heroCardZone.appendChild(pinned);
             heroCard.style.display = 'none';
-            heroCard.classList.remove('swap-btn-visible');
         });
 
-        heroCard.addEventListener('click', (e) => {
-            if (window.matchMedia('(max-width: 1024px)').matches && !e.target.closest('.hero-card-close')) {
-                heroCard.classList.toggle('swap-btn-visible');
-            }
-        });
-
+        // Drag: roaming card only
         heroCard.addEventListener('mousedown', (e) => {
-            if (e.target.closest('.hero-card-close')) return;
+            if (e.target.closest('.hero-card-pin')) return;
             if (window.matchMedia('(max-width: 1024px)').matches) return;
             isDragging = true;
             document.body.style.userSelect = 'none';
             dragStartX = e.clientX;
             dragStartY = e.clientY;
-            const rect = heroCard.getBoundingClientRect();
+            const rect     = heroCard.getBoundingClientRect();
             const zoneRect = heroCardZone.getBoundingClientRect();
             cardStartX = rect.left - zoneRect.left;
-            cardStartY = rect.top - zoneRect.top;
-            heroCard.style.right = '';
+            cardStartY = rect.top  - zoneRect.top;
+            heroCard.style.right     = '';
             heroCard.style.transform = '';
             heroCard.style.left = cardStartX + 'px';
-            heroCard.style.top = cardStartY + 'px';
+            heroCard.style.top  = cardStartY + 'px';
         });
 
         document.addEventListener('mousemove', (e) => {
@@ -1466,14 +1951,9 @@
             const dy = e.clientY - dragStartY;
             const zoneRect = heroCardZone.getBoundingClientRect();
             const cardRect = heroCard.getBoundingClientRect();
-            const minCardWidth = 280;
-            const cardWidth = Math.max(cardRect.width, minCardWidth);
-            let newX = cardStartX + dx;
-            let newY = cardStartY + dy;
-            newX = Math.max(0, Math.min(zoneRect.width - cardWidth, newX));
-            newY = Math.max(0, Math.min(zoneRect.height - cardRect.height, newY));
-            heroCard.style.left = newX + 'px';
-            heroCard.style.top = newY + 'px';
+            const cardW    = Math.max(cardRect.width, 280);
+            heroCard.style.left = Math.max(0, Math.min(zoneRect.width  - cardW,            cardStartX + dx)) + 'px';
+            heroCard.style.top  = Math.max(0, Math.min(zoneRect.height - cardRect.height,  cardStartY + dy)) + 'px';
         });
 
         document.addEventListener('mouseup', () => {
@@ -1481,30 +1961,48 @@
             document.body.style.userSelect = '';
         });
 
-        function resetCardPositionForMobile() {
+        // Mobile: tap card body to cycle to next card
+        heroCard.addEventListener('click', (e) => {
+            if (!window.matchMedia('(max-width: 1024px)').matches) return;
+            if (e.target.closest('.hero-card-close-mobile')) return;
+            window.advanceHeroCard(null);
+        });
+
+        // Mobile: close button hides card
+        heroCardCloseMobile.addEventListener('click', (e) => {
+            e.stopPropagation();
+            heroCard.style.display = 'none';
+        });
+
+        window.addEventListener('resize', () => {
             if (window.matchMedia('(max-width: 1024px)').matches) {
-                heroCard.style.left = '';
-                heroCard.style.top = '';
-                heroCard.style.right = '';
-                heroCard.style.transform = '';
+                heroCard.style.left = heroCard.style.top = heroCard.style.right = heroCard.style.transform = '';
             }
-        }
+        });
 
-        window.addEventListener('resize', resetCardPositionForMobile);
+        // Subtle Mouse Movement for Parallax Layers + Cursor-following scan line
+        const scanLine = document.querySelector('.scan-line');
 
-        // Subtle Mouse Movement for Parallax Layers
         document.addEventListener('mousemove', (e) => {
             const x = (e.clientX / window.innerWidth - 0.5);
             const y = (e.clientY / window.innerHeight - 0.5);
-            
+
             // Main grid moves slowly
             document.querySelector('.topography-bg').style.transform = `translate(${x * 10}px, ${y * 10}px) scale(1.05)`;
-            
+
             // Hex pattern moves in opposite direction
             document.querySelector('.hex-pattern').style.transform = `translate(${-x * 8}px, ${-y * 8}px)`;
-            
+
             // Circuit nodes have subtle movement
             document.querySelector('.circuit-nodes').style.transform = `translate(${x * 5}px, ${y * 5}px)`;
+
+            // Scan line follows cursor
+            scanLine.style.top = e.clientY + 'px';
+            scanLine.style.opacity = '1';
+        });
+
+        document.addEventListener('mouseleave', () => {
+            scanLine.style.opacity = '0';
         });
 
         // Tool Stack Filter Functionality
@@ -1531,19 +2029,10 @@
     </script>
 
     <script>
-        // Any click anywhere on the Spline scene cycles the hero card.
-        let splineCardIndex = 0;
-
         document.getElementById('spline-viewer').addEventListener('click', (e) => {
-            const total = window._heroCards?.length ?? 4;
-            splineCardIndex = (splineCardIndex + 1) % total;
-            if (typeof window.showHeroCard === 'function') {
-                const zone = document.getElementById('heroCardZone').getBoundingClientRect();
-                window.showHeroCard(splineCardIndex, {
-                    x: e.clientX - zone.left,
-                    y: e.clientY - zone.top
-                });
-            }
+            if (typeof window.advanceHeroCard !== 'function') return;
+            const zone = document.getElementById('heroCardZone').getBoundingClientRect();
+            window.advanceHeroCard({ x: e.clientX - zone.left, y: e.clientY - zone.top });
         });
     </script>
 </body>
