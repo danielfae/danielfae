@@ -1408,9 +1408,9 @@
                 max-width: 100%;
             }
 
-            /* Small screens & mobile: fixed title size (matches 84px at 440px when scaled) */
+            /* Small screens & mobile: fixed title size (90% of former 84px; scales below 440px) */
             .hero-title {
-                font-size: 84px;
+                font-size: calc(84px * 0.9);
                 white-space: normal;
                 line-height: 0.88;
                 width: 100%;
@@ -1431,10 +1431,10 @@
             }
         }
 
-        /* Below 440px: scale title proportionally from 84px @ 440px */
+        /* Below 440px: scale title proportionally (90% of prior curve, anchored at 440px) */
         @media (max-width: 440px) {
             .hero-title {
-                font-size: calc(84px * (100vw / 440));
+                font-size: calc(84px * 0.9 * (100vw / 440));
             }
         }
 
