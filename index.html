@@ -582,6 +582,18 @@
             margin-bottom: 2rem;
         }
 
+        .section-intro a {
+            color: var(--hazard-amber);
+            text-decoration: underline;
+            text-decoration-color: rgba(212, 160, 23, 0.45);
+            text-underline-offset: 3px;
+        }
+
+        .section-intro a:hover {
+            color: var(--copper-accent);
+            text-decoration-color: var(--copper-accent);
+        }
+
         .module-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -851,6 +863,64 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            gap: 3rem;
+        }
+
+        .footer-scroll-top {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translate(-50%, -50%) scale(0.92);
+            z-index: 3;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            border: 1px solid var(--etched-line);
+            border-radius: 50%;
+            background: var(--vellum-highlight);
+            color: var(--ink-deep);
+            cursor: pointer;
+            font: inherit;
+            box-shadow: 0 2px 12px rgba(26, 28, 30, 0.08);
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.35s ease, transform 0.25s ease;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .footer-scroll-top.is-visible {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .footer-scroll-top:hover {
+            background: var(--ink-deep);
+            color: var(--vellum-base);
+            border-color: var(--ink-deep);
+        }
+
+        .footer-scroll-top svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media (max-width: 720px) {
+            footer {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.25rem;
+                padding-top: 5rem;
+            }
+
+            .footer-right {
+                text-align: center;
+            }
         }
 
         .coordinates {
@@ -930,7 +1000,7 @@
                 align-items: flex-start;
             }
 
-            /* Very small screens: one hamburger + unified panel (see @media max-width: 480px) */
+            /* ≤1000px: one hamburger + unified panel (see @media max-width: 1000px) */
             .coordinates-compact {
                 display: none;
                 position: relative;
@@ -1178,7 +1248,7 @@
                 display: none;
             }
 
-            @media (max-width: 480px) {
+            @media (max-width: 1000px) {
                 .coordinates-row {
                     display: none !important;
                 }
@@ -1511,7 +1581,7 @@
                     <p class="mono" style="margin-bottom: 1rem; color: var(--hazard-amber);">Core Philosophy</p>
                     <h2>Human Amplification <br><span style="font-weight: 300; font-style: italic;">over </span>Full Automation</h2>
                     <p>AI should strengthen human expertise, not replace it. In high-stakes environments, bad decisions or direct attacks can lead to <strong>explosions, environmental damage, or costly failures</strong>. That is why <span style="font-style: italic;">human-in-the-loop architecture</span> is essential to the operation and safety of agentic systems.</p>
-                    <p>I support an <span style="font-style: italic;">AI-native mindset</span>, but not an "automate everything" approach. Teams still need clear decisions, shared context, and human judgment. Maintaining a <span style="font-style: italic;">human-centered design approach</span> is key to make advanced agentic systems trustworthy, reliable and more useful.</p>
+                    <p>I support an <span style="font-style: italic;">AI-native mindset</span>, but not an "automate everything" approach. Teams still need clear decisions, shared context, and human judgement. Maintaining a <span style="font-style: italic;">human-centered design approach</span> is key to make advanced agentic systems trustworthy, reliable and more useful.</p>
                     <p class="mono" style="margin-top: 1rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.72rem; text-align: right; padding-right: 5px;">- Daniel Arevalo, October 2025</p>
                 </div>
 
@@ -1534,9 +1604,9 @@
             <section class="module-section scroll-reveal">
                 <div class="section-header">
                     <h2 class="mono">Design Process</h2>
-                    <p class="mono">For Enterprise Cybersecurity Solutions</p>
+                    <p class="mono">For Enterprise SaaS and Cybersecurity Solutions</p>
                 </div>
-                <p class="section-intro">I design usable products that enhance human expertise with agentic AI. My skills enable teams to execute fast, correct direction, align quickly, and iterate with high velocity towards practical solutions.</p>
+                <p class="section-intro"> My skills enable teams to execute fast, correct direction, align quickly, and iterate with high velocity towards practical solutions.</p>
 
                 <div class="module-grid">
                     <div class="module-card">
@@ -1589,7 +1659,7 @@
                     <h2 class="mono">Technical Stack</h2>
                     <p class="mono">Practitioner + Thought Leader</p>
                 </div>
-                <p class="section-intro">My workflow combines strategic research with high-fidelity or production-ready prototyping with code. I use coding agents and generative AI to ship faster while keeping a <span style="font-style: italic;">human-centered approach</span> to decision-making.</span></p>
+                <p class="section-intro">My workflow combines strategic research with production-ready prototyping directly in code. I use AI coding agents and generative AI to ship faster while keeping a <span style="font-style: italic;">human-centered approach</span> to decision-making.</span></p>
                 
                 <div class="tool-section">
                     <div class="filter-controls">
@@ -1680,17 +1750,50 @@
                         </div>
                     </div>
                 </div>
-                
-                <p class="section-intro" style="margin-top: 2.5rem;">AI is the key to speed up learning loops between product decisions and business impact. Particularly, for research synthesis, assumption testing, and rapid prototyping.</p>
+                <p class="section-intro" style="margin-top: 2.5rem;">All these tools are the key to speeding up learning loops between product decisions and business impact—especially when research synthesis, assumption testing, and rapid prototyping stay in the same tight loop.</p>
             </section>
+                <section class="read-more-note" style="margin-top:2.5rem; margin-bottom: 0;">
+                    <div class="mono" style="font-weight: 600; margin-bottom: 0.5rem;">Read more…</div>
+                    <div class="section-intro" style="margin:0;">
+                        I design usable products that enhance human expertise with agentic AI. I keep a <a href="https://daeblog.vercel.app/" target="_blank" rel="noopener noreferrer">blog</a> of my thoughts on practice and the evolution of this work, check out my recent posts:
+                        <ul style="margin: 0.5em 0 0 1em; padding: 0; list-style: disc;">
+                            <li>
+                                <a href="https://daeblog.vercel.app/posts/2026/design-leadership-has-evolved" target="_blank" rel="noopener noreferrer">
+                                    Design leadership has evolved
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://daeblog.vercel.app/posts/2026/death-of-frontend-development" target="_blank" rel="noopener noreferrer">
+                                    The death of front-end development
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://daeblog.vercel.app/posts/2026/how-i-write-code-in-2026" target="_blank" rel="noopener noreferrer">
+                                    How I write code in 2026
+                                </a>
+                            </li>
+                        </ul>
+                        <span style="display:block;margin-top:0.5em;">Or browse the full
+                            <a href="https://daeblog.vercel.app/posts" target="_blank" rel="noopener noreferrer">archive</a>.
+                        </span>
+                    </div>
+                </section>
         </main>
 
-        <footer>
+        <footer id="site-footer">
             <div class="mono">© 2026 Daniel Arevalo @ Omny Security</div>
-            <div class="mono" style="text-align: right;">
+            <div class="mono footer-right">
                 Building, testing and improving complex systems<br>
                 with AI and human-centered design principles
             </div>
+            <button type="button" class="footer-scroll-top" id="footerScrollTop" hidden
+                aria-label="Scroll to top of page"
+                title="Scroll to top of page — returns to the top of this page">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 19V5"></path>
+                    <path d="M5 12l7-7 7 7"></path>
+                </svg>
+            </button>
         </footer>
     </div>
 
@@ -1734,13 +1837,13 @@
             });
         })();
 
-        // Very small screens (≤480px): single hamburger opens panel with resume, blog, location
+        // ≤1000px width: single hamburger opens panel with resume, blog, location (see @media max-width: 1000px)
         (function () {
             const compact = document.getElementById('coordCompact');
             const menuBtn = document.getElementById('coordMenuBtn');
             const panel = document.getElementById('coord-menu-panel');
             if (!compact || !menuBtn || !panel) return;
-            const mq = window.matchMedia('(max-width: 480px)');
+            const mq = window.matchMedia('(max-width: 1000px)');
 
             function setMenuOpen(open) {
                 compact.classList.toggle('coord-menu-open', open);
@@ -1773,7 +1876,7 @@
             { text: 'With a human-centered approach, I ensure that IT/OT environments become safer while making people more efficient in complex industrial operations.', accent: '#4a90d9' },
             { text: 'AI should strengthen human expertise, not replace it. Human-in-the-loop architecture is essential to the operation and safety of agentic systems.', accent: '#d4a017' },
             { text: 'I design usable products that enhance human expertise with agentic AI. My skills enable teams to execute fast and iterate with high velocity.', accent: '#7cb342' },
-            { text: 'Focused on high-criticality security products where minimal failures can be costly and fatal. Enterprise SaaS across Oil & Gas, Maritime, Manufacturing, Utilities.', accent: '#ab47bc' }
+            { text: 'When agents ship in hours what teams once spent weeks on, design leadership and critical judgement is essential to protect complex systems from failures that can be fatal.', accent: '#ab47bc' }
         ];
 
         const heroCard            = document.getElementById('heroCard');
@@ -1979,6 +2082,40 @@
                 heroCard.style.left = heroCard.style.top = heroCard.style.right = heroCard.style.transform = '';
             }
         });
+
+        // Footer: first time cursor enters footer (scan line crosses into it), show centered scroll-to-top; touch: show when footer enters view
+        (function () {
+            const footer = document.getElementById('site-footer');
+            const scrollTopBtn = document.getElementById('footerScrollTop');
+            if (!footer || !scrollTopBtn) return;
+
+            function revealScrollTopBtn() {
+                if (scrollTopBtn.classList.contains('is-visible')) return;
+                scrollTopBtn.removeAttribute('hidden');
+                scrollTopBtn.classList.add('is-visible');
+            }
+
+            const usePointerEnterFooter = window.matchMedia('(pointer: fine)').matches && window.matchMedia('(hover: hover)').matches;
+
+            if (usePointerEnterFooter) {
+                footer.addEventListener('mouseenter', revealScrollTopBtn, { once: true });
+            } else {
+                const io = new IntersectionObserver(
+                    (entries) => {
+                        if (entries[0].isIntersecting) {
+                            revealScrollTopBtn();
+                            io.disconnect();
+                        }
+                    },
+                    { threshold: 0.12 }
+                );
+                io.observe(footer);
+            }
+
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        })();
 
         // Subtle Mouse Movement for Parallax Layers + Cursor-following scan line
         const scanLine = document.querySelector('.scan-line');
