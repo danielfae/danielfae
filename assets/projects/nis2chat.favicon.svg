@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.000 145.000" width="145" height="145" role="img" aria-label="NIS2CHAT">
+  <title>NIS2CHAT tile</title>
+  <path d="M 26.100 0 H 118.900 A 26.100 26.100 0 0 1 145.000 26.100 V 92.800 A 26.100 26.100 0 0 1 118.900 118.900 H 43.355 L 14.355 145.000 L 14.355 118.900 H 26.100 A 26.100 26.100 0 0 1 0 92.800 V 26.100 A 26.100 26.100 0 0 1 26.100 0 Z" fill="#C8E972"/>
+  <g id="watchpoint" data-part="icon-mark" fill="none" stroke="#1A1A1D" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" transform="translate(27.188 14.137) scale(3.776042)">
+    <path d="M3.6 8.2V5.6a2 2 0 0 1 2-2h2.6"/>
+    <path d="M15.8 3.6h2.6a2 2 0 0 1 2 2v2.6"/>
+    <path d="M20.4 15.8v2.6a2 2 0 0 1-2 2h-2.6"/>
+    <path d="M8.2 20.4H5.6a2 2 0 0 1-2-2v-2.6"/>
+    <circle cx="12" cy="12" r="3.1" fill="#1A1A1D" stroke="none"/>
+  </g>
+</svg>
