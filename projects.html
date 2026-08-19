@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" href="favicon/ÆSquare-ios.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --vellum-base: #f4f1ea;
@@ -17,6 +17,7 @@
             --ink-deep: #1a1c1e;
             --ink-faded: #4a4d52;
             --etched-line: rgba(26, 28, 30, 0.15);
+            --copper-accent: #b87333;
             --hazard-amber: #d4a017;
             --grain-opacity: 0.06;
         }
@@ -25,6 +26,10 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -55,9 +60,9 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1080px;
             margin: 0 auto;
-            padding: 3rem 2rem;
+            padding: 3rem 2rem 5rem;
             position: relative;
         }
 
@@ -84,7 +89,7 @@
             font-size: 0.6rem;
         }
 
-        .projects-card {
+        .projects-shell {
             background: linear-gradient(135deg, var(--vellum-highlight) 0%, var(--vellum-base) 100%);
             border: 1px solid var(--etched-line);
         }
@@ -95,7 +100,7 @@
         }
 
         .page-header {
-            padding: 3rem;
+            padding: 3rem 3rem 2.25rem;
             border-bottom: 1px solid var(--etched-line);
         }
 
@@ -114,15 +119,175 @@
             text-transform: uppercase;
         }
 
-        .page-body {
-            padding: 3rem;
-            min-height: 240px;
+        .page-lede {
+            color: var(--ink-faded);
+            font-size: 1.05rem;
+            max-width: 46ch;
+            font-weight: 300;
         }
 
-        .page-body p {
+        .favicon-list {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 0.75rem;
+            padding: 1.5rem 3rem 2rem;
+            border-bottom: 1px solid var(--etched-line);
+            list-style: none;
+        }
+
+        .favicon-card {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18%;
+            background: var(--vellum-highlight);
+            border: 1px solid var(--etched-line);
+            text-decoration: none;
+            transition: transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.25s ease, border-color 0.2s ease;
+        }
+
+        .favicon-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .favicon-card:hover,
+        .favicon-card:focus-visible {
+            transform: translateY(-3px);
+            border-color: var(--ink-deep);
+            box-shadow: 0 8px 20px rgba(26, 28, 30, 0.08);
+            outline: none;
+        }
+
+        .favicon-card.is-active {
+            border-color: var(--ink-deep);
+            box-shadow: inset 0 -3px 0 var(--hazard-amber);
+        }
+
+        .favicon-card--dark {
+            background: #111113;
+            border-color: rgba(26, 28, 30, 0.35);
+        }
+
+        .project-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .project-block {
+            padding: 2.5rem 3rem;
+            border-bottom: 1px solid var(--etched-line);
+            scroll-margin-top: 1.5rem;
+        }
+
+        .project-block:last-child {
+            border-bottom: none;
+        }
+
+        .project-shot {
+            display: block;
+            overflow: hidden;
+            border: 1px solid var(--etched-line);
+            background: #111;
+            margin-bottom: 1.25rem;
+        }
+
+        .project-shot img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            object-fit: cover;
+            object-position: top center;
+        }
+
+        .project-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-meta img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .project-link {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-deep);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .project-link:hover {
+            color: var(--copper-accent);
+            border-bottom-color: var(--copper-accent);
+        }
+
+        .project-copy {
             color: var(--ink-faded);
-            font-size: 1.1rem;
-            max-width: 36ch;
+            font-size: 1.02rem;
+            font-weight: 300;
+            max-width: 62ch;
+        }
+
+        footer {
+            margin-top: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+            color: var(--ink-faded);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 720px) {
+            .container {
+                padding: 2rem 1.25rem 3.5rem;
+            }
+
+            .page-header,
+            .favicon-list,
+            .project-block {
+                padding-left: 1.25rem;
+                padding-right: 1.25rem;
+            }
+
+            .page-header {
+                padding-top: 2rem;
+            }
+
+            .favicon-list {
+                gap: 0.5rem;
+                padding-top: 1.15rem;
+                padding-bottom: 1.35rem;
+            }
+
+            .favicon-card {
+                padding: 14%;
+            }
+
+            .project-block {
+                padding-top: 1.75rem;
+                padding-bottom: 1.75rem;
+            }
+
+            footer {
+                flex-direction: column;
+                text-align: left;
+            }
         }
     </style>
 </head>
@@ -133,16 +298,151 @@
     <div class="container">
         <a href="index.html" class="back-link">Back to Portfolio</a>
 
-        <div class="projects-card">
+        <div class="projects-shell">
             <div class="top-border"></div>
             <header class="page-header">
                 <p class="mono">Selected Work</p>
                 <h1>Projects</h1>
+                <p class="page-lede">Live products I have designed and shipped. Open a mark to jump to its screenshot and a short description.</p>
             </header>
-            <div class="page-body">
-                <p>Case studies and build logs will live here soon.</p>
+
+            <ul class="favicon-list" aria-label="Project marks">
+                <li>
+                    <a class="favicon-card" href="#aekora" aria-label="Ækora">
+                        <img src="assets/projects/aekora.favicon.png" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a class="favicon-card" href="#nis2chat" aria-label="NIS2 Chat">
+                        <img src="assets/projects/nis2chat.favicon.svg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a class="favicon-card" href="#nis2intel" aria-label="NIS2INTEL">
+                        <img src="assets/projects/nis2intel.favicon.svg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a class="favicon-card favicon-card--dark" href="#biioroom" aria-label="BIIO Training Room">
+                        <img src="assets/projects/biioroom.favicon.png" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a class="favicon-card favicon-card--dark" href="#biiofit" aria-label="BiiO Fit">
+                        <img src="assets/projects/biiofit.favicon.svg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a class="favicon-card favicon-card--dark" href="#ieva" aria-label="IEVA">
+                        <img src="assets/projects/ieva.favicon.svg" alt="">
+                    </a>
+                </li>
+            </ul>
+
+            <div class="project-stack">
+                <article class="project-block" id="aekora">
+                    <a class="project-shot" href="https://aekora.com/" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/projects/aekora.shot.jpg" alt="Above-the-fold screenshot of aekora.com" width="1440" height="900" fetchpriority="high">
+                    </a>
+                    <div class="project-meta">
+                        <img src="assets/projects/aekora.favicon.png" alt="">
+                        <a class="project-link" href="https://aekora.com/" target="_blank" rel="noopener noreferrer">aekora.com →</a>
+                    </div>
+                    <p class="project-copy">AI systems for growth: bulk document processing with local models, AI positioning so brands get recommended in conversations, and branded presence inside ChatGPT.</p>
+                </article>
+
+                <article class="project-block" id="nis2chat">
+                    <a class="project-shot" href="https://nis2.chat/" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/projects/nis2chat.shot.jpg" alt="Above-the-fold screenshot of nis2.chat" width="1440" height="900" loading="lazy">
+                    </a>
+                    <div class="project-meta">
+                        <img src="assets/projects/nis2chat.favicon.svg" alt="">
+                        <a class="project-link" href="https://nis2.chat/" target="_blank" rel="noopener noreferrer">nis2.chat →</a>
+                    </div>
+                    <p class="project-copy">A jurisdiction-specific NIS2 compliance assistant. Pick an EU member state and get guidance, gap analysis, and a prioritized roadmap grounded in how that country transposes the directive.</p>
+                </article>
+
+                <article class="project-block" id="nis2intel">
+                    <a class="project-shot" href="https://nis2intel.com/" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/projects/nis2intel.shot.jpg" alt="Above-the-fold screenshot of nis2intel.com" width="1440" height="900" loading="lazy">
+                    </a>
+                    <div class="project-meta">
+                        <img src="assets/projects/nis2intel.favicon.svg" alt="">
+                        <a class="project-link" href="https://nis2intel.com/" target="_blank" rel="noopener noreferrer">nis2intel.com →</a>
+                    </div>
+                    <p class="project-copy">Country-by-country NIS2 transposition tracking. National law progress, deltas, and compliance risk across the EU in one operating view, with a direct path into NIS2 Chat.</p>
+                </article>
+
+                <article class="project-block" id="biioroom">
+                    <a class="project-shot" href="https://biioroom.com/" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/projects/biioroom.shot.jpg" alt="Above-the-fold screenshot of biioroom.com" width="1440" height="900" loading="lazy">
+                    </a>
+                    <div class="project-meta">
+                        <img src="assets/projects/biioroom.favicon.png" alt="">
+                        <a class="project-link" href="https://biioroom.com/" target="_blank" rel="noopener noreferrer">biioroom.com →</a>
+                    </div>
+                    <p class="project-copy">A private training room in Cúcuta that you rent by the hour — with friends, your own trainer, or a scheduled class. Strength, mobility, cardio, and functional work in a space that is yours for the hour.</p>
+                </article>
+
+                <article class="project-block" id="biiofit">
+                    <a class="project-shot" href="https://biio.fit/" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/projects/biiofit.shot.jpg" alt="Above-the-fold screenshot of biio.fit" width="1440" height="900" loading="lazy">
+                    </a>
+                    <div class="project-meta">
+                        <img src="assets/projects/biiofit.favicon.svg" alt="">
+                        <a class="project-link" href="https://biio.fit/" target="_blank" rel="noopener noreferrer">biio.fit →</a>
+                    </div>
+                    <p class="project-copy">The BiiO method as a product: two sessions a week, a 90-day band program, and VITA — a Spanish-speaking voice trainer that guides each session and adjusts the next one from what you logged.</p>
+                </article>
+
+                <article class="project-block" id="ieva">
+                    <a class="project-shot" href="https://ieva.pro/" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/projects/ieva.shot.jpg" alt="Above-the-fold screenshot of ieva.pro" width="1440" height="900" loading="lazy">
+                    </a>
+                    <div class="project-meta">
+                        <img src="assets/projects/ieva.favicon.svg" alt="">
+                        <a class="project-link" href="https://ieva.pro/" target="_blank" rel="noopener noreferrer">ieva.pro →</a>
+                    </div>
+                    <p class="project-copy">IEVA — Integrated Executive Virtual Assistant, by Ækora. One governed layer across inboxes, calendars, documents, and meetings that remembers context, delegates to specialist agents, and keeps consequential action under human oversight.</p>
+                </article>
             </div>
         </div>
+
+        <footer>
+            <div>© 2026 Daniel Arevalo</div>
+            <div>Design Engineer &amp; Product Architect</div>
+        </footer>
     </div>
+
+    <script>
+        (function () {
+            const cards = [...document.querySelectorAll('.favicon-card')];
+            const blocks = [...document.querySelectorAll('.project-block')];
+            if (!cards.length || !blocks.length) return;
+
+            const byId = Object.fromEntries(cards.map((card) => [card.getAttribute('href').slice(1), card]));
+
+            function setActive(id) {
+                cards.forEach((card) => card.classList.toggle('is-active', card.getAttribute('href') === '#' + id));
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                const visible = entries
+                    .filter((entry) => entry.isIntersecting)
+                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+                if (visible) setActive(visible.target.id);
+            }, { rootMargin: '-20% 0px -55% 0px', threshold: [0.15, 0.4, 0.7] });
+
+            blocks.forEach((block) => observer.observe(block));
+            setActive(blocks[0].id);
+
+            cards.forEach((card) => {
+                card.addEventListener('click', () => {
+                    const id = card.getAttribute('href').slice(1);
+                    setActive(id);
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
