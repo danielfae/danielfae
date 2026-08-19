@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daniel Arevalo | Lead Product Experience Designer</title>
+    <title>Daniel Arevalo | Design Engineer & Product Architect</title>
     <link rel="icon" type="image/svg+xml" href="favicon/ÆSquare.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/ÆSquare-32.png">
     <link rel="apple-touch-icon" href="favicon/ÆSquare-ios.png">
@@ -983,6 +983,17 @@
             color: var(--vellum-base);
         }
 
+        .coord-link--projects {
+            color: var(--ink-deep);
+            background: rgba(26, 28, 30, 0.04);
+            border-color: var(--ink-deep);
+        }
+
+        .coord-link--projects:hover {
+            background: var(--ink-deep);
+            color: var(--vellum-base);
+        }
+
         /* Collapse coordinates to icon buttons from 1200px and below */
         @media (max-width: 1200px) {
             .coordinates {
@@ -1207,6 +1218,12 @@
                     background: rgba(184, 115, 51, 0.08);
                     border-color: var(--copper-accent);
                 }
+
+                .coord-nav-expand--projects {
+                    color: var(--ink-deep);
+                    background: rgba(26, 28, 30, 0.04);
+                    border-color: var(--ink-deep);
+                }
             }
 
             /* Mouse + room: icon chip; fixed widths (no width transition — avoids jitter) */
@@ -1239,6 +1256,22 @@
                 }
 
                 .coord-nav-expand--blog:hover .coord-nav-expand__label {
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+
+                .coord-nav-expand--projects:hover {
+                    width: 11.75rem;
+                    color: var(--ink-deep);
+                    background: rgba(26, 28, 30, 0.04);
+                    border-color: var(--ink-deep);
+                }
+
+                .coord-nav-expand--projects:hover .coord-nav-expand__icon {
+                    opacity: 0;
+                }
+
+                .coord-nav-expand--projects:hover .coord-nav-expand__label {
                     opacity: 1;
                     pointer-events: auto;
                 }
@@ -1482,11 +1515,12 @@
                         <span class="hero-first-name">DANIEL</span>
                         <span style="display:block" class="hero-last-name">AREVALO</span>
                     </h1>
-                    <p class="mono">Lead Product Experience Designer @ <a href="https://omnysecurity.com" target="_blank">OmnySecurity.com</a></p>
+                    <p class="mono">Design Engineer & Product Architect</p>
                     <p class="hero-tagline">Building AI-powered cybersecurity products to protect society's most critical infrastructure.</p>
                 </div>
                 <div class="hero-links">
                     <a href="resume.html" class="hero-link">Resume →</a>
+                    <a href="projects.html" class="hero-link">Projects →</a>
                     <a href="https://daeblog.vercel.app/" class="hero-link">Blog →</a>
                 </div>
             </div>
@@ -1528,6 +1562,17 @@
                         </span>
                         <span class="coord-nav-expand__label">VIEW RESUME →</span>
                     </a>
+                    <a href="projects.html" class="coord-nav-expand coord-nav-expand--projects" aria-label="View Projects">
+                        <span class="coord-nav-expand__icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </span>
+                        <span class="coord-nav-expand__label">VIEW PROJECTS →</span>
+                    </a>
                     <a href="https://daeblog.vercel.app/" class="coord-nav-expand coord-nav-expand--blog" aria-label="Read Blog">
                         <span class="coord-nav-expand__icon" aria-hidden="true">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1562,8 +1607,9 @@
                             <line x1="4" y1="16" x2="20" y2="16"></line>
                         </svg>
                     </button>
-                    <div class="coord-menu-panel" id="coord-menu-panel" role="region" aria-label="Resume, blog, and location">
+                    <div class="coord-menu-panel" id="coord-menu-panel" role="region" aria-label="Resume, projects, blog, and location">
                         <a href="resume.html" class="coord-link">VIEW RESUME →</a>
+                        <a href="projects.html" class="coord-link coord-link--projects">VIEW PROJECTS →</a>
                         <a href="https://daeblog.vercel.app/" class="coord-link coord-link--blog">READ BLOG →</a>
                         <div class="coord-menu-location">
                             LOCATION: OSLO, NORWAY<br>
