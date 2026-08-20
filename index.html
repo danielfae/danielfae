@@ -161,7 +161,7 @@
         }
 
         main {
-            padding-bottom: 4rem;
+            padding-bottom: 2rem;
         }
 
         /* Typography & Components */
@@ -688,6 +688,61 @@
             border-bottom-color: var(--copper-accent);
         }
 
+        .quotation {
+            width: fit-content;
+            max-width: 100%;
+            margin: 0 auto 2.5rem;
+            padding: 2.5rem 3rem;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 0.5px solid var(--etched-line);
+            position: relative;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.03);
+            transition: transform 0.4s ease;
+        }
+
+        .quotation:hover {
+            transform: translateY(-5px);
+        }
+
+        .quotation::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 20px;
+            height: 20px;
+            border-top: 1px solid var(--ink-deep);
+            border-left: 1px solid var(--ink-deep);
+        }
+
+        .quotation blockquote {
+            margin: 0;
+        }
+
+        .quotation blockquote p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            color: var(--ink-deep);
+            margin-bottom: 1.5rem;
+        }
+
+        .quotation blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .quotation figcaption {
+            margin-top: 1rem;
+            font-size: 0.72rem;
+            text-align: right;
+            padding-right: 5px;
+            color: var(--ink-faded);
+        }
+
+        .quotation cite {
+            font-style: normal;
+        }
+
         /* Tool Stack */
         .tool-section {
             margin-top: 2.5rem;
@@ -857,7 +912,7 @@
 
         /* Footer */
         footer {
-            margin-top: 8rem;
+            margin-top: 4rem;
             padding: 4rem 0;
             border-top: 0.5px solid var(--etched-line);
             display: flex;
@@ -1479,6 +1534,7 @@
             .module-grid { grid-template-columns: 1fr; }
             .engagement-item { flex-direction: column; gap: 0.5rem; }
             .engagement-item .topic { text-align: left; width: 100%; }
+            .quotation { padding: 2rem 1.5rem; }
         }
 
         @media (max-width: 640px) {
@@ -1516,7 +1572,7 @@
                         <span style="display:block" class="hero-last-name">AREVALO</span>
                     </h1>
                     <p class="mono">Product Architect & Design Engineer</p>
-                    <p class="hero-tagline">I design and ship products for complex systems, industrial software, enterprise analytics, and AI systems.</p>
+                    <p class="hero-tagline">I build products for complex systems using AI. <br> <span style=" font-size: 1.2rem; font-style:italic;">From industrial analytics software and enterprise SaaS to AI-native platforms with agentic workflows.</span></p>
                 </div>
                 <div class="hero-links">
                     <a href="resume.html" class="hero-link">Resume →</a>
@@ -1626,9 +1682,10 @@
             <section class="philosophy-grid">
                 <div class="manifesto scroll-reveal">
                     <p class="mono" style="margin-bottom: 1rem; color: var(--hazard-amber);">Core Philosophy</p>
-                    <h2>Product Judgment <br><span style="font-weight: 300; font-style: italic;">over </span>Faster Nonsense</h2>
-                    <p>A product architect understands <span style="font-style: italic;">what should be built, why it matters, how it gets built, and what happens if it fails</span>. As AI collapses the distance between product, design, and engineering, you need fewer translators in the middle — and more people who can hold the whole system.</p>
-                    <p>Software is getting cheaper to produce. That abundance is a trap if teams confuse speed with leverage. I support an <span style="font-style: italic;">AI-native mindset</span>, preferring <span style="font-style: italic;">human amplification</span> over full automation because in the AI age, the scarce resource is human judgment. knowing which problems are worth solving, especially where software decisions carry real-world consequences.</p>
+                    <h2>Critical Product Judgment<br><span style="font-weight: 300; font-style: italic;">instead of</span><span style="font-weight: 300; font-style: italic;">: </span> Faster AI Slop</h2>
+                    <p>As AI collapses the distance between product, design, and engineering, you need fewer translators in the middle and more people who can own the whole system. <strong> Product Architects </strong> that understand <span style="font-style: italic;">what should be built, why it matters, how it gets built, and what happens if it fails</span>.</p>
+                    <p>Software is getting cheaper to produce. That abundance is a trap if teams confuse speed with leverage. I support an <span style="font-style: italic;">AI-native mindset</span>, but will always bet more for <strong>human amplification</strong> over full automation. </p>
+                    <p>Because in the <span style="font-style: italic;">Industrial AI</span> age, the scarce resource will always be <strong>critical judgment:</strong> knowing which problems are worth solving, especially in environments where decisions can carry real-world consequences.</p>
                     <p class="mono" style="margin-top: 1rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.72rem; text-align: right; padding-right: 5px;">- Daniel Arevalo, July 2026</p>
                 </div>
 
@@ -1653,7 +1710,7 @@
                     <h2 class="mono">How I Work</h2>
                     <p class="mono">Product architecture for industrial AI</p>
                 </div>
-                <p class="section-intro">My skills enable teams to execute fast, correct direction, align quickly, and iterate with high velocity towards practical solutions, so speed compounds the right bets.</p>
+                <p class="section-intro">My skills enable teams to execute fast, correct direction, align quickly, and iterate with high velocity towards practical solutions and the right product bets.</p>
 
                 <div class="module-grid">
                     <div class="module-card">
@@ -1711,7 +1768,13 @@
                     <h2 class="mono">Technical Stack</h2>
                     <p class="mono">Practitioner + Thought Leader</p>
                 </div>
-                <p class="section-intro">My workflow pairs product judgment with production-ready prototyping in code. I use AI coding agents to ship faster while keeping ownership of the decision — better context in, better product out.</p>
+                <p class="section-intro">My workflow pairs product judgment, fast iterations and production-ready prototyping. I use AI coding agents to ship faster while keeping ownership of the decisions that are made with any combination of people and AI.</p>
+                <figure class="quotation">
+                    <blockquote>
+                        <p>All the agentic loops and graph engineering are there to guarantee one single thing:<br><strong>The better context that goes in, the better result that comes out.</strong></p>
+                    </blockquote>
+                    <figcaption class="mono">- Daniel Arevalo, July 2026</figcaption>
+                </figure>
                 
                 <div class="tool-section">
                     <div class="filter-controls">
@@ -1727,12 +1790,17 @@
                     <div class="tool-stack">
                         <div class="tool-card" data-category="research">
                             <span class="tool-card-category">Research</span>
-                            <div class="tool-card-name">OpenAI's ChatGPT</div>
-                            <p class="tool-card-desc">Research synthesis, literature review, and fast knowledge extraction for complex topics.</p>
+                            <div class="tool-card-name">Manus</div>
+                            <p class="tool-card-desc">Autonomous research agent for multi-step investigation, browsing, and turning open questions into structured output.</p>
                         </div>
                         <div class="tool-card" data-category="research">
                             <span class="tool-card-category">Research</span>
-                            <div class="tool-card-name">OpenClaw</div>
+                            <div class="tool-card-name">Perplexity</div>
+                            <p class="tool-card-desc">Cited search, literature review, and fast knowledge extraction with source-grounded answers.</p>
+                        </div>
+                        <div class="tool-card" data-category="research">
+                            <span class="tool-card-category">Research</span>
+                            <div class="tool-card-name">Hermes</div>
                             <p class="tool-card-desc">Agent and MCP-oriented workflows for structured experiments, tool integration, and reproducible research loops.</p>
                         </div>
                         <div class="tool-card" data-category="development">
@@ -1741,14 +1809,14 @@
                             <p class="tool-card-desc">IDE-native coding assistance, completions, and refactors grounded in the codebase and workflows.</p>
                         </div>
                         <div class="tool-card" data-category="strategy">
-                            <span class="tool-card-category">Strategy & JTBD</span>
-                            <div class="tool-card-name">Google's Gemini</div>
-                            <p class="tool-card-desc">Long-context reasoning, scenario exploration, and structured synthesis for strategy and stakeholder alignment.</p>
+                            <span class="tool-card-category">Strategy</span>
+                            <div class="tool-card-name">Gemini Notebook</div>
+                            <p class="tool-card-desc">Source-grounded notebooks with long-context reasoning for structured synthesis and stakeholder alignment.</p>
                         </div>
                         <div class="tool-card" data-category="strategy">
-                            <span class="tool-card-category">Strategy & JTBD</span>
-                            <div class="tool-card-name">NotebookLM</div>
-                            <p class="tool-card-desc">Source-grounded notebooks for themes, narratives, and evidence-backed JTBD and opportunity framing.</p>
+                            <span class="tool-card-category">Strategy</span>
+                            <div class="tool-card-name">Figma / Gamma</div>
+                            <p class="tool-card-desc">JTBD and opportunity framing turned into stakeholder-ready decks, narratives, and decision artifacts.</p>
                         </div>
                         <div class="tool-card" data-category="development">
                             <span class="tool-card-category">Development</span>
@@ -1762,8 +1830,8 @@
                         </div>
                         <div class="tool-card" data-category="prototyping">
                             <span class="tool-card-category">Prototyping</span>
-                            <div class="tool-card-name">Riff</div>
-                            <p class="tool-card-desc">AI-native app building for fast iteration on flows, UI, and interactive product experiments.</p>
+                            <div class="tool-card-name">Emergent</div>
+                            <p class="tool-card-desc">Agent-built full-stack apps for fast iteration on flows, UI, and interactive product experiments.</p>
                         </div>
                         <div class="tool-card" data-category="prototyping">
                             <span class="tool-card-category">Prototyping</span>
@@ -1777,8 +1845,8 @@
                         </div>
                         <div class="tool-card" data-category="editors">
                             <span class="tool-card-category">Code Editors</span>
-                            <div class="tool-card-name">Antigravity</div>
-                            <p class="tool-card-desc">Google’s IDE for agentic workflows—multi-file edits, grounded context, and reviewable changes.</p>
+                            <div class="tool-card-name">Warp</div>
+                            <p class="tool-card-desc">Agentic terminal for repo-aware commands, multi-step agent runs, and reviewable changes without leaving the shell.</p>
                         </div>
                         <div class="tool-card" data-category="integrations">
                             <span class="tool-card-category">Integrations</span>
@@ -1802,13 +1870,31 @@
                         </div>
                     </div>
                 </div>
-                <p class="section-intro" style="margin-top: 2.5rem;">The tools speed up the middle of the work. The leverage still comes from knowing which loop is worth running — and stopping when the output is nonsense.</p>
+                <p class="section-intro" style="margin-top: 2.5rem;">The tools speed up the middle of the work. The leverage still comes from knowing which loop is worth running — and stopping when the output is slop.</p>
             </section>
-                <section class="read-more-note" style="margin-top:2.5rem; margin-bottom: 0;">
-                    <div class="mono" style="font-weight: 600; margin-bottom: 0.5rem;">Read more…</div>
+                <section class="read-more-note" style="margin-top: 8rem; margin-bottom: 0;">
+                    <div class="section-header">
+                        <h2 class="mono">Read more about my work</h2>
+                        <p class="mono">Design, AI & Product Thinking</p>
+                    </div>
                     <div class="section-intro" style="margin:0;">
                         I write about product practice as the distance between product, design, and engineering collapses. Recent posts from the <a href="https://daeblog.vercel.app/" target="_blank" rel="noopener noreferrer">blog</a>:
                         <ul style="margin: 0.5em 0 0 1em; padding: 0; list-style: disc;">
+                            <li>
+                                <a href="https://daeblog.vercel.app/posts/2026/intent-engineering-for-ai-agents" target="_blank" rel="noopener noreferrer">
+                                    Intent engineering for AI agents
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://daeblog.vercel.app/posts/2026/about-craft-taste-and-speed" target="_blank" rel="noopener noreferrer">
+                                    About craft, taste, and speed
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://daeblog.vercel.app/posts/2026/the-disappearing-middle-of-software-work" target="_blank" rel="noopener noreferrer">
+                                    The disappearing middle of software work
+                                </a>
+                            </li>
                             <li>
                                 <a href="https://daeblog.vercel.app/posts/2026/design-leadership-has-evolved" target="_blank" rel="noopener noreferrer">
                                     Design leadership has evolved
@@ -1927,7 +2013,7 @@
         const heroCards = [
             { text: 'The product triangle of PM, designer, and developer is collapsing. Execution is moving closer to the decision — you need fewer translators in the middle.', accent: '#4a90d9' },
             { text: 'Software is getting cheaper to produce. The scarce resource is no longer code, but judgment: knowing which problems are worth solving.', accent: '#d4a017' },
-            { text: 'Fast nonsense is still nonsense. I pair product judgment with the ability to build, so teams ship the right thing — not just more things.', accent: '#7cb342' },
+            { text: 'Fast AI slop will always be slop. I pair product judgment with the ability to build, so teams ship the right thing — not just more things.', accent: '#7cb342' },
             { text: 'Every AI agent needs a human who cares. Someone still has to own the outcome, know when the system is wrong, and decide what is worth doing.', accent: '#ab47bc' }
         ];
 
