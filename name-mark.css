@@ -1,0 +1,110 @@
+/* Wordmark matches index .hero-title: Outfit 800, -0.04em tracking, real kerning. */
+.name-mark {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1.575rem;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+    font-kerning: normal;
+    font-feature-settings: "kern" 1;
+    color: #1a1c1e;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: visible;
+    vertical-align: middle;
+}
+
+a.name-mark {
+    color: #1a1c1e;
+    transition: color 0.2s ease;
+}
+
+a.name-mark:hover {
+    color: var(--copper-accent, #b87333);
+}
+
+a.name-mark:focus-visible {
+    outline: 1px solid var(--copper-accent, #b87333);
+    outline-offset: 4px;
+}
+
+.name-mark__char {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    margin: 0;
+    letter-spacing: 0;
+    line-height: 1;
+    animation: name-mark-slide 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i, 0) * 28ms);
+}
+
+.name-mark__char:nth-child(3n + 2) {
+    --enter-y: 0.55rem;
+    --arc-y: -0.38rem;
+}
+
+.name-mark__char:nth-child(3n) {
+    --enter-y: -0.45rem;
+    --arc-y: 0.42rem;
+}
+
+@keyframes name-mark-slide {
+    from {
+        opacity: 0;
+        transform: translate3d(min(42vw, 18rem), var(--enter-y, -0.55rem), 0);
+    }
+    62% {
+        opacity: 1;
+        transform: translate3d(-0.18rem, var(--arc-y, 0.32rem), 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.page-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    overflow: visible;
+}
+
+.page-topbar .back-link {
+    margin-bottom: 0;
+}
+
+.page-topbar .name-mark {
+    flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+    .page-topbar {
+        margin-bottom: 0.9rem;
+    }
+}
+
+@media (max-width: 720px) {
+    .name-mark {
+        font-size: 1.32rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .name-mark__char {
+        animation: none !important;
+        opacity: 1;
+        transform: none;
+    }
+}

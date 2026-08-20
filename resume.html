@@ -9,7 +9,8 @@
     <link rel="apple-touch-icon" href="favicon/ÆSquare-ios.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="name-mark.css">
     <style>
         :root {
             --bg-base: #f4f1ea;
@@ -37,6 +38,7 @@
             min-height: 100vh;
             line-height: 1.5;
             font-weight: 400;
+            overflow-x: hidden;
         }
 
         /* Vellum Texture Overlay */
@@ -720,7 +722,10 @@
     <div class="scan-line"></div>
 
     <div class="container">
-        <a href="index.html" class="back-link">Back to Portfolio</a>
+        <div class="page-topbar">
+            <a href="index.html" class="back-link">Back to Portfolio</a>
+            <a href="index.html" class="name-mark" data-name-mark data-name="DANIEL AREVALO" aria-label="Daniel Arevalo, home">DANIEL AREVALO</a>
+        </div>
 
         <div class="resume-card">
             <div class="top-border"></div>
@@ -1089,5 +1094,6 @@
             document.querySelector('.circuit-nodes').style.transform = `translate(${x * 5}px, ${y * 5}px)`;
         });
     </script>
+    <script src="name-mark.js"></script>
 </body>
 </html>
