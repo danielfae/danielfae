@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daniel Arevalo | Product Architect & Design Engineer</title>
+    <title>Daniel Arevalo | Design Engineer & Product Architect</title>
     <link rel="icon" type="image/svg+xml" href="favicon/ÆSquare.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/ÆSquare-32.png">
     <link rel="apple-touch-icon" href="favicon/ÆSquare-ios.png">
@@ -184,19 +184,19 @@
             overflow: visible;
             display: grid;
             grid-template-columns: 55fr 45fr;
-            align-items: center;
+            grid-template-rows: auto auto 1fr;
+            align-items: stretch;
             position: relative;
             pointer-events: none;
         }
 
         .hero-left {
-            display: flex;
-            flex-direction: column;
-            align-self: stretch;
-            justify-content: space-between;
-            padding: 4rem 0;
+            display: grid;
+            grid-template-rows: subgrid;
             grid-column: 1;
-            grid-row: 1;
+            grid-row: 1 / -1;
+            align-self: stretch;
+            padding: 4rem 0;
             position: relative;
             z-index: 3;
             pointer-events: none;
@@ -208,24 +208,53 @@
             pointer-events: auto;
         }
 
-        .hero-left > div {
+        .hero-identity {
+            grid-row: 1;
             container-type: inline-size;
             width: 100%;
+            position: relative;
+            z-index: 3;
         }
 
         .hero-right {
+            display: grid;
+            grid-template-rows: subgrid;
             grid-column: 2;
-            grid-row: 1;
+            grid-row: 1 / -1;
+            align-self: stretch;
+            padding: 4rem 0 4rem 2rem;
+            position: relative;
+            z-index: 3;
             pointer-events: none;
         }
 
         .hero-tagline {
+            grid-row: 2;
+            align-self: start;
             font-size: 1.35rem;
             font-weight: 300;
             line-height: 1.45;
             color: var(--ink-faded);
             margin-top: 1.25rem;
-            max-width: 480px;
+            max-width: 22rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-tagline-aside {
+            grid-row: 2;
+            align-self: start;
+            font-size: 1.2rem;
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1.45;
+            color: var(--ink-faded);
+            margin-top: 1.25rem;
+            margin-left: auto;
+            max-width: 22rem;
+            text-align: right;
+            position: relative;
+            z-index: 3;
         }
 
         .hero-card-zone {
@@ -424,6 +453,8 @@
         .hero-links {
             display: flex;
             gap: 1.5rem;
+            grid-row: 3;
+            align-self: end;
         }
 
         .hero-link {
@@ -459,7 +490,7 @@
             }
         }
 
-        .hero-left .mono {
+        .hero-identity .mono {
             margin-top: 1.5rem;
             color: var(--copper-accent);
         }
@@ -1382,11 +1413,37 @@
             }
 
             .hero-right {
-                order: 1;
+                display: contents;
             }
 
             .hero-left {
+                display: contents;
+            }
+
+            .hero-identity {
+                order: 1;
+                padding-top: 2rem;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .hero-tagline {
                 order: 2;
+                max-width: 100%;
+            }
+
+            .hero-tagline-aside {
+                order: 3;
+                text-align: left;
+                margin-left: 0;
+                margin-top: 0.75rem;
+                max-width: 100%;
+                padding-left: 0;
+            }
+
+            .hero-links {
+                order: 4;
+                padding-bottom: 2rem;
             }
 
             .hero-spline {
@@ -1484,17 +1541,8 @@
                 font-size: 1.15rem;
             }
 
-            .hero-left {
-                padding: 2rem 0;
-                align-self: stretch;
-                width: 100%;
-                max-width: 100%;
-                box-sizing: border-box;
-            }
-
-            .hero-left > div {
-                width: 100%;
-                max-width: 100%;
+            .hero-tagline-aside {
+                font-size: 1.1rem;
             }
 
             /* Small screens & mobile: fixed title size (90% of former 84px; scales below 440px) */
@@ -1561,22 +1609,23 @@
                 url="https://prod.spline.design/QLB5PwzK2mLB5klF/scene.splinecode">
             </spline-viewer>
 
-            <!-- Right column: empty grid cell (Spline fills the background) -->
-            <div class="hero-right"></div>
+            <!-- Right column: trajectory line, balancing the left thesis -->
+            <div class="hero-right">
+                <p class="hero-tagline-aside">From industrial analytics software and enterprise SaaS to AI platforms running autonomously with agentic workflows.</p>
+            </div>
 
-            <!-- Left column: name, role, hero links -->
+            <!-- Left column: name, role, thesis, hero links -->
             <div class="hero-left">
-                <div>
+                <div class="hero-identity">
                     <h1 class="hero-title">
                         <span class="hero-first-name">DANIEL</span>
                         <span style="display:block" class="hero-last-name">AREVALO</span>
                     </h1>
                     <p class="mono" style="display:block; font-size:1.0rem; font-weight: 500; letter-spacing:0.09em; max-width:none; width:100%; line-height:1.1;">
-                        Product Architect &amp; Design Engineer
+                        Design Engineer &amp; Product Architect
                     </p>
-             
-                    <p class="hero-tagline">I build products for complex systems using AI. <br><br> <span style=" font-size: 1.2rem; font-style:italic;">From industrial analytics software and enterprise SaaS to AI-native platforms with agentic workflows.</span></p>
                 </div>
+                <p class="hero-tagline">I build products and ideate solutions for complex systems using AI.</p>
                 <div class="hero-links">
                     <a href="resume.html" class="hero-link">Resume →</a>
                     <a href="projects.html" class="hero-link">Projects →</a>
@@ -1711,7 +1760,7 @@
             <section class="module-section scroll-reveal">
                 <div class="section-header">
                     <h2 class="mono">How I Work</h2>
-                    <p class="mono">Product architecture for industrial AI</p>
+                    <p class="mono">Product architecture in the Industrial AI age</p>
                 </div>
                 <p class="section-intro">My skills enable teams to execute fast, correct direction, align quickly, and iterate with high velocity towards practical solutions and the right product bets.</p>
 
@@ -1740,7 +1789,7 @@
             <section class="scroll-reveal">
                 <div class="section-header">
                     <h2 class="mono">Speaking & Advocacy</h2>
-                    <p class="mono">Opinions on product, AI, and judgment</p>
+                    <p class="mono">Opinions on product, taste, and judgment</p>
                 </div>
                 <ul class="engagement-list">
                     <li class="engagement-item">
@@ -1873,7 +1922,7 @@
                         </div>
                     </div>
                 </div>
-                <p class="section-intro" style="margin-top: 2.5rem;">The tools speed up the middle of the work. The leverage still comes from knowing which loop is worth running — and stopping when the output is slop.</p>
+                <p class="section-intro" style="margin-top: 2.5rem;">The tools speed up the previously busy work in the middle of the product development process. The leverage for talented PMs and designers still comes from knowing which loop is worth running — and stopping when the output is slop.</p>
             </section>
                 <section class="read-more-note" style="margin-top: 8rem; margin-bottom: 0;">
                     <div class="section-header">
