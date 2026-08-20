@@ -100,6 +100,10 @@
         }
 
         .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 2.5rem;
             padding: 3rem 3rem 2.25rem;
             border-bottom: 1px solid var(--etched-line);
         }
@@ -108,7 +112,6 @@
             font-size: clamp(2rem, 5vw, 2.75rem);
             font-weight: 800;
             letter-spacing: -0.03em;
-            margin-bottom: 0.75rem;
         }
 
         .mono {
@@ -122,8 +125,11 @@
         .page-lede {
             color: var(--ink-faded);
             font-size: 1.05rem;
-            max-width: 46ch;
+            max-width: 36ch;
             font-weight: 300;
+            text-align: right;
+            margin: 0 0 0.35em;
+            flex: 1 1 16rem;
         }
 
         .favicon-list {
@@ -179,13 +185,12 @@
         }
 
         .project-block {
+            display: none;
             padding: 2.5rem 3rem;
-            border-bottom: 1px solid var(--etched-line);
-            scroll-margin-top: 1.5rem;
         }
 
-        .project-block:last-child {
-            border-bottom: none;
+        .project-block.is-active {
+            display: block;
         }
 
         .project-shot {
@@ -202,6 +207,34 @@
             aspect-ratio: 16 / 10;
             object-fit: cover;
             object-position: top center;
+        }
+
+        .project-shot--cycle {
+            position: relative;
+        }
+
+        .project-shot--cycle img {
+            transition: opacity 0.7s ease;
+        }
+
+        .project-shot--cycle img.is-on {
+            opacity: 1;
+        }
+
+        .project-shot--cycle img:not(.is-on) {
+            opacity: 0;
+        }
+
+        .project-shot--cycle img + img {
+            position: absolute;
+            inset: 0;
+            height: 100%;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .project-shot--cycle img {
+                transition: none;
+            }
         }
 
         .project-meta {
@@ -238,7 +271,6 @@
             color: var(--ink-faded);
             font-size: 1.02rem;
             font-weight: 300;
-            max-width: 62ch;
         }
 
         footer {
@@ -266,7 +298,16 @@
             }
 
             .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.85rem;
                 padding-top: 2rem;
+            }
+
+            .page-lede {
+                text-align: left;
+                max-width: none;
+                margin: 0;
             }
 
             .favicon-list {
@@ -403,9 +444,11 @@
         <div class="projects-shell">
             <div class="top-border"></div>
             <header class="page-header">
-                <p class="mono">Selected Work</p>
-                <h1>Projects</h1>
-                <p class="page-lede">Live products I have designed and shipped. Open a mark to jump to its screenshot and a short description.</p>
+                <div class="page-header-titles">
+                    <p class="mono">Selected Work</p>
+                    <h1>Projects</h1>
+                </div>
+                <p class="page-lede">Live products I have designed and shipped. <br> Select a logo to view the screenshot and description.</p>
             </header>
 
             <div class="lock-panel" id="lockPanel">
@@ -422,17 +465,17 @@
             <div class="projects-content" id="projectsContent">
             <ul class="favicon-list" aria-label="Project marks">
                 <li>
-                    <a class="favicon-card" href="#aekora" aria-label="Ækora">
+                    <a class="favicon-card favicon-card--dark is-active" href="#aekora" aria-label="Ækora" aria-current="true">
                         <img src="assets/projects/aekora.favicon.png" alt="">
                     </a>
                 </li>
                 <li>
-                    <a class="favicon-card" href="#nis2chat" aria-label="NIS2 Chat">
-                        <img src="assets/projects/nis2chat.favicon.svg" alt="">
+                    <a class="favicon-card favicon-card--dark" href="#nis2chat" aria-label="NIS2 Chat">
+                        <img src="assets/projects/nis2chat.favicon.png" alt="">
                     </a>
                 </li>
                 <li>
-                    <a class="favicon-card" href="#nis2intel" aria-label="NIS2INTEL">
+                    <a class="favicon-card favicon-card--dark" href="#nis2intel" aria-label="NIS2INTEL">
                         <img src="assets/projects/nis2intel.favicon.svg" alt="">
                     </a>
                 </li>
@@ -454,9 +497,9 @@
             </ul>
 
             <div class="project-stack">
-                <article class="project-block" id="aekora">
+                <article class="project-block is-active" id="aekora">
                     <a class="project-shot" href="https://aekora.com/" target="_blank" rel="noopener noreferrer">
-                        <img src="assets/projects/aekora.shot.jpg" alt="Above-the-fold screenshot of aekora.com" width="1440" height="900" fetchpriority="high">
+                        <img src="assets/projects/aekora.shot.jpg" alt="Above-the-fold screenshot of aekora.com" width="1024" height="654" fetchpriority="high">
                     </a>
                     <div class="project-meta">
                         <img src="assets/projects/aekora.favicon.png" alt="">
@@ -467,18 +510,19 @@
 
                 <article class="project-block" id="nis2chat">
                     <a class="project-shot" href="https://nis2.chat/" target="_blank" rel="noopener noreferrer">
-                        <img src="assets/projects/nis2chat.shot.jpg" alt="Above-the-fold screenshot of nis2.chat" width="1440" height="900" loading="lazy">
+                        <img src="assets/projects/nis2chat.shot.jpg" alt="Above-the-fold screenshot of nis2.chat" width="1024" height="920" loading="lazy">
                     </a>
                     <div class="project-meta">
-                        <img src="assets/projects/nis2chat.favicon.svg" alt="">
+                        <img src="assets/projects/nis2chat.favicon.png" alt="">
                         <a class="project-link" href="https://nis2.chat/" target="_blank" rel="noopener noreferrer">nis2.chat →</a>
                     </div>
                     <p class="project-copy">A jurisdiction-specific NIS2 compliance assistant. Pick an EU member state and get guidance, gap analysis, and a prioritized roadmap grounded in how that country transposes the directive.</p>
                 </article>
 
                 <article class="project-block" id="nis2intel">
-                    <a class="project-shot" href="https://nis2intel.com/" target="_blank" rel="noopener noreferrer">
-                        <img src="assets/projects/nis2intel.shot.jpg" alt="Above-the-fold screenshot of nis2intel.com" width="1440" height="900" loading="lazy">
+                    <a class="project-shot project-shot--cycle" href="https://nis2intel.com/" target="_blank" rel="noopener noreferrer">
+                        <img class="is-on" src="assets/projects/nis2intel.shot.jpg" alt="Above-the-fold screenshot of nis2intel.com" width="1024" height="677" loading="lazy">
+                        <img src="assets/projects/nis2intel.shot-tracker.jpg" alt="Screenshot of the NIS2INTEL EU transposition tracker" width="1024" height="817" loading="lazy">
                     </a>
                     <div class="project-meta">
                         <img src="assets/projects/nis2intel.favicon.svg" alt="">
@@ -488,25 +532,27 @@
                 </article>
 
                 <article class="project-block" id="biioroom">
-                    <a class="project-shot" href="https://biioroom.com/" target="_blank" rel="noopener noreferrer">
-                        <img src="assets/projects/biioroom.shot.jpg" alt="Above-the-fold screenshot of biioroom.com" width="1440" height="900" loading="lazy">
+                    <a class="project-shot project-shot--cycle" href="https://biioroom.com/" target="_blank" rel="noopener noreferrer">
+                        <img class="is-on" src="assets/projects/biioroom.shot.jpg" alt="Above-the-fold screenshot of biioroom.com" width="1024" height="873" loading="lazy">
+                        <img src="assets/projects/biioroom.shot-paths.jpg" alt="Screenshot of the BIIO Training Room user or trainer path selection" width="1024" height="711" loading="lazy">
                     </a>
                     <div class="project-meta">
                         <img src="assets/projects/biioroom.favicon.png" alt="">
                         <a class="project-link" href="https://biioroom.com/" target="_blank" rel="noopener noreferrer">biioroom.com →</a>
                     </div>
-                    <p class="project-copy">A private training room in Cúcuta that you rent by the hour — with friends, your own trainer, or a scheduled class. Strength, mobility, cardio, and functional work in a space that is yours for the hour.</p>
+                    <p class="project-copy">Web application for a private training room in Colombia that you rent by the hour — with friends, your own trainer, or a scheduled class. Strength, mobility, cardio, and functional work in a space that is yours for the hour.</p>
                 </article>
 
                 <article class="project-block" id="biiofit">
-                    <a class="project-shot" href="https://biio.fit/" target="_blank" rel="noopener noreferrer">
-                        <img src="assets/projects/biiofit.shot.jpg" alt="Above-the-fold screenshot of biio.fit" width="1440" height="900" loading="lazy">
+                    <a class="project-shot project-shot--cycle" href="https://biio.fit/" target="_blank" rel="noopener noreferrer">
+                        <img class="is-on" src="assets/projects/biiofit.shot.jpg" alt="Above-the-fold screenshot of biio.fit" width="1024" height="719" loading="lazy">
+                        <img src="assets/projects/biiofit.shot-calendar.jpg" alt="Screenshot of the BiiO 90-day fitness and meal calendar" width="1024" height="851" loading="lazy">
                     </a>
                     <div class="project-meta">
                         <img src="assets/projects/biiofit.favicon.svg" alt="">
                         <a class="project-link" href="https://biio.fit/" target="_blank" rel="noopener noreferrer">biio.fit →</a>
                     </div>
-                    <p class="project-copy">The BiiO method as a product: two sessions a week, a 90-day band program, and VITA — a Spanish-speaking voice trainer that guides each session and adjusts the next one from what you logged.</p>
+                    <p class="project-copy">The BiiO fit method is a proudct with a calendar for training and nutrition, a 90-day workout program, and VITA, a Spanish-speaking voice trainer that guides each session and adjusts the next one from what you logged.</p>
                 </article>
 
                 <article class="project-block" id="ieva">
@@ -573,26 +619,80 @@
             const blocks = [...document.querySelectorAll('.project-block')];
             if (!cards.length || !blocks.length) return;
 
-            const byId = Object.fromEntries(cards.map((card) => [card.getAttribute('href').slice(1), card]));
+            const ids = new Set(blocks.map((block) => block.id));
 
-            function setActive(id) {
-                cards.forEach((card) => card.classList.toggle('is-active', card.getAttribute('href') === '#' + id));
+            const cycles = new Map();
+            document.querySelectorAll('.project-shot--cycle').forEach((root) => {
+                const block = root.closest('.project-block');
+                if (!block) return;
+                cycles.set(block.id, {
+                    frames: [...root.querySelectorAll('img')],
+                    timer: null,
+                    index: 0,
+                });
+            });
+
+            function stopShotCycle(cycle) {
+                if (cycle.timer) {
+                    clearInterval(cycle.timer);
+                    cycle.timer = null;
+                }
             }
 
-            const observer = new IntersectionObserver((entries) => {
-                const visible = entries
-                    .filter((entry) => entry.isIntersecting)
-                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-                if (visible) setActive(visible.target.id);
-            }, { rootMargin: '-20% 0px -55% 0px', threshold: [0.15, 0.4, 0.7] });
+            function showCycleFrame(cycle, index) {
+                cycle.index = index;
+                cycle.frames.forEach((frame, frameIndex) => {
+                    frame.classList.toggle('is-on', frameIndex === index);
+                });
+            }
 
-            blocks.forEach((block) => observer.observe(block));
-            setActive(blocks[0].id);
+            function startShotCycle(cycle) {
+                if (!cycle.frames.length) return;
+                stopShotCycle(cycle);
+                showCycleFrame(cycle, 0);
+                cycle.timer = setInterval(() => {
+                    showCycleFrame(cycle, (cycle.index + 1) % cycle.frames.length);
+                }, 5000);
+            }
+
+            function setActive(id) {
+                cards.forEach((card) => {
+                    const isActive = card.getAttribute('href') === '#' + id;
+                    card.classList.toggle('is-active', isActive);
+                    if (isActive) {
+                        card.setAttribute('aria-current', 'true');
+                    } else {
+                        card.removeAttribute('aria-current');
+                    }
+                });
+                blocks.forEach((block) => block.classList.toggle('is-active', block.id === id));
+                cycles.forEach((cycle, cycleId) => {
+                    if (cycleId === id) {
+                        startShotCycle(cycle);
+                    } else {
+                        stopShotCycle(cycle);
+                        showCycleFrame(cycle, 0);
+                    }
+                });
+            }
+
+            function idFromHash() {
+                const id = location.hash.replace('#', '');
+                return ids.has(id) ? id : blocks[0].id;
+            }
+
+            setActive(idFromHash());
+
+            window.addEventListener('hashchange', () => setActive(idFromHash()));
 
             cards.forEach((card) => {
-                card.addEventListener('click', () => {
+                card.addEventListener('click', (event) => {
+                    event.preventDefault();
                     const id = card.getAttribute('href').slice(1);
                     setActive(id);
+                    if (location.hash !== '#' + id) {
+                        history.replaceState(null, '', '#' + id);
+                    }
                 });
             });
         })();
