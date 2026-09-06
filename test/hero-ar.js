@@ -1,6 +1,6 @@
 /**
  * Custom hero surface (no Spline) + AR-style insight cards.
- * Click mesh → reticle → tether → HUD card in mid-hero.
+ * Click mesh → reticle → tether → HUD card just above the surface band.
  * Max 4 cards; revisiting a card dismisses the old one and respawns at the new click.
  */
 import * as THREE from 'three';
@@ -55,16 +55,16 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile() ? 1.25 
 renderer.setClearColor(0x000000, 0);
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
-camera.position.set(0, 3.2, 4.6);
-camera.lookAt(0, 0.05, 0);
+const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+camera.position.set(0, 5.1, 3.15);
+camera.lookAt(0, 0, 0);
 
 scene.add(new THREE.AmbientLight(0xf4f1ea, 0.9));
 const keyLight = new THREE.DirectionalLight(0xfff6e8, 0.85);
 keyLight.position.set(4, 8, 3);
 scene.add(keyLight);
 
-const surfaceGeo = new THREE.PlaneGeometry(14, 10, SEG, SEG);
+const surfaceGeo = new THREE.PlaneGeometry(28, 9, SEG, SEG);
 surfaceGeo.rotateX(-Math.PI / 2);
 const basePositions = Float32Array.from(surfaceGeo.attributes.position.array);
 
@@ -106,8 +106,8 @@ for (let i = 0; i < nodeCount; i++) {
         })
     );
     n.userData = {
-        ox: (Math.random() - 0.5) * 10,
-        oz: (Math.random() - 0.5) * 7,
+        ox: (Math.random() - 0.5) * 18,
+        oz: (Math.random() - 0.5) * 6,
         phase: Math.random() * Math.PI * 2,
         amp: 0.12 + Math.random() * 0.18
     };
@@ -258,7 +258,7 @@ function makePath(accent) {
     return { path, pulse };
 }
 
-/** Mid-hero placement, biased toward the click X so the tether reads clearly. */
+/** Place cards just above the surface half so tethers stay short. */
 function cardPlacement(clientInZone, indexAmongActive) {
     const zoneRect = zone.getBoundingClientRect();
     const cardW = Math.min(320, Math.max(240, zoneRect.width * 0.28));
@@ -267,10 +267,11 @@ function cardPlacement(clientInZone, indexAmongActive) {
     const fan = indexAmongActive - (count - 1) / 2;
 
     let left = (clientInZone?.x ?? zoneRect.width * 0.5) - cardW / 2 + fan * 28;
-    let top = zoneRect.height * 0.48 - cardH * 0.5 + (indexAmongActive % 2) * 14;
+    // Sit just above the terrain band (bottom 50% of hero)
+    let top = zoneRect.height * 0.5 - cardH - 20 + (indexAmongActive % 2) * 12;
 
     left = Math.max(16, Math.min(zoneRect.width - cardW - 16, left));
-    top = Math.max(16, Math.min(zoneRect.height - cardH - 16, top));
+    top = Math.max(12, Math.min(zoneRect.height * 0.5 - cardH - 8, top));
     return { left, top, width: cardW };
 }
 
@@ -406,16 +407,22 @@ function spawnInsight(hitWorld, clientInZone) {
 function syncTethers() {
     if (!activeAnchors.length) return;
     const t = clock.getElapsedTime();
+    const tip = new THREE.Vector3();
     for (let i = 0; i < activeAnchors.length; i++) {
         const a = activeAnchors[i];
         a.world.y = surfaceYAt(a.world.x, a.world.z, t) + 0.02;
         a.marker.position.copy(a.world);
 
-        const hit = projectWorldToZone(a.world);
+        // Connect to the stem tip so the line meets the marker, not empty air below
+        tip.set(a.world.x, a.world.y + 0.34, a.world.z);
+        const hit = projectWorldToZone(tip);
         const ax = (parseFloat(a.el.style.left) || 0) + a.el.offsetWidth * 0.5;
         const ay = (parseFloat(a.el.style.top) || 0) + a.el.offsetHeight - 2;
-        const mx = (ax + hit.x) / 2 + (hit.x - ax) * 0.05;
-        const my = Math.min(ay, hit.y) - Math.max(40, Math.abs(hit.y - ay) * 0.22);
+        const dx = hit.x - ax;
+        const dy = hit.y - ay;
+        // Shallow curve — avoid a tall empty arch between card and surface
+        const mx = ax + dx * 0.5 + Math.sign(dx || 1) * Math.min(18, Math.abs(dx) * 0.08);
+        const my = ay + dy * 0.42;
         a.path.setAttribute('d', `M ${ax} ${ay} Q ${mx} ${my} ${hit.x} ${hit.y}`);
 
         const age = (performance.now() - a.t0) / 1000;
@@ -520,9 +527,9 @@ function frame() {
     if (!skipDeform) deform(t);
 
     if (!prefersReducedMotion()) {
-        camera.position.x = Math.sin(t * 0.08) * 0.22;
-        camera.position.y = 3.2 + Math.sin(t * 0.12) * 0.05;
-        camera.lookAt(0, 0.05, 0);
+        camera.position.x = Math.sin(t * 0.08) * 0.18;
+        camera.position.y = 5.1 + Math.sin(t * 0.12) * 0.04;
+        camera.lookAt(0, 0, 0);
     }
 
     renderer.render(scene, camera);
