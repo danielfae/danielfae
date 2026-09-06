@@ -378,7 +378,7 @@ function spawnInsight(hitWorld, clientInZone) {
     reticle.addEventListener('animationend', () => reticle.remove());
 
     requestAnimationFrame(() => {
-        el.classList.add('is-drawing');
+        // Start tether from the marker first; card opens from the bottom as it arrives
         syncTethers();
         const len = path.getTotalLength ? path.getTotalLength() : 420;
         path.style.strokeDasharray = String(len);
@@ -389,6 +389,10 @@ function spawnInsight(hitWorld, clientInZone) {
     });
 
     window.setTimeout(() => {
+        el.classList.add('is-drawing');
+    }, 380);
+
+    window.setTimeout(() => {
         // Drop dash array after the draw-in so live tethers stay solid
         path.style.transition = 'none';
         path.style.strokeDasharray = 'none';
@@ -397,7 +401,7 @@ function spawnInsight(hitWorld, clientInZone) {
         el.classList.add('is-live');
         const status = el.querySelector('.ar-card-status');
         if (status) status.textContent = 'ANCHORED';
-    }, 750);
+    }, 980);
 
     el.querySelector('.ar-card-close').addEventListener('click', (e) => {
         e.stopPropagation();
