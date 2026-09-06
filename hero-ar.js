@@ -332,12 +332,10 @@ function buildCardElement(card, index) {
         </div>
         <div class="ar-card-meta">
             <span class="ar-card-code">${card.code}</span>
-            <span class="ar-card-status">LOCKING…</span>
             <button class="ar-card-close" type="button" aria-label="Dismiss insight">×</button>
         </div>
         <div class="ar-card-scan" aria-hidden="true"></div>
         <p class="ar-card-text"></p>
-        <div class="ar-card-foot">SURFACE ANCHOR · LIVE</div>
     `;
     el.querySelector('.ar-card-text').textContent = card.text;
     return el;
@@ -377,7 +375,9 @@ function spawnInsight(hitWorld, clientInZone) {
     const existing = activeAnchors.find((a) => a.cardIndex === index);
     if (existing) dismissAnchor(existing, false);
 
-    while (activeAnchors.length >= MAX_CARDS) {
+    // Mobile: a single centered card; desktop keeps up to MAX_CARDS
+    const cardCap = isMobile() ? 1 : MAX_CARDS;
+    while (activeAnchors.length >= cardCap) {
         dismissAnchor(activeAnchors[0], false);
     }
 
@@ -434,8 +434,6 @@ function spawnInsight(hitWorld, clientInZone) {
         path.style.strokeDashoffset = '0';
         el.classList.remove('is-loading', 'is-drawing');
         el.classList.add('is-live');
-        const status = el.querySelector('.ar-card-status');
-        if (status) status.textContent = 'ANCHORED';
     }, 750);
 
     el.querySelector('.ar-card-close').addEventListener('click', (e) => {
