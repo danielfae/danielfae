@@ -170,6 +170,14 @@ function deform(t) {
     }
 }
 
+function syncSvgSize() {
+    const w = Math.max(1, Math.round(zone.clientWidth));
+    const h = Math.max(1, Math.round(zone.clientHeight));
+    tetherSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    tetherSvg.setAttribute('width', String(w));
+    tetherSvg.setAttribute('height', String(h));
+}
+
 function resize() {
     const rect = wrap.getBoundingClientRect();
     const w = Math.max(1, rect.width);
@@ -177,6 +185,7 @@ function resize() {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
+    syncSvgSize();
     syncTethers();
 }
 
@@ -265,14 +274,14 @@ function buildCardElement(card, index) {
             <span class="ar-br tl"></span><span class="ar-br tr"></span>
             <span class="ar-br bl"></span><span class="ar-br br"></span>
         </div>
-        <header class="ar-card-meta">
+        <div class="ar-card-meta">
             <span class="ar-card-code">${card.code}</span>
             <span class="ar-card-status">LOCKING…</span>
             <button class="ar-card-close" type="button" aria-label="Dismiss insight">×</button>
-        </header>
+        </div>
         <div class="ar-card-scan" aria-hidden="true"></div>
         <p class="ar-card-text"></p>
-        <footer class="ar-card-foot">SURFACE ANCHOR · LIVE</footer>
+        <div class="ar-card-foot">SURFACE ANCHOR · LIVE</div>
     `;
     el.querySelector('.ar-card-text').textContent = card.text;
     return el;
@@ -372,13 +381,14 @@ function syncTethers() {
         a.marker.scale.setScalar(1 + Math.sin(t * 3 + a.world.x) * 0.06);
 
         const hit = projectWorldToZone(a.world);
-        const rect = a.el.getBoundingClientRect();
-        const zoneRect = zone.getBoundingClientRect();
-        const ax = rect.left - zoneRect.left + rect.width * 0.5;
-        const ay = rect.top - zoneRect.top + rect.height - 4;
-        const mx = (ax + hit.x) / 2 + (hit.x - ax) * 0.08;
-        const my = Math.min(ay, hit.y) - Math.abs(hit.y - ay) * 0.28;
+        // Prefer style/offset box so clip-path / transforms don't inflate the tether origin
+        const ax = (parseFloat(a.el.style.left) || 0) + a.el.offsetWidth * 0.5;
+        const ay = (parseFloat(a.el.style.top) || 0) + a.el.offsetHeight - 2;
+        const mx = (ax + hit.x) / 2 + (hit.x - ax) * 0.05;
+        const my = Math.min(ay, hit.y) - Math.max(40, Math.abs(hit.y - ay) * 0.22);
         a.path.setAttribute('d', `M ${ax} ${ay} Q ${mx} ${my} ${hit.x} ${hit.y}`);
+        a.path.style.stroke = a.accent;
+        a.pulse.style.fill = a.accent;
 
         const age = (performance.now() - a.t0) / 1000;
         const u = (age * 0.55) % 1;
