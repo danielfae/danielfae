@@ -96,30 +96,6 @@ const wireMesh = new THREE.Mesh(
 wireMesh.position.set(0, 0.012, -1.5);
 scene.add(wireMesh);
 
-const nodes = new THREE.Group();
-scene.add(nodes);
-const nodeGeo = new THREE.SphereGeometry(0.045, 8, 8);
-const nodeCount = isMobile() ? 4 : 7;
-for (let i = 0; i < nodeCount; i++) {
-    const n = new THREE.Mesh(
-        nodeGeo,
-        new THREE.MeshBasicMaterial({
-            color: i % 3 === 0 ? 0xb87333 : 0xd4a017,
-            transparent: true,
-            opacity: 0.9,
-            depthTest: false,
-            depthWrite: false
-        })
-    );
-    n.userData = {
-        ox: (Math.random() - 0.5) * 40,
-        oz: (Math.random() - 0.5) * 18,
-        phase: Math.random() * Math.PI * 2,
-        amp: 0.12 + Math.random() * 0.18
-    };
-    nodes.add(n);
-}
-
 const ripples = [];
 const pointer = new THREE.Vector2();
 const raycaster = new THREE.Raycaster();
@@ -168,12 +144,6 @@ function deform(t) {
     }
     pos.needsUpdate = true;
     if ((deformTick & 1) === 0) surfaceGeo.computeVertexNormals();
-
-    for (let i = 0; i < nodes.children.length; i++) {
-        const n = nodes.children[i];
-        const { ox, oz, phase, amp } = n.userData;
-        n.position.set(ox, surfaceYAt(ox, oz, t) + 0.22 + Math.sin(t * 1.2 + phase) * amp, oz);
-    }
 
     for (let i = ripples.length - 1; i >= 0; i--) {
         if (t - ripples[i].t0 > 2.3) ripples.splice(i, 1);
