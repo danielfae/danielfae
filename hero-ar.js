@@ -94,7 +94,6 @@ const wireMesh = new THREE.Mesh(
     })
 );
 wireMesh.position.set(0, 0.012, -1.5);
-wireMesh.position.set(0, 0.012, -1.5);
 scene.add(wireMesh);
 
 const nodes = new THREE.Group();
@@ -107,7 +106,9 @@ for (let i = 0; i < nodeCount; i++) {
         new THREE.MeshBasicMaterial({
             color: i % 3 === 0 ? 0xb87333 : 0xd4a017,
             transparent: true,
-            opacity: 0.9
+            opacity: 0.9,
+            depthTest: false,
+            depthWrite: false
         })
     );
     n.userData = {
@@ -171,7 +172,7 @@ function deform(t) {
     for (let i = 0; i < nodes.children.length; i++) {
         const n = nodes.children[i];
         const { ox, oz, phase, amp } = n.userData;
-        n.position.set(ox, heightField(ox, oz, t) + 0.18 + Math.sin(t * 1.2 + phase) * amp, oz);
+        n.position.set(ox, surfaceYAt(ox, oz, t) + 0.22 + Math.sin(t * 1.2 + phase) * amp, oz);
     }
 
     for (let i = ripples.length - 1; i >= 0; i--) {
@@ -209,7 +210,20 @@ function projectWorldToZone(worldVec3) {
 }
 
 function surfaceYAt(x, z, t) {
-    return heightField(x, z, t);
+    let y = heightField(x, z, t);
+    for (let r = 0; r < ripples.length; r++) {
+        const ripple = ripples[r];
+        const age = t - ripple.t0;
+        if (age < 0 || age > 2.2) continue;
+        const dist = Math.hypot(x - ripple.x, z - ripple.z);
+        if (dist > 4.5) continue;
+        y += Math.sin(dist * 4.0 - age * 8) * Math.exp(-age * 1.7) * Math.exp(-dist * 0.4) * 0.45;
+    }
+    if (hoverPoint) {
+        const dist = Math.hypot(x - hoverPoint.x, z - hoverPoint.z);
+        if (dist < 2.2) y += Math.exp(-dist * dist * 1.6) * 0.1;
+    }
+    return y;
 }
 
 /* ---------- AR cards ---------- */
@@ -225,22 +239,47 @@ function nextCardIndex() {
 function createMarker(accentHex) {
     const accent = new THREE.Color(accentHex);
     const group = new THREE.Group();
+    // depthTest off so the deforming terrain never covers markers
     const ring = new THREE.Mesh(
         new THREE.RingGeometry(0.08, 0.12, 20),
-        new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0.95, side: THREE.DoubleSide })
+        new THREE.MeshBasicMaterial({
+            color: accent,
+            transparent: true,
+            opacity: 0.95,
+            depthTest: false,
+            depthWrite: false,
+            side: THREE.DoubleSide
+        })
     );
     ring.rotation.x = -Math.PI / 2;
     const core = new THREE.Mesh(
         new THREE.CircleGeometry(0.04, 16),
-        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9, side: THREE.DoubleSide })
+        new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.9,
+            depthTest: false,
+            depthWrite: false,
+            side: THREE.DoubleSide
+        })
     );
     core.rotation.x = -Math.PI / 2;
     core.position.y = 0.002;
     const stem = new THREE.Mesh(
         new THREE.CylinderGeometry(0.012, 0.012, 0.35, 6),
-        new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0.85 })
+        new THREE.MeshBasicMaterial({
+            color: accent,
+            transparent: true,
+            opacity: 0.85,
+            depthTest: false,
+            depthWrite: false
+        })
     );
     stem.position.y = 0.175;
+    group.renderOrder = 10;
+    ring.renderOrder = 10;
+    core.renderOrder = 11;
+    stem.renderOrder = 10;
     group.add(ring, core, stem);
     scene.add(group);
     return group;
@@ -353,7 +392,7 @@ function spawnInsight(hitWorld, clientInZone) {
 
     const marker = createMarker(card.accent);
     const world = hitWorld.clone();
-    world.y = surfaceYAt(world.x, world.z, clock.getElapsedTime()) + 0.02;
+    world.y = surfaceYAt(world.x, world.z, clock.getElapsedTime()) + 0.05;
     marker.position.copy(world);
 
     const { path, pulse } = makePath(card.accent);
@@ -378,7 +417,7 @@ function spawnInsight(hitWorld, clientInZone) {
     reticle.addEventListener('animationend', () => reticle.remove());
 
     requestAnimationFrame(() => {
-        // Start tether from the marker first; card opens from the bottom as it arrives
+        el.classList.add('is-drawing');
         syncTethers();
         const len = path.getTotalLength ? path.getTotalLength() : 420;
         path.style.strokeDasharray = String(len);
@@ -389,10 +428,6 @@ function spawnInsight(hitWorld, clientInZone) {
     });
 
     window.setTimeout(() => {
-        el.classList.add('is-drawing');
-    }, 380);
-
-    window.setTimeout(() => {
         // Drop dash array after the draw-in so live tethers stay solid
         path.style.transition = 'none';
         path.style.strokeDasharray = 'none';
@@ -401,7 +436,7 @@ function spawnInsight(hitWorld, clientInZone) {
         el.classList.add('is-live');
         const status = el.querySelector('.ar-card-status');
         if (status) status.textContent = 'ANCHORED';
-    }, 980);
+    }, 750);
 
     el.querySelector('.ar-card-close').addEventListener('click', (e) => {
         e.stopPropagation();
@@ -425,7 +460,7 @@ function syncTethers() {
     const tip = new THREE.Vector3();
     for (let i = 0; i < activeAnchors.length; i++) {
         const a = activeAnchors[i];
-        a.world.y = surfaceYAt(a.world.x, a.world.z, t) + 0.02;
+        a.world.y = surfaceYAt(a.world.x, a.world.z, t) + 0.05;
         a.marker.position.copy(a.world);
 
         // Connect to the stem tip so the line meets the marker, not empty air below
