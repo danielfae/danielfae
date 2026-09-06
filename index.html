@@ -23,8 +23,14 @@
     <link rel="icon" type="image/svg+xml" href="favicon/ÆSquare.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/ÆSquare-32.png">
     <link rel="apple-touch-icon" href="favicon/ÆSquare-ios.png">
-    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.170.0/build/three.module.js"
+        }
+    }
+    </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
@@ -190,9 +196,8 @@
         }
 
         /*
-         * Spline uses z-index: -2 (below hero chrome). The header's background layer
-         * still sits above negative-z descendants, so transparent header area would
-         * otherwise win hit-testing and swallow hover/click before the canvas.
+         * Custom WebGL surface sits behind hero chrome. Header uses pointer-events: none
+         * so clicks reach the canvas; interactive children re-enable pointer events.
          */
         header {
             height: 100svh;
@@ -452,18 +457,287 @@
             }
         }
 
-        .hero-spline {
+        .hero-canvas-wrap {
             position: absolute;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
             width: 100vw;
             height: 100%;
-            display: block;
             z-index: 1;
-            background: var(--vellum-base);
+            background:
+                radial-gradient(ellipse 70% 55% at 55% 58%, rgba(184, 115, 51, 0.12), transparent 70%),
+                radial-gradient(ellipse 50% 40% at 30% 40%, rgba(212, 160, 23, 0.08), transparent 65%),
+                var(--vellum-base, var(--vellum-base, #f4f1ea));
             pointer-events: auto;
+            overflow: hidden;
         }
+
+        .hero-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        .hero-surface-hint {
+            position: absolute;
+            left: 50%;
+            bottom: 1.75rem;
+            transform: translateX(-50%);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-faded, var(--ink-faded, #4a4d52));
+            background: rgba(244, 241, 234, 0.72);
+            border: 1px solid rgba(26, 28, 30, 0.15);
+            padding: 0.45rem 0.85rem;
+            pointer-events: none;
+            z-index: 2;
+            backdrop-filter: blur(6px);
+            transition: opacity 0.45s ease, transform 0.45s ease;
+        }
+
+        .hero-surface-hint.is-hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(8px);
+        }
+
+        .ar-tether-layer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: visible;
+            z-index: 4;
+            display: block;
+        }
+
+        .ar-tether-path {
+            fill: none;
+            stroke-width: 2;
+            opacity: 0.95;
+            filter: drop-shadow(0 0 4px rgba(184, 115, 51, 0.45));
+            transition: opacity 0.3s ease;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .ar-tether-pulse {
+            opacity: 0.95;
+            transition: opacity 0.3s ease;
+        }
+
+        .ar-tether-path.is-dismissing,
+        .ar-tether-pulse.is-dismissing {
+            opacity: 0;
+        }
+
+        .ar-reticle {
+            position: absolute;
+            width: 54px;
+            height: 54px;
+            margin-left: -27px;
+            margin-top: -27px;
+            border: 1px solid var(--card-accent, #b87333);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            animation: ar-reticle 0.7s ease-out forwards;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.35),
+                inset 0 0 12px color-mix(in srgb, var(--card-accent, #b87333) 35%, transparent);
+        }
+
+        .ar-reticle::before,
+        .ar-reticle::after {
+            content: '';
+            position: absolute;
+            background: var(--card-accent, #b87333);
+        }
+
+        .ar-reticle::before {
+            left: 50%;
+            top: 8px;
+            bottom: 8px;
+            width: 1px;
+            transform: translateX(-50%);
+        }
+
+        .ar-reticle::after {
+            top: 50%;
+            left: 8px;
+            right: 8px;
+            height: 1px;
+            transform: translateY(-50%);
+        }
+
+        @keyframes ar-reticle {
+            0% { transform: scale(0.35); opacity: 0; }
+            35% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+
+        .ar-card {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: min(340px, 72vw);
+            height: fit-content;
+            max-height: none;
+            bottom: auto;
+            right: auto;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 300;
+            line-height: 1.5;
+            color: var(--ink-deep, #1a1c1e);
+            padding: 1.1rem 1.25rem 0.9rem;
+            background: linear-gradient(160deg, rgba(255,255,255,0.78), rgba(244,241,234,0.62));
+            border: 1px solid rgba(26, 28, 30, 0.18);
+            border-left: 3px solid var(--card-accent, #b87333);
+            box-shadow:
+                0 10px 40px rgba(26, 28, 30, 0.12),
+                inset 0 1px 0 rgba(255,255,255,0.75);
+            backdrop-filter: blur(14px) saturate(1.2);
+            -webkit-backdrop-filter: blur(14px) saturate(1.2);
+            pointer-events: auto;
+            cursor: grab;
+            transform-origin: 50% 0%;
+            opacity: 0;
+            transform: translateY(-12px) scale(0.96);
+            transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, clip-path 0.45s ease;
+            clip-path: inset(0 0 100% 0);
+            overflow: visible;
+        }
+
+        .ar-card.is-drawing {
+            opacity: 0.4;
+            transform: translateY(-6px) scale(0.98);
+            clip-path: inset(0 0 55% 0);
+        }
+
+        .ar-card.is-live {
+            opacity: 1;
+            transform: none;
+            clip-path: inset(0 0 0 0);
+            animation: ar-card-unlock 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .ar-card.is-dismissing {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.97);
+        }
+
+        .ar-card.is-dragging {
+            cursor: grabbing;
+            box-shadow: 0 16px 48px rgba(26, 28, 30, 0.18);
+        }
+
+        @keyframes ar-card-unlock {
+            0% { filter: brightness(1.35); }
+            100% { filter: none; }
+        }
+
+        .ar-card-brackets {
+            position: absolute;
+            inset: 6px;
+            pointer-events: none;
+        }
+
+        .ar-br {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-color: var(--card-accent, #b87333);
+            border-style: solid;
+            opacity: 0.85;
+        }
+
+        .ar-br.tl { top: 0; left: 0; border-width: 1.5px 0 0 1.5px; }
+        .ar-br.tr { top: 0; right: 0; border-width: 1.5px 1.5px 0 0; }
+        .ar-br.bl { bottom: 0; left: 0; border-width: 0 0 1.5px 1.5px; }
+        .ar-br.br { bottom: 0; right: 0; border-width: 0 1.5px 1.5px 0; }
+
+        .ar-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            margin-bottom: 0.65rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .ar-card-code {
+            color: var(--card-accent, #b87333);
+            font-weight: 700;
+        }
+
+        .ar-card-status {
+            color: var(--ink-faded, #4a4d52);
+            opacity: 0.85;
+        }
+
+        .ar-card-close {
+            margin-left: auto;
+            width: 22px;
+            height: 22px;
+            border: 1px solid rgba(26,28,30,0.15);
+            background: rgba(255,255,255,0.65);
+            color: var(--ink-faded, #4a4d52);
+            border-radius: 2px;
+            cursor: pointer;
+            line-height: 1;
+            font-size: 14px;
+            display: grid;
+            place-items: center;
+        }
+
+        .ar-card-close:hover {
+            background: var(--ink-deep, #1a1c1e);
+            color: #fff;
+        }
+
+        .ar-card-scan {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 28%;
+            top: -30%;
+            background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--card-accent, #b87333) 22%, transparent), transparent);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .ar-card.is-loading .ar-card-scan,
+        .ar-card.is-drawing .ar-card-scan {
+            opacity: 1;
+            animation: ar-scan 0.9s linear;
+        }
+
+        @keyframes ar-scan {
+            from { top: -30%; }
+            to { top: 100%; }
+        }
+
+        .ar-card-text {
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ar-card-foot {
+            margin-top: 0.85rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 0.12em;
+            color: var(--ink-faded, #4a4d52);
+            opacity: 0.7;
+        }
+
 
         .hero-links {
             display: flex;
@@ -1460,9 +1734,43 @@
                 order: 4;
                 padding-bottom: 2rem;
             }
+            .hero-canvas-wrap {
+                position: relative;
+                left: 0;
+                transform: none;
+                width: 100%;
+                height: min(62vh, 520px);
+                order: 3;
+                margin: 0.5rem 0 1rem;
+            }
 
-            .hero-spline {
-                height: 100%;
+            .hero-surface-hint {
+                bottom: 0.85rem;
+                font-size: 0.58rem;
+            }
+
+            .ar-tether-layer,
+            .ar-reticle {
+                display: none;
+            }
+
+            .ar-card {
+                position: relative !important;
+                left: auto !important;
+                top: auto !important;
+                width: 100% !important;
+                max-width: 100%;
+                margin-bottom: 0.75rem;
+                cursor: default;
+                opacity: 1;
+                transform: none;
+                clip-path: none;
+            }
+
+            .hero-card-zone {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
             }
 
             .hero-card-zone {
@@ -1619,10 +1927,11 @@
 
     <div class="container">
         <header>
-            <!-- Full-bleed Spline background, behind all hero content -->
-            <spline-viewer id="spline-viewer" class="hero-spline"
-                url="https://prod.spline.design/QLB5PwzK2mLB5klF/scene.splinecode">
-            </spline-viewer>
+            <!-- Custom WebGL surface (no Spline) -->
+            <div class="hero-canvas-wrap" id="heroCanvasWrap" aria-label="Interactive product topology surface">
+                <canvas id="heroCanvas" class="hero-canvas"></canvas>
+                <p class="hero-surface-hint" id="heroSurfaceHint">Click the surface to anchor an insight</p>
+            </div>
 
             <!-- Right column: trajectory line, balancing the left thesis -->
             <div class="hero-right">
@@ -1649,17 +1958,7 @@
             </div>
 
             <div class="hero-card-zone" id="heroCardZone">
-                <div class="hero-card" id="heroCard" data-index="0" style="--card-accent: #4a90d9;">
-                    <button class="hero-card-pin" id="heroCardPin" type="button" aria-label="Pin card">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V17"/><path d="M5 17H19"/><path d="M10 5V11L7 17H17L14 11V5"/><path d="M10 5H14"/></svg>
-                    </button>
-                    <button class="hero-card-close-mobile" id="heroCardCloseMobile" type="button" aria-label="Close card">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </button>
-                    <div class="hero-card-scroll">
-                        <p class="hero-card-text" id="heroCardText">The product triangle of PM, designer, and developer is collapsing. Execution is moving closer to the decision — you need fewer translators in the middle.</p>
-                    </div>
-                </div>
+                <svg class="ar-tether-layer" id="arTetherLayer" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
             </div>
 
             <!-- Location widget: desktop only, top-right of hero -->
@@ -2086,217 +2385,7 @@
             });
         })();
 
-        // Hero Card: cycle, pin, drag (hues from tool section)
-        const heroCards = [
-            { text: 'The product triangle of PM, designer, and developer is collapsing. Execution is moving closer to the decision — you need fewer translators in the middle.', accent: '#4a90d9' },
-            { text: 'Software is getting cheaper to produce. The scarce resource is no longer code, but judgment: knowing which problems are worth solving.', accent: '#d4a017' },
-            { text: 'Fast AI slop will always be slop. I pair product judgment with the ability to build, so teams ship the right thing — not just more things.', accent: '#7cb342' },
-            { text: 'Every AI agent needs a human who cares. Someone still has to own the outcome, know when the system is wrong, and decide what is worth doing.', accent: '#ab47bc' }
-        ];
-
-        const heroCard            = document.getElementById('heroCard');
-        const heroCardText        = document.getElementById('heroCardText');
-        const heroCardPin         = document.getElementById('heroCardPin');
-        const heroCardCloseMobile = document.getElementById('heroCardCloseMobile');
-        const heroCardZone        = document.getElementById('heroCardZone');
-
-        let cardIndex  = 0;
-        let isDragging = false;
-        let dragStartX = 0, dragStartY = 0;
-        let cardStartX = 0, cardStartY = 0;
-        let zTop = 10; // z-index counter: newest card always above older ones
-
-        const pinnedIndices = new Set();
-
-        // Hidden until first Spline/pinned-card click
-        heroCard.style.display = 'none';
-
-        // Expose for shared advance logic and spline script block
-        window._heroCards     = heroCards;
-        window._pinnedIndices = pinnedIndices;
-        window._splineCardIndex = 0;
-
-        // Centralised "advance and show next card" — called by Spline click and pinned-card click
-        window.advanceHeroCard = function(clickPos) {
-            const total  = heroCards.length;
-            const pinned = pinnedIndices;
-            let next  = window._splineCardIndex;
-            let found = false;
-            for (let i = 0; i < total; i++) {
-                next = (next + 1) % total;
-                if (!pinned.has(next)) { found = true; break; }
-            }
-            if (!found) return;
-            window._splineCardIndex = next;
-            showCard(next, clickPos);
-        };
-
-        window.showHeroCard = function(index, clickPos) { showCard(index, clickPos); };
-
-        function showCard(index, clickPos) {
-            heroCard.style.display = '';
-            heroCard.classList.add('swapping');
-
-            // Make the card immediately visible and raise its z-index above all others
-            heroCard.style.opacity  = '1';
-            heroCard.style.zIndex   = ++zTop;
-
-            // Border flashes black → accent
-            heroCard.classList.remove('card-entering');
-            void heroCard.offsetWidth; // reflow to restart animation
-            heroCard.classList.add('card-entering');
-            heroCard.addEventListener('animationend', () => heroCard.classList.remove('card-entering'), { once: true });
-
-            // After first hover-out, hand opacity control back to CSS (→ fades to 0)
-            heroCard.addEventListener('mouseleave', () => { heroCard.style.opacity = ''; }, { once: true });
-
-            const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-
-            if (!isMobile && clickPos) {
-                const zoneRect = heroCardZone.getBoundingClientRect();
-                const cardW = heroCard.offsetWidth || 320;
-                const cardH = heroCard.offsetHeight || 200;
-                let left = clickPos.x - cardW / 2;
-                let top  = clickPos.y + 20;
-                left = Math.max(0, Math.min(zoneRect.width  - cardW, left));
-                top  = Math.max(0, Math.min(zoneRect.height - cardH, top));
-                heroCard.style.right     = '';
-                heroCard.style.transform = '';
-                heroCard.style.left = left + 'px';
-                heroCard.style.top  = top  + 'px';
-            }
-
-            setTimeout(() => {
-                cardIndex = index % heroCards.length;
-                const card = heroCards[cardIndex];
-                heroCardText.textContent = card.text;
-                heroCard.style.setProperty('--card-accent', card.accent);
-                heroCard.dataset.index = cardIndex;
-                if (!isMobile && !clickPos) {
-                    heroCard.style.left      = '';
-                    heroCard.style.top       = '';
-                    heroCard.style.right     = '2rem';
-                    heroCard.style.transform = 'translateY(-50%)';
-                } else if (isMobile) {
-                    heroCard.style.left      = '';
-                    heroCard.style.top       = '';
-                    heroCard.style.right     = '';
-                    heroCard.style.transform = '';
-                }
-                heroCard.classList.remove('swapping');
-            }, 350);
-        }
-
-        // Pin button: freeze roaming card as a locked pinned clone
-        heroCardPin.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const idx = parseInt(heroCard.dataset.index);
-            if (isNaN(idx)) return;
-            pinnedIndices.add(idx);
-
-            const card   = heroCards[idx];
-            const pinned = document.createElement('div');
-            pinned.className = 'hero-card is-pinned';
-            pinned.style.setProperty('--card-accent', card.accent);
-
-            // Snapshot exact visual position (getBoundingClientRect accounts for transform)
-            const rect     = heroCard.getBoundingClientRect();
-            const zoneRect = heroCardZone.getBoundingClientRect();
-            pinned.style.left      = (rect.left - zoneRect.left) + 'px';
-            pinned.style.top       = (rect.top  - zoneRect.top)  + 'px';
-            pinned.style.width     = rect.width + 'px';
-            pinned.style.transform = 'none';
-            pinned.style.right     = 'auto';
-            pinned.style.zIndex    = zTop; // same level as roaming card
-
-            pinned.innerHTML =
-                '<button class="hero-card-pin" type="button" aria-label="Unpin card">' +
-                    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-                        '<path d="M12 22V17"/><path d="M5 17H19"/><path d="M10 5V11L7 17H17L14 11V5"/><path d="M10 5H14"/>' +
-                    '</svg>' +
-                '</button>' +
-                '<div class="hero-card-scroll"><p class="hero-card-text">' + card.text.replace(/</g, '&lt;') + '</p></div>';
-
-            // Clicking the pinned card body raises it to the top of the stack
-            pinned.addEventListener('click', (e) => {
-                if (e.target.closest('.hero-card-pin')) return;
-                pinned.style.zIndex = ++zTop;
-            });
-
-            // Unpin: return card to hover-fade behavior, remove from DOM once it fully fades
-            pinned.querySelector('.hero-card-pin').addEventListener('click', (e) => {
-                e.stopPropagation();
-                pinnedIndices.delete(idx);
-                pinned.classList.remove('is-pinned');
-                // Stay visible until user moves away
-                pinned.style.opacity = '1';
-                pinned.addEventListener('mouseleave', () => {
-                    pinned.style.opacity = '';
-                    pinned.addEventListener('transitionend', function cleanup(ev) {
-                        if (ev.propertyName !== 'opacity') return;
-                        if (parseFloat(getComputedStyle(pinned).opacity) < 0.05) {
-                            pinned.remove();
-                        }
-                    });
-                }, { once: true });
-            });
-
-            heroCardZone.appendChild(pinned);
-            heroCard.style.display = 'none';
-        });
-
-        // Drag: roaming card only
-        heroCard.addEventListener('mousedown', (e) => {
-            if (e.target.closest('.hero-card-pin')) return;
-            if (window.matchMedia('(max-width: 1024px)').matches) return;
-            isDragging = true;
-            document.body.style.userSelect = 'none';
-            dragStartX = e.clientX;
-            dragStartY = e.clientY;
-            const rect     = heroCard.getBoundingClientRect();
-            const zoneRect = heroCardZone.getBoundingClientRect();
-            cardStartX = rect.left - zoneRect.left;
-            cardStartY = rect.top  - zoneRect.top;
-            heroCard.style.right     = '';
-            heroCard.style.transform = '';
-            heroCard.style.left = cardStartX + 'px';
-            heroCard.style.top  = cardStartY + 'px';
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            const dx = e.clientX - dragStartX;
-            const dy = e.clientY - dragStartY;
-            const zoneRect = heroCardZone.getBoundingClientRect();
-            const cardRect = heroCard.getBoundingClientRect();
-            const cardW    = Math.max(cardRect.width, 280);
-            heroCard.style.left = Math.max(0, Math.min(zoneRect.width  - cardW,            cardStartX + dx)) + 'px';
-            heroCard.style.top  = Math.max(0, Math.min(zoneRect.height - cardRect.height,  cardStartY + dy)) + 'px';
-        });
-
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            document.body.style.userSelect = '';
-        });
-
-        // Mobile: tap card body to cycle to next card
-        heroCard.addEventListener('click', (e) => {
-            if (!window.matchMedia('(max-width: 1024px)').matches) return;
-            if (e.target.closest('.hero-card-close-mobile')) return;
-            window.advanceHeroCard(null);
-        });
-
-        // Mobile: close button hides card
-        heroCardCloseMobile.addEventListener('click', (e) => {
-            e.stopPropagation();
-            heroCard.style.display = 'none';
-        });
-
-        window.addEventListener('resize', () => {
-            if (window.matchMedia('(max-width: 1024px)').matches) {
-                heroCard.style.left = heroCard.style.top = heroCard.style.right = heroCard.style.transform = '';
-            }
-        });
+        
 
         // Footer: first time cursor enters footer (scan line crosses into it), show centered scroll-to-top; touch: show when footer enters view
         (function () {
@@ -2379,13 +2468,6 @@
             });
         });
     </script>
-
-    <script>
-        document.getElementById('spline-viewer').addEventListener('click', (e) => {
-            if (typeof window.advanceHeroCard !== 'function') return;
-            const zone = document.getElementById('heroCardZone').getBoundingClientRect();
-            window.advanceHeroCard({ x: e.clientX - zone.left, y: e.clientY - zone.top });
-        });
-    </script>
+    <script type="module" src="./hero-ar.js"></script>
 </body>
 </html>
