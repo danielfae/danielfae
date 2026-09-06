@@ -1701,6 +1701,7 @@
                 min-height: unset;
                 overflow: visible;
                 margin-bottom: 4rem;
+                position: relative;
             }
 
             .hero-right {
@@ -1782,13 +1783,13 @@
                 max-width: 100%;
                 margin: 0;
                 cursor: default;
-                opacity: 1;
-                transform: none;
-                clip-path: none;
+                opacity: 1 !important;
+                transform: none !important;
+                clip-path: none !important;
             }
 
-            /* Backup: if more than one card exists, only show the latest */
-            .hero-card-zone > .ar-card:not(:last-child) {
+            /* Only the latest card (reticles/svg siblings must not hide it) */
+            .hero-card-zone > .ar-card:not(:last-of-type) {
                 display: none;
             }
 

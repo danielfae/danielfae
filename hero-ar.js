@@ -408,13 +408,15 @@ function spawnInsight(hitWorld, clientInZone) {
     };
     activeAnchors.push(anchor);
 
-    const reticle = document.createElement('div');
-    reticle.className = 'ar-reticle';
-    reticle.style.left = `${clientInZone.x}px`;
-    reticle.style.top = `${clientInZone.y}px`;
-    reticle.style.setProperty('--card-accent', card.accent);
-    zone.appendChild(reticle);
-    reticle.addEventListener('animationend', () => reticle.remove());
+    if (!isMobile()) {
+        const reticle = document.createElement('div');
+        reticle.className = 'ar-reticle';
+        reticle.style.left = `${clientInZone.x}px`;
+        reticle.style.top = `${clientInZone.y}px`;
+        reticle.style.setProperty('--card-accent', card.accent);
+        zone.appendChild(reticle);
+        reticle.addEventListener('animationend', () => reticle.remove());
+    }
 
     requestAnimationFrame(() => {
         el.classList.add('is-drawing');
