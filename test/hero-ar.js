@@ -1,6 +1,7 @@
 /**
  * Custom hero surface (no Spline) + AR-style insight cards.
- * Click the mesh → reticle pins the hit → tether draws → HUD card materializes at the top.
+ * Click mesh → reticle → tether → HUD card in mid-hero.
+ * Max 4 cards; revisiting a card dismisses the old one and respawns at the new click.
  */
 import * as THREE from 'three';
 
@@ -27,6 +28,9 @@ const CARDS = [
     }
 ];
 
+const MAX_CARDS = 4;
+const SEG = 48;
+
 const canvas = document.getElementById('heroCanvas');
 const wrap = document.getElementById('heroCanvasWrap');
 const zone = document.getElementById('heroCardZone');
@@ -38,15 +42,16 @@ if (!canvas || !wrap || !zone || !tetherSvg) {
 }
 
 const isMobile = () => window.matchMedia('(max-width: 1024px)').matches;
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------- Three.js surface ---------- */
+/* ---------- Three.js ---------- */
 const renderer = new THREE.WebGLRenderer({
     canvas,
-    antialias: true,
+    antialias: !isMobile(),
     alpha: true,
     powerPreference: 'high-performance'
 });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile() ? 1.25 : 1.5));
 renderer.setClearColor(0x000000, 0);
 
 const scene = new THREE.Scene();
@@ -54,63 +59,57 @@ const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
 camera.position.set(0, 3.4, 6.2);
 camera.lookAt(0, 0.2, 0);
 
-scene.add(new THREE.AmbientLight(0xf4f1ea, 0.85));
-const keyLight = new THREE.DirectionalLight(0xfff6e8, 1.05);
+scene.add(new THREE.AmbientLight(0xf4f1ea, 0.9));
+const keyLight = new THREE.DirectionalLight(0xfff6e8, 0.85);
 keyLight.position.set(4, 8, 3);
 scene.add(keyLight);
-const fillLight = new THREE.DirectionalLight(0xb87333, 0.35);
-fillLight.position.set(-5, 2, -2);
-scene.add(fillLight);
 
-const SEG = 96;
 const surfaceGeo = new THREE.PlaneGeometry(14, 10, SEG, SEG);
 surfaceGeo.rotateX(-Math.PI / 2);
 const basePositions = Float32Array.from(surfaceGeo.attributes.position.array);
 
 const surfaceMesh = new THREE.Mesh(
     surfaceGeo,
-    new THREE.MeshStandardMaterial({
+    new THREE.MeshLambertMaterial({
         color: 0xe8e2d6,
-        roughness: 0.62,
-        metalness: 0.18,
         transparent: true,
-        opacity: 0.92,
+        opacity: 0.9,
         side: THREE.DoubleSide
     })
 );
 scene.add(surfaceMesh);
 
+// Share geometry — one deform updates both fill + wire
 const wireMesh = new THREE.Mesh(
-    surfaceGeo.clone(),
+    surfaceGeo,
     new THREE.MeshBasicMaterial({
         color: 0x1a1c1e,
         wireframe: true,
         transparent: true,
-        opacity: 0.14
+        opacity: 0.12
     })
 );
-wireMesh.position.y = 0.01;
+wireMesh.position.y = 0.012;
 scene.add(wireMesh);
 
 const nodes = new THREE.Group();
 scene.add(nodes);
-const nodeGeo = new THREE.SphereGeometry(0.045, 10, 10);
-for (let i = 0; i < 18; i++) {
+const nodeGeo = new THREE.SphereGeometry(0.045, 8, 8);
+const nodeCount = isMobile() ? 6 : 10;
+for (let i = 0; i < nodeCount; i++) {
     const n = new THREE.Mesh(
         nodeGeo,
-        new THREE.MeshStandardMaterial({
+        new THREE.MeshBasicMaterial({
             color: i % 3 === 0 ? 0xb87333 : 0xd4a017,
-            emissive: i % 3 === 0 ? 0xb87333 : 0xd4a017,
-            emissiveIntensity: 0.35,
-            roughness: 0.4,
-            metalness: 0.6
+            transparent: true,
+            opacity: 0.9
         })
     );
     n.userData = {
         ox: (Math.random() - 0.5) * 10,
         oz: (Math.random() - 0.5) * 7,
         phase: Math.random() * Math.PI * 2,
-        amp: 0.15 + Math.random() * 0.25
+        amp: 0.12 + Math.random() * 0.18
     };
     nodes.add(n);
 }
@@ -120,53 +119,58 @@ const pointer = new THREE.Vector2();
 const raycaster = new THREE.Raycaster();
 const clock = new THREE.Clock();
 let hoverPoint = null;
+let heroVisible = true;
+let deformTick = 0;
 
 function heightField(x, z, t) {
     return (
-        Math.sin(x * 0.55 + t * 0.55) * 0.28 +
-        Math.cos(z * 0.7 - t * 0.4) * 0.22 +
-        Math.sin((x + z) * 0.35 + t * 0.25) * 0.18 +
-        Math.sin(Math.hypot(x, z) * 0.9 - t * 0.8) * 0.08
+        Math.sin(x * 0.55 + t * 0.45) * 0.28 +
+        Math.cos(z * 0.7 - t * 0.35) * 0.2 +
+        Math.sin((x + z) * 0.32 + t * 0.22) * 0.12
     );
 }
 
 function deform(t) {
     const pos = surfaceGeo.attributes.position;
-    const wpos = wireMesh.geometry.attributes.position;
+    const arr = pos.array;
+    const hasRipples = ripples.length > 0;
+    const hover = hoverPoint;
+
     for (let i = 0; i < pos.count; i++) {
         const ix = i * 3;
         const x = basePositions[ix];
         const z = basePositions[ix + 2];
         let y = heightField(x, z, t);
 
-        for (const r of ripples) {
-            const age = t - r.t0;
-            if (age < 0 || age > 2.4) continue;
-            const dist = Math.hypot(x - r.x, z - r.z);
-            y += Math.sin(dist * 4.2 - age * 9) * Math.exp(-age * 1.6) * Math.exp(-dist * 0.35) * 0.55;
+        if (hasRipples) {
+            for (let r = 0; r < ripples.length; r++) {
+                const ripple = ripples[r];
+                const age = t - ripple.t0;
+                if (age < 0 || age > 2.2) continue;
+                const dist = Math.hypot(x - ripple.x, z - ripple.z);
+                if (dist > 4.5) continue;
+                y += Math.sin(dist * 4.0 - age * 8) * Math.exp(-age * 1.7) * Math.exp(-dist * 0.4) * 0.45;
+            }
         }
 
-        if (hoverPoint) {
-            const dist = Math.hypot(x - hoverPoint.x, z - hoverPoint.z);
-            y += Math.exp(-dist * dist * 1.8) * 0.12;
+        if (hover) {
+            const dist = Math.hypot(x - hover.x, z - hover.z);
+            if (dist < 2.2) y += Math.exp(-dist * dist * 1.6) * 0.1;
         }
 
-        pos.array[ix + 1] = y;
-        wpos.array[ix] = x;
-        wpos.array[ix + 1] = y + 0.01;
-        wpos.array[ix + 2] = z;
+        arr[ix + 1] = y;
     }
     pos.needsUpdate = true;
-    wpos.needsUpdate = true;
-    surfaceGeo.computeVertexNormals();
+    if ((deformTick & 1) === 0) surfaceGeo.computeVertexNormals();
 
-    nodes.children.forEach((n) => {
+    for (let i = 0; i < nodes.children.length; i++) {
+        const n = nodes.children[i];
         const { ox, oz, phase, amp } = n.userData;
-        n.position.set(ox, heightField(ox, oz, t) + 0.2 + Math.sin(t * 1.4 + phase) * amp, oz);
-    });
+        n.position.set(ox, heightField(ox, oz, t) + 0.18 + Math.sin(t * 1.2 + phase) * amp, oz);
+    }
 
     for (let i = ripples.length - 1; i >= 0; i--) {
-        if (t - ripples[i].t0 > 2.5) ripples.splice(i, 1);
+        if (t - ripples[i].t0 > 2.3) ripples.splice(i, 1);
     }
 }
 
@@ -203,7 +207,7 @@ function surfaceYAt(x, z, t) {
     return heightField(x, z, t);
 }
 
-/* ---------- AR cards + tethers ---------- */
+/* ---------- AR cards ---------- */
 let cardCursor = -1;
 const activeAnchors = [];
 let zTop = 20;
@@ -217,18 +221,18 @@ function createMarker(accentHex) {
     const accent = new THREE.Color(accentHex);
     const group = new THREE.Group();
     const ring = new THREE.Mesh(
-        new THREE.RingGeometry(0.08, 0.12, 32),
+        new THREE.RingGeometry(0.08, 0.12, 20),
         new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0.95, side: THREE.DoubleSide })
     );
     ring.rotation.x = -Math.PI / 2;
     const core = new THREE.Mesh(
-        new THREE.CircleGeometry(0.04, 24),
+        new THREE.CircleGeometry(0.04, 16),
         new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9, side: THREE.DoubleSide })
     );
     core.rotation.x = -Math.PI / 2;
     core.position.y = 0.002;
     const stem = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.012, 0.012, 0.35, 8),
+        new THREE.CylinderGeometry(0.012, 0.012, 0.35, 6),
         new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0.85 })
     );
     stem.position.y = 0.175;
@@ -254,14 +258,20 @@ function makePath(accent) {
     return { path, pulse };
 }
 
-function cardSlotPosition(indexAmongActive) {
+/** Mid-hero placement, biased toward the click X so the tether reads clearly. */
+function cardPlacement(clientInZone, indexAmongActive) {
     const zoneRect = zone.getBoundingClientRect();
-    const cardW = Math.min(340, Math.max(240, zoneRect.width * 0.3));
-    const gap = 16;
-    const top = isMobile() ? 12 : 28;
-    const maxRow = Math.max(1, Math.floor((zoneRect.width - 48) / (cardW + gap)));
-    const slot = indexAmongActive % maxRow;
-    return { left: 24 + slot * (cardW + gap), top, width: cardW };
+    const cardW = Math.min(320, Math.max(240, zoneRect.width * 0.28));
+    const cardH = 190;
+    const count = Math.max(activeAnchors.length, 1);
+    const fan = indexAmongActive - (count - 1) / 2;
+
+    let left = (clientInZone?.x ?? zoneRect.width * 0.5) - cardW / 2 + fan * 28;
+    let top = zoneRect.height * 0.48 - cardH * 0.5 + (indexAmongActive % 2) * 14;
+
+    left = Math.max(16, Math.min(zoneRect.width - cardW - 16, left));
+    top = Math.max(16, Math.min(zoneRect.height - cardH - 16, top));
+    return { left, top, width: cardW };
 }
 
 function buildCardElement(card, index) {
@@ -287,11 +297,46 @@ function buildCardElement(card, index) {
     return el;
 }
 
+function removeAnchorDom(anchor) {
+    anchor.el.remove();
+    anchor.path.remove();
+    anchor.pulse.remove();
+    scene.remove(anchor.marker);
+    anchor.marker.traverse((obj) => {
+        if (obj.geometry) obj.geometry.dispose();
+        if (obj.material) obj.material.dispose();
+    });
+}
+
+function dismissAnchor(anchor, immediate = false) {
+    const i = activeAnchors.indexOf(anchor);
+    if (i >= 0) activeAnchors.splice(i, 1);
+
+    if (immediate) {
+        removeAnchorDom(anchor);
+        return;
+    }
+
+    anchor.el.classList.add('is-dismissing');
+    anchor.path.classList.add('is-dismissing');
+    anchor.pulse.classList.add('is-dismissing');
+    window.setTimeout(() => removeAnchorDom(anchor), 280);
+}
+
 function spawnInsight(hitWorld, clientInZone) {
     const index = nextCardIndex();
     const card = CARDS[index];
+
+    // Same insight already on screen → fade it out, then respawn at the new click
+    const existing = activeAnchors.find((a) => a.cardIndex === index);
+    if (existing) dismissAnchor(existing, false);
+
+    while (activeAnchors.length >= MAX_CARDS) {
+        dismissAnchor(activeAnchors[0], false);
+    }
+
     const el = buildCardElement(card, index);
-    const slot = cardSlotPosition(activeAnchors.length);
+    const slot = cardPlacement(clientInZone, activeAnchors.length);
     el.style.left = `${slot.left}px`;
     el.style.top = `${slot.top}px`;
     el.style.width = `${slot.width}px`;
@@ -304,7 +349,16 @@ function spawnInsight(hitWorld, clientInZone) {
     marker.position.copy(world);
 
     const { path, pulse } = makePath(card.accent);
-    const anchor = { el, world, accent: card.accent, path, pulse, marker, t0: performance.now() };
+    const anchor = {
+        el,
+        world,
+        accent: card.accent,
+        path,
+        pulse,
+        marker,
+        cardIndex: index,
+        t0: performance.now()
+    };
     activeAnchors.push(anchor);
 
     const reticle = document.createElement('div');
@@ -322,7 +376,7 @@ function spawnInsight(hitWorld, clientInZone) {
         path.style.strokeDasharray = String(len);
         path.style.strokeDashoffset = String(len);
         path.getBoundingClientRect();
-        path.style.transition = 'stroke-dashoffset 0.85s cubic-bezier(0.22, 1, 0.36, 1)';
+        path.style.transition = 'stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1)';
         path.style.strokeDashoffset = '0';
     });
 
@@ -331,7 +385,7 @@ function spawnInsight(hitWorld, clientInZone) {
         el.classList.add('is-live');
         const status = el.querySelector('.ar-card-status');
         if (status) status.textContent = 'ANCHORED';
-    }, 900);
+    }, 750);
 
     el.querySelector('.ar-card-close').addEventListener('click', (e) => {
         e.stopPropagation();
@@ -346,49 +400,23 @@ function spawnInsight(hitWorld, clientInZone) {
 
     if (hint) hint.classList.add('is-hidden');
     ripples.push({ x: hitWorld.x, z: hitWorld.z, t0: clock.getElapsedTime() });
-}
-
-function dismissAnchor(anchor) {
-    const i = activeAnchors.indexOf(anchor);
-    if (i >= 0) activeAnchors.splice(i, 1);
-    anchor.el.classList.add('is-dismissing');
-    anchor.path.classList.add('is-dismissing');
-    anchor.pulse.classList.add('is-dismissing');
-    window.setTimeout(() => {
-        anchor.el.remove();
-        anchor.path.remove();
-        anchor.pulse.remove();
-        scene.remove(anchor.marker);
-    }, 320);
-    layoutCards();
-}
-
-function layoutCards() {
-    activeAnchors.forEach((a, i) => {
-        const slot = cardSlotPosition(i);
-        a.el.style.left = `${slot.left}px`;
-        a.el.style.top = `${slot.top}px`;
-        a.el.style.width = `${slot.width}px`;
-    });
-    syncTethers();
+    if (ripples.length > 3) ripples.shift();
 }
 
 function syncTethers() {
+    if (!activeAnchors.length) return;
     const t = clock.getElapsedTime();
-    activeAnchors.forEach((a) => {
+    for (let i = 0; i < activeAnchors.length; i++) {
+        const a = activeAnchors[i];
         a.world.y = surfaceYAt(a.world.x, a.world.z, t) + 0.02;
         a.marker.position.copy(a.world);
-        a.marker.scale.setScalar(1 + Math.sin(t * 3 + a.world.x) * 0.06);
 
         const hit = projectWorldToZone(a.world);
-        // Prefer style/offset box so clip-path / transforms don't inflate the tether origin
         const ax = (parseFloat(a.el.style.left) || 0) + a.el.offsetWidth * 0.5;
         const ay = (parseFloat(a.el.style.top) || 0) + a.el.offsetHeight - 2;
         const mx = (ax + hit.x) / 2 + (hit.x - ax) * 0.05;
         const my = Math.min(ay, hit.y) - Math.max(40, Math.abs(hit.y - ay) * 0.22);
         a.path.setAttribute('d', `M ${ax} ${ay} Q ${mx} ${my} ${hit.x} ${hit.y}`);
-        a.path.style.stroke = a.accent;
-        a.pulse.style.fill = a.accent;
 
         const age = (performance.now() - a.t0) / 1000;
         const u = (age * 0.55) % 1;
@@ -396,7 +424,7 @@ function syncTethers() {
         const py = (1 - u) * (1 - u) * ay + 2 * (1 - u) * u * my + u * u * hit.y;
         a.pulse.setAttribute('cx', String(px));
         a.pulse.setAttribute('cy', String(py));
-    });
+    }
 }
 
 /* ---------- Drag ---------- */
@@ -443,15 +471,21 @@ function pick(clientX, clientY) {
     return raycaster.intersectObject(surfaceMesh, false)[0] || null;
 }
 
+let hoverRaf = 0;
 canvas.addEventListener('pointermove', (e) => {
-    const hit = pick(e.clientX, e.clientY);
-    if (hit) {
-        hoverPoint = { x: hit.point.x, z: hit.point.z };
-        canvas.style.cursor = 'crosshair';
-    } else {
-        hoverPoint = null;
-        canvas.style.cursor = 'default';
-    }
+    if (hoverRaf) return;
+    const { clientX, clientY } = e;
+    hoverRaf = requestAnimationFrame(() => {
+        hoverRaf = 0;
+        const hit = pick(clientX, clientY);
+        if (hit) {
+            hoverPoint = { x: hit.point.x, z: hit.point.z };
+            canvas.style.cursor = 'crosshair';
+        } else {
+            hoverPoint = null;
+            canvas.style.cursor = 'default';
+        }
+    });
 });
 
 canvas.addEventListener('pointerleave', () => {
@@ -472,22 +506,35 @@ canvas.addEventListener('pointerdown', (e) => {
 
 window.addEventListener('pointermove', onPointerMove);
 window.addEventListener('pointerup', onPointerUp);
-window.addEventListener('resize', () => {
-    resize();
-    layoutCards();
-});
+window.addEventListener('resize', resize);
 
 /* ---------- Loop ---------- */
 function frame() {
+    requestAnimationFrame(frame);
+    if (!heroVisible || document.hidden) return;
+
     const t = clock.getElapsedTime();
-    deform(t);
-    camera.position.x = Math.sin(t * 0.08) * 0.35;
-    camera.position.y = 3.4 + Math.sin(t * 0.12) * 0.08;
-    camera.lookAt(0, 0.15, 0);
+    deformTick++;
+
+    const skipDeform = prefersReducedMotion() || (isMobile() && (deformTick & 1) === 1);
+    if (!skipDeform) deform(t);
+
+    if (!prefersReducedMotion()) {
+        camera.position.x = Math.sin(t * 0.08) * 0.28;
+        camera.position.y = 3.4 + Math.sin(t * 0.12) * 0.06;
+        camera.lookAt(0, 0.15, 0);
+    }
+
     renderer.render(scene, camera);
     syncTethers();
-    requestAnimationFrame(frame);
 }
+
+new IntersectionObserver(
+    (entries) => {
+        heroVisible = entries.some((e) => e.isIntersecting);
+    },
+    { threshold: 0.05 }
+).observe(wrap);
 
 resize();
 frame();
