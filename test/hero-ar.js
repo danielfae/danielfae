@@ -73,7 +73,7 @@ const surfaceMesh = new THREE.Mesh(
     new THREE.MeshLambertMaterial({
         color: 0xe8e2d6,
         transparent: true,
-        opacity: 0.9,
+        opacity: 0.28,
         side: THREE.DoubleSide
     })
 );
