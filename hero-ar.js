@@ -1,5 +1,5 @@
 /**
- * Custom hero surface (no Spline) + AR-style insight cards.
+ * Interactive Three.js hero surface + AR-style insight cards.
  * Click mesh → reticle → tether → HUD card just above the surface band.
  * Max 4 cards; revisiting a card dismisses the old one and respawns at the new click.
  */
