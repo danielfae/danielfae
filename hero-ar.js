@@ -431,9 +431,13 @@ function syncTethers() {
         const ay = (parseFloat(a.el.style.top) || 0) + a.el.offsetHeight - 2;
         const dx = hit.x - ax;
         const dy = hit.y - ay;
-        // Nearly straight tether — cards sit just above the surface band
-        const mx = ax + dx * 0.5;
-        const my = ay + dy * 0.55;
+        // Straight when the card is directly above the marker; soft curve near the
+        // card as horizontal offset grows.
+        const absDx = Math.abs(dx);
+        const side = dx === 0 ? 0 : Math.sign(dx);
+        const curve = Math.min(42, absDx * 0.26);
+        const mx = ax + dx * 0.3 + side * curve * 0.35;
+        const my = ay + dy * 0.28 - curve * 0.2;
         a.path.setAttribute('d', `M ${ax} ${ay} Q ${mx} ${my} ${hit.x} ${hit.y}`);
 
         const age = (performance.now() - a.t0) / 1000;
