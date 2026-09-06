@@ -29,7 +29,7 @@ const CARDS = [
 ];
 
 const MAX_CARDS = 4;
-const SEG = 48;
+const SEG = 12;
 
 const canvas = document.getElementById('heroCanvas');
 const wrap = document.getElementById('heroCanvasWrap');
@@ -55,16 +55,20 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile() ? 1.25 
 renderer.setClearColor(0x000000, 0);
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-camera.position.set(0, 5.1, 3.15);
-camera.lookAt(0, 0, 0);
+scene.fog = new THREE.Fog(0xf4f1ea, 5, 20);
+// Full-bleed canvas. Perspective frames a smaller, coarser landscape in the
+// lower half — wide enough to run edge-to-edge, no CSS crop of the hero.
+const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 120);
+camera.position.set(0, 2.1, 4.6);
+camera.lookAt(0, 0.0, -6.5);
 
-scene.add(new THREE.AmbientLight(0xf4f1ea, 0.9));
-const keyLight = new THREE.DirectionalLight(0xfff6e8, 0.85);
-keyLight.position.set(4, 8, 3);
+scene.add(new THREE.AmbientLight(0xf4f1ea, 0.92));
+const keyLight = new THREE.DirectionalLight(0xfff6e8, 0.8);
+keyLight.position.set(3, 7, 4);
 scene.add(keyLight);
 
-const surfaceGeo = new THREE.PlaneGeometry(28, 9, SEG, SEG);
+// Extra-wide, shallow, low-poly surface — reads as ground plane, not a cut band
+const surfaceGeo = new THREE.PlaneGeometry(72, 40, SEG, 8);
 surfaceGeo.rotateX(-Math.PI / 2);
 const basePositions = Float32Array.from(surfaceGeo.attributes.position.array);
 
@@ -73,29 +77,30 @@ const surfaceMesh = new THREE.Mesh(
     new THREE.MeshLambertMaterial({
         color: 0xe8e2d6,
         transparent: true,
-        opacity: 0.28,
+        opacity: 0.18,
         side: THREE.DoubleSide
     })
 );
+surfaceMesh.position.set(0, 0, -1.5);
 scene.add(surfaceMesh);
 
-// Share geometry — one deform updates both fill + wire
 const wireMesh = new THREE.Mesh(
     surfaceGeo,
     new THREE.MeshBasicMaterial({
         color: 0x1a1c1e,
         wireframe: true,
         transparent: true,
-        opacity: 0.12
+        opacity: 0.11
     })
 );
-wireMesh.position.y = 0.012;
+wireMesh.position.set(0, 0.012, -1.5);
+wireMesh.position.set(0, 0.012, -1.5);
 scene.add(wireMesh);
 
 const nodes = new THREE.Group();
 scene.add(nodes);
 const nodeGeo = new THREE.SphereGeometry(0.045, 8, 8);
-const nodeCount = isMobile() ? 6 : 10;
+const nodeCount = isMobile() ? 4 : 7;
 for (let i = 0; i < nodeCount; i++) {
     const n = new THREE.Mesh(
         nodeGeo,
@@ -106,8 +111,8 @@ for (let i = 0; i < nodeCount; i++) {
         })
     );
     n.userData = {
-        ox: (Math.random() - 0.5) * 18,
-        oz: (Math.random() - 0.5) * 6,
+        ox: (Math.random() - 0.5) * 40,
+        oz: (Math.random() - 0.5) * 18,
         phase: Math.random() * Math.PI * 2,
         amp: 0.12 + Math.random() * 0.18
     };
@@ -124,9 +129,9 @@ let deformTick = 0;
 
 function heightField(x, z, t) {
     return (
-        Math.sin(x * 0.55 + t * 0.45) * 0.28 +
-        Math.cos(z * 0.7 - t * 0.35) * 0.2 +
-        Math.sin((x + z) * 0.32 + t * 0.22) * 0.12
+        Math.sin(x * 0.16 + t * 0.28) * 0.12 +
+        Math.cos(z * 0.2 - t * 0.22) * 0.09 +
+        Math.sin((x + z) * 0.09 + t * 0.12) * 0.05
     );
 }
 
@@ -258,20 +263,21 @@ function makePath(accent) {
     return { path, pulse };
 }
 
-/** Place cards just above the surface half so tethers stay short. */
+/** Place cards just above the visual terrain band (~mid hero) so tethers stay short. */
 function cardPlacement(clientInZone, indexAmongActive) {
     const zoneRect = zone.getBoundingClientRect();
     const cardW = Math.min(320, Math.max(240, zoneRect.width * 0.28));
-    const cardH = 190;
+    const cardH = 200;
     const count = Math.max(activeAnchors.length, 1);
     const fan = indexAmongActive - (count - 1) / 2;
 
     let left = (clientInZone?.x ?? zoneRect.width * 0.5) - cardW / 2 + fan * 28;
-    // Sit just above the terrain band (bottom 50% of hero)
-    let top = zoneRect.height * 0.5 - cardH - 20 + (indexAmongActive % 2) * 12;
+    // Prefer just above the click (short tether); keep within the mid-hero band
+    const preferY = (clientInZone?.y ?? zoneRect.height * 0.55) - cardH - 20;
+    let top = preferY + (indexAmongActive % 2) * 10;
+    top = Math.max(zoneRect.height * 0.22, Math.min(zoneRect.height * 0.52 - cardH, top));
 
     left = Math.max(16, Math.min(zoneRect.width - cardW - 16, left));
-    top = Math.max(12, Math.min(zoneRect.height * 0.5 - cardH - 8, top));
     return { left, top, width: cardW };
 }
 
@@ -343,6 +349,7 @@ function spawnInsight(hitWorld, clientInZone) {
     el.style.width = `${slot.width}px`;
     el.style.zIndex = String(++zTop);
     zone.appendChild(el);
+
 
     const marker = createMarker(card.accent);
     const world = hitWorld.clone();
@@ -420,9 +427,9 @@ function syncTethers() {
         const ay = (parseFloat(a.el.style.top) || 0) + a.el.offsetHeight - 2;
         const dx = hit.x - ax;
         const dy = hit.y - ay;
-        // Shallow curve — avoid a tall empty arch between card and surface
-        const mx = ax + dx * 0.5 + Math.sign(dx || 1) * Math.min(18, Math.abs(dx) * 0.08);
-        const my = ay + dy * 0.42;
+        // Nearly straight tether — cards sit just above the surface band
+        const mx = ax + dx * 0.5;
+        const my = ay + dy * 0.55;
         a.path.setAttribute('d', `M ${ax} ${ay} Q ${mx} ${my} ${hit.x} ${hit.y}`);
 
         const age = (performance.now() - a.t0) / 1000;
@@ -527,9 +534,9 @@ function frame() {
     if (!skipDeform) deform(t);
 
     if (!prefersReducedMotion()) {
-        camera.position.x = Math.sin(t * 0.08) * 0.18;
-        camera.position.y = 5.1 + Math.sin(t * 0.12) * 0.04;
-        camera.lookAt(0, 0, 0);
+        camera.position.x = Math.sin(t * 0.08) * 0.2;
+        camera.position.y = 2.1 + Math.sin(t * 0.1) * 0.035;
+        camera.lookAt(0, 0.0, -6.5);
     }
 
     renderer.render(scene, camera);
