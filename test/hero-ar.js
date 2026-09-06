@@ -431,18 +431,18 @@ function syncTethers() {
         const ay = (parseFloat(a.el.style.top) || 0) + a.el.offsetHeight - 2;
         const dx = hit.x - ax;
         const dy = hit.y - ay;
-        // Straight when aligned above the marker; soft bends near card and marker
-        // as horizontal offset grows, so the tether reads as one continuous arc.
+        // Path runs marker → card so draw-in and pulse rise up to meet the card.
+        // Soft bends near both ends when offset; straight when aligned above.
         const absDx = Math.abs(dx);
         const side = dx === 0 ? 0 : Math.sign(dx);
         const curve = Math.min(48, absDx * 0.28);
-        const c1x = ax + dx * 0.22 + side * curve * 0.42;
-        const c1y = ay + dy * 0.2 - curve * 0.18;
-        const c2x = hit.x - dx * 0.22 + side * curve * 0.28;
-        const c2y = hit.y - dy * 0.2 - curve * 0.12;
-        a.path.setAttribute('d', `M ${ax} ${ay} C ${c1x} ${c1y} ${c2x} ${c2y} ${hit.x} ${hit.y}`);
+        const c1x = hit.x - dx * 0.22 + side * curve * 0.28;
+        const c1y = hit.y - dy * 0.2 - curve * 0.12;
+        const c2x = ax + dx * 0.22 + side * curve * 0.42;
+        const c2y = ay + dy * 0.2 - curve * 0.18;
+        a.path.setAttribute('d', `M ${hit.x} ${hit.y} C ${c1x} ${c1y} ${c2x} ${c2y} ${ax} ${ay}`);
 
-        // Slow pulse with a pause between runs
+        // Slow pulse marker → card, with a pause between runs
         const age = (performance.now() - a.t0) / 1000;
         const period = 3.6;
         const phase = (age % period) / period;
@@ -450,15 +450,15 @@ function syncTethers() {
             const u = phase / 0.5;
             const omu = 1 - u;
             const px =
-                omu * omu * omu * ax +
+                omu * omu * omu * hit.x +
                 3 * omu * omu * u * c1x +
                 3 * omu * u * u * c2x +
-                u * u * u * hit.x;
+                u * u * u * ax;
             const py =
-                omu * omu * omu * ay +
+                omu * omu * omu * hit.y +
                 3 * omu * omu * u * c1y +
                 3 * omu * u * u * c2y +
-                u * u * u * hit.y;
+                u * u * u * ay;
             a.pulse.setAttribute('cx', String(px));
             a.pulse.setAttribute('cy', String(py));
             a.pulse.style.opacity = String(u < 0.08 || u > 0.92 ? Math.min(u, 1 - u) * 12.5 : 1);
