@@ -55,7 +55,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile() ? 1.25 
 renderer.setClearColor(0x000000, 0);
 
 const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0xf4f1ea, 5, 20);
+scene.fog = new THREE.Fog(0xf4f1ea, 8, 26);
 // Full-bleed canvas. Perspective frames a smaller, coarser landscape in the
 // lower half — wide enough to run edge-to-edge, no CSS crop of the hero.
 const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 120);
@@ -77,7 +77,7 @@ const surfaceMesh = new THREE.Mesh(
     new THREE.MeshLambertMaterial({
         color: 0xe8e2d6,
         transparent: true,
-        opacity: 0.18,
+        opacity: 0.24,
         side: THREE.DoubleSide
     })
 );
@@ -90,7 +90,7 @@ const wireMesh = new THREE.Mesh(
         color: 0x1a1c1e,
         wireframe: true,
         transparent: true,
-        opacity: 0.11
+        opacity: 0.17
     })
 );
 wireMesh.position.set(0, 0.012, -1.5);
