@@ -29,7 +29,7 @@ const CARDS = [
 ];
 
 const MAX_CARDS = 4;
-const SEG = 36;
+const SEG = 72;
 
 const canvas = document.getElementById('heroCanvas');
 const wrap = document.getElementById('heroCanvasWrap');
@@ -68,7 +68,7 @@ keyLight.position.set(3, 7, 4);
 scene.add(keyLight);
 
 // Extra-wide, shallow, low-poly surface — reads as ground plane, not a cut band
-const surfaceGeo = new THREE.PlaneGeometry(72, 40, SEG, 24);
+const surfaceGeo = new THREE.PlaneGeometry(72, 40, SEG, 48);
 surfaceGeo.rotateX(-Math.PI / 2);
 const basePositions = Float32Array.from(surfaceGeo.attributes.position.array);
 
