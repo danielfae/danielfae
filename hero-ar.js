@@ -389,6 +389,10 @@ function spawnInsight(hitWorld, clientInZone) {
     });
 
     window.setTimeout(() => {
+        // Drop dash array after the draw-in so live tethers stay solid
+        path.style.transition = 'none';
+        path.style.strokeDasharray = 'none';
+        path.style.strokeDashoffset = '0';
         el.classList.remove('is-loading', 'is-drawing');
         el.classList.add('is-live');
         const status = el.querySelector('.ar-card-status');
