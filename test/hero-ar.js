@@ -55,9 +55,9 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile() ? 1.25 
 renderer.setClearColor(0x000000, 0);
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-camera.position.set(0, 3.4, 6.2);
-camera.lookAt(0, 0.2, 0);
+const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
+camera.position.set(0, 3.2, 4.6);
+camera.lookAt(0, 0.05, 0);
 
 scene.add(new THREE.AmbientLight(0xf4f1ea, 0.9));
 const keyLight = new THREE.DirectionalLight(0xfff6e8, 0.85);
@@ -520,9 +520,9 @@ function frame() {
     if (!skipDeform) deform(t);
 
     if (!prefersReducedMotion()) {
-        camera.position.x = Math.sin(t * 0.08) * 0.28;
-        camera.position.y = 3.4 + Math.sin(t * 0.12) * 0.06;
-        camera.lookAt(0, 0.15, 0);
+        camera.position.x = Math.sin(t * 0.08) * 0.22;
+        camera.position.y = 3.2 + Math.sin(t * 0.12) * 0.05;
+        camera.lookAt(0, 0.05, 0);
     }
 
     renderer.render(scene, camera);

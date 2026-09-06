@@ -460,16 +460,18 @@
 
         .hero-canvas-wrap {
             position: absolute;
-            top: 0;
+            top: auto;
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             width: 100vw;
-            height: 100%;
+            height: 33.333%;
             z-index: 1;
             background:
-                radial-gradient(ellipse 70% 55% at 55% 58%, rgba(184, 115, 51, 0.12), transparent 70%),
-                radial-gradient(ellipse 50% 40% at 30% 40%, rgba(212, 160, 23, 0.08), transparent 65%),
-                var(--vellum-base, var(--vellum-base, #f4f1ea));
+                linear-gradient(to top, transparent 72%, var(--vellum-base, #f4f1ea) 100%),
+                radial-gradient(ellipse 80% 70% at 55% 70%, rgba(184, 115, 51, 0.14), transparent 72%),
+                radial-gradient(ellipse 55% 50% at 28% 55%, rgba(212, 160, 23, 0.09), transparent 68%),
+                var(--vellum-base, #f4f1ea);
             pointer-events: auto;
             overflow: hidden;
         }
@@ -1740,7 +1742,7 @@
                 left: 0;
                 transform: none;
                 width: 100%;
-                height: min(62vh, 520px);
+                height: min(34vh, 280px);
                 order: 3;
                 margin: 0.5rem 0 1rem;
             }
