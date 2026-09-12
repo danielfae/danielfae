@@ -1,5 +1,6 @@
 /**
  * Interactive Three.js hero surface + AR-style insight cards.
+ * Loaded on demand by hero-ar.js; the canvas fades in over the static poster after the first render.
  * Click mesh → reticle → tether → HUD card just above the surface band.
  * Max 4 cards; revisiting a card dismisses the old one and respawns at the new click.
  */
@@ -588,4 +589,6 @@ new IntersectionObserver(
 
 resize();
 frame();
+// First frame is on the canvas: swap the poster for the live scene
+wrap.dataset.hero = 'live';
 ripples.push({ x: 0.5, z: -0.4, t0: 0.2 });

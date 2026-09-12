@@ -472,11 +472,39 @@
             overflow: hidden;
         }
 
+        /* Static first frame of the scene: the hero until (or instead of) WebGL */
+        .hero-poster {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+
         .hero-canvas {
             display: block;
             width: 100%;
             height: 100%;
             touch-action: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease;
+        }
+
+        .hero-canvas-wrap[data-hero="live"] .hero-canvas {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hero-canvas-wrap[data-hero="live"] .hero-poster {
+            opacity: 0;
+        }
+
+        /* Nothing to click until the scene is live */
+        .hero-canvas-wrap:not([data-hero="live"]) .hero-surface-hint {
+            opacity: 0;
         }
 
         .hero-surface-hint {
@@ -948,7 +976,7 @@
             opacity: 0.05;
         }
 
-        .module-card h4 {
+        .module-card h3 {
             font-size: 1.5rem;
             margin: 1.5rem 0 1rem;
             z-index: 2;
@@ -1937,6 +1965,7 @@
         <header>
             <!-- Interactive WebGL hero surface -->
             <div class="hero-canvas-wrap" id="heroCanvasWrap" aria-label="Interactive product topology surface">
+                <img class="hero-poster" src="assets/hero-poster.webp" srcset="assets/hero-poster-1200.webp 1200w, assets/hero-poster.webp 2400w" sizes="100vw" width="2400" height="1000" alt="" fetchpriority="high">
                 <canvas id="heroCanvas" class="hero-canvas"></canvas>
                 <p class="hero-surface-hint" id="heroSurfaceHint">Click the surface to anchor an insight</p>
             </div>
@@ -2090,19 +2119,19 @@
                     <div class="module-card">
                         <div class="module-number">01</div>
                         <p class="mono">Strategy</p>
-                        <h4>What is worth building</h4>
+                        <h3>What is worth building</h3>
                         <p>As a product architect, I turn research, stakeholder tension, and domain constraints into a clear call on which features deserve to exist when coding is no longer the bottleneck. </p>
                     </div>
                     <div class="module-card">
                         <div class="module-number">02</div>
                         <p class="mono">Exploration</p>
-                        <h4>How it gets built</h4>
+                        <h3>How it gets built</h3>
                         <p>I prototype in code, sit across design and engineering, and collapse the distance between decision and execution. Judgment without the ability to build is only half the job.</p>
                     </div>
                     <div class="module-card">
                         <div class="module-number">03</div>
                         <p class="mono">Execution</p>
-                        <h4>What happens if it fails</h4>
+                        <h3>What happens if it fails</h3>
                         <p>Someone still has to care about the outcome. I keep monitoring product features through launch and use, validating whether each works, and learning when it is wrong and why.</p>
                     </div>
                 </div>
