@@ -42,6 +42,9 @@ if (!canvas || !wrap || !zone || !tetherSvg) {
     throw new Error('Hero AR: missing required DOM nodes');
 }
 
+// Yield after evaluating three so setup and shader compile land in separate tasks
+await new Promise((resolve) => setTimeout(resolve, 0));
+
 const isMobile = () => window.matchMedia('(max-width: 1024px)').matches;
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -588,6 +591,8 @@ new IntersectionObserver(
 ).observe(wrap);
 
 resize();
+// Compile shaders off the first frame where the browser supports parallel compile
+await renderer.compileAsync(scene, camera);
 frame();
 // First frame is on the canvas: swap the poster for the live scene
 wrap.dataset.hero = 'live';
