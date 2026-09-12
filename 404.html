@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page not found | Daniel Arevalo</title>
+    <meta name="description" content="This page does not exist on danielfae.com. Head back to the portfolio of Daniel Arevalo, Design Engineer &amp; Product Architect.">
+    <meta name="robots" content="noindex">
+    <!-- Root-relative URLs: GitHub Pages serves this file at any missing path depth -->
+    <link rel="icon" type="image/svg+xml" href="/favicon/ÆSquare.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/ÆSquare-32.png">
+    <link rel="apple-touch-icon" href="/favicon/ÆSquare-ios.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/name-mark.css">
+    <style>
+        :root {
+            --vellum-base: #f4f1ea;
+            --ink-deep: #1a1c1e;
+            --ink-faded: #4a4d52;
+            --etched-line: rgba(26, 28, 30, 0.15);
+            --hazard-amber: #d4a017;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--vellum-base);
+            color: var(--ink-deep);
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .vellum-texture {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0.06;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            mix-blend-mode: multiply;
+        }
+
+        .topbar,
+        main {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding-inline: 1.5rem;
+        }
+
+        .topbar {
+            padding-block: 2rem;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-block: 2rem 6rem;
+        }
+
+        .mono {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-faded);
+        }
+
+        .error-code {
+            border-left: 2px solid var(--hazard-amber);
+            padding-left: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        p.lede {
+            font-size: 1.15rem;
+            font-weight: 300;
+            color: var(--ink-faded);
+            max-width: 34rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 2rem;
+            border-top: 0.5px dashed var(--etched-line);
+            padding-top: 1.5rem;
+        }
+
+        .links a {
+            color: var(--ink-deep);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .links a:hover,
+        .links a:focus-visible {
+            color: var(--hazard-amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="vellum-texture"></div>
+
+    <div class="topbar">
+        <a href="/" class="name-mark" data-name-mark data-name="DANIEL AREVALO" aria-label="Daniel Arevalo, home">DANIEL AREVALO</a>
+    </div>
+
+    <main>
+        <p class="mono error-code">Error 404</p>
+        <h1>Page not found</h1>
+        <p class="lede">The page you are looking for does not exist or has moved. The portfolio, resume, and projects are all still here.</p>
+        <nav class="links" aria-label="Site">
+            <a href="/">Back to the portfolio →</a>
+            <a href="/resume.html">Resume →</a>
+            <a href="/projects.html">Projects →</a>
+        </nav>
+    </main>
+
+    <script src="/name-mark.js"></script>
+</body>
+</html>
