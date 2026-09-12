@@ -57,10 +57,10 @@ Pick this file up and work through the checklist below. Check items off as they'
 
 ## Phase 8 — Verification (do last)
 
-- [ ] Serve locally (see `DEVELOPMENT.md`) and inspect `<head>` on both pages for the new tags
+- [x] Serve locally (see `DEVELOPMENT.md`) and inspect `<head>` on both pages for the new tags
 - [ ] Test social preview (Slack / iMessage / LinkedIn link unfurl) on both `https://danielfae.com/` and `https://danielfae.com/resume.html`
-- [ ] Visit a nonsense URL on the live domain and confirm the branded 404 appears
-- [ ] Run a Lighthouse SEO audit on both pages
+- [x] Visit a nonsense URL on the live domain and confirm the branded 404 appears
+- [x] Run a Lighthouse SEO audit on both pages
 - [ ] Submit `sitemap.xml` in Search Console; confirm both URLs get discovered
 
 ## Status 2026-09-13 (branch `seo/robots-sitemap`, cut from the deployed `claude/main`)
@@ -74,4 +74,6 @@ GitHub Pages serves this site from **`claude/main`**, not `main` (local `main` i
 - Added `404.html` (noindex, root-relative asset URLs so it works at any missing path depth, not in the sitemap).
 - "How I Work" card titles changed from `<h4>` to `<h3>`; outline is now h1 → h2 → h3 with no skips.
 - Hero performance: `hero-ar.js` is now a small loader. A static poster (`assets/hero-poster.webp`, 2400×1000, plus `hero-poster-1200.webp`), rendered from the scene's own first frame, paints immediately. `hero-scene.js` (the former `hero-ar.js`) and `three` are dynamically imported after `load` + idle, then the canvas fades in over the poster. Under `prefers-reduced-motion: reduce` or `navigator.hardwareConcurrency < 4` three is never fetched and the poster stays as the hero. Local check: LCP is the `IMG.hero-poster` at 390px wide and the `<h1>` name on desktop (Chrome ignores the mostly-transparent full-width poster there); in both cases LCP no longer waits on three.js. To regenerate the poster after changing the scene, re-render its first frame at 2400×1000.
-- Remaining: verification (Phase 8): Lighthouse, live 404 check, social unfurls, Search Console.
+- Follow-up perf and a11y pass: fonts self-hosted in `assets/fonts` (was render-blocking Google Fonts CSS), resume photo is a 6 KB `assets/profile-photo-200.webp` (was a 1.4 MB PNG; the PNG is kept for docs), minified three build, hero startup split across tasks, amber intro links use `--hazard-amber-text` (#85620a) and resume `--text-muted` is #63666b to pass 4.5:1.
+- Live Lighthouse (mobile, 2026-09-13) before → after: home Performance 53 → 85, Accessibility 96 → 100, TBT 610 ms → 0; resume Performance 63 → 100, Accessibility 95 → 100. SEO and Best Practices 100 on both. Live `/this/does-not-exist` returns 404 with the branded page.
+- Remaining (needs the site owner): social unfurl check, Search Console / Bing sitemap submission.

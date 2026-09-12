@@ -57,6 +57,11 @@ a.name-mark:focus-visible {
     --arc-y: 0.42rem;
 }
 
+/* Drop the finished animation: Chrome otherwise keeps its start offset as page overflow */
+.name-mark.is-settled .name-mark__char {
+    animation: none;
+}
+
 @keyframes name-mark-slide {
     from {
         opacity: 0;

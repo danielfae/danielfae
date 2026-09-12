@@ -74,6 +74,13 @@
         });
 
         el.classList.add('is-ready');
+
+        const last = el.lastElementChild;
+        if (last) {
+            last.addEventListener('animationend', function () {
+                el.classList.add('is-settled');
+            }, { once: true });
+        }
     }
 
     function run() {
