@@ -218,6 +218,11 @@
             display: block;
         }
 
+        .favicon-list li[hidden],
+        .project-block[hidden] {
+            display: none !important;
+        }
+
         .project-shot {
             display: block;
             overflow: hidden;
@@ -575,7 +580,7 @@
         }
     </style>
     <script>
-        if (sessionStorage.getItem('projects-unlocked') === '1') {
+        if (sessionStorage.getItem('projects-unlocked') === '1' && sessionStorage.getItem('projects-portfolio')) {
             document.documentElement.classList.add('is-unlocked');
         }
     </script>
@@ -730,38 +735,91 @@
 
     <script>
         (function () {
-            // Any string in this list unlocks the Projects content.
-            const UNLOCK_PASSWORDS = [
-                "AlphaSense",
-                "AIPortfolio",
-            ];
+            // Access codes map to a portfolio view. Halliburton hides BiiO projects.
+            const PORTFOLIOS = {
+                AlphaSense: { exclude: [] },
+                AIPortfolio: { exclude: [] },
+                Halliburton: { exclude: ['biioroom', 'biiofit'] },
+            };
 
             const storageKey = 'projects-unlocked';
+            const portfolioKey = 'projects-portfolio';
             const form = document.getElementById('lockForm');
             const input = document.getElementById('projectPassword');
             const error = document.getElementById('lockError');
 
-            function unlock() {
+            let cards = [];
+            let blocks = [];
+            let ids = new Set();
+            let projectsReady = false;
+
+            function getPortfolioConfig(code) {
+                return Object.prototype.hasOwnProperty.call(PORTFOLIOS, code) ? PORTFOLIOS[code] : null;
+            }
+
+            function refreshCollections() {
+                cards = [...document.querySelectorAll('.favicon-card')].filter((card) => {
+                    const item = card.closest('li');
+                    return !item || !item.hidden;
+                });
+                blocks = [...document.querySelectorAll('.project-block')].filter((block) => !block.hidden);
+                ids = new Set(blocks.map((block) => block.id));
+            }
+
+            function applyPortfolioFilter(excludeIds) {
+                const exclude = new Set(excludeIds || []);
+                document.querySelectorAll('.favicon-card').forEach((card) => {
+                    const id = (card.getAttribute('href') || '').slice(1);
+                    const item = card.closest('li');
+                    if (item) item.hidden = exclude.has(id);
+                });
+                document.querySelectorAll('.project-block').forEach((block) => {
+                    const hidden = exclude.has(block.id);
+                    block.hidden = hidden;
+                    if (hidden) {
+                        block.classList.remove('is-active');
+                    }
+                });
+                refreshCollections();
+            }
+
+            function unlock(code) {
+                const config = getPortfolioConfig(code);
+                if (!config) return false;
+
                 document.documentElement.classList.add('is-unlocked');
                 sessionStorage.setItem(storageKey, '1');
+                sessionStorage.setItem(portfolioKey, code);
+                applyPortfolioFilter(config.exclude);
                 if (error) error.hidden = true;
                 if (input) input.value = '';
+
+                if (projectsReady && blocks.length) {
+                    const activeId = idFromHash();
+                    setActive(activeId, { alignLogo: true });
+                    syncHash(activeId);
+                }
+                return true;
             }
 
             function isAllowed(value) {
-                const code = value.trim();
-                return UNLOCK_PASSWORDS.some((password) => password && code === password);
+                return Boolean(getPortfolioConfig(value.trim()));
             }
 
-            if (sessionStorage.getItem(storageKey) === '1') {
-                unlock();
+            const savedCode = sessionStorage.getItem(portfolioKey);
+            if (sessionStorage.getItem(storageKey) === '1' && savedCode && getPortfolioConfig(savedCode)) {
+                unlock(savedCode);
+            } else {
+                sessionStorage.removeItem(storageKey);
+                sessionStorage.removeItem(portfolioKey);
+                refreshCollections();
             }
 
             if (form && input) {
                 form.addEventListener('submit', (event) => {
                     event.preventDefault();
-                    if (isAllowed(input.value)) {
-                        unlock();
+                    const code = input.value.trim();
+                    if (isAllowed(code) && unlock(code)) {
                         return;
                     }
                     if (error) error.hidden = false;
@@ -769,11 +827,7 @@
                 });
             }
 
-            const cards = [...document.querySelectorAll('.favicon-card')];
-            const blocks = [...document.querySelectorAll('.project-block')];
             if (!cards.length || !blocks.length) return;
-
-            const ids = new Set(blocks.map((block) => block.id));
             const logoCarousel = document.querySelector('[data-logo-carousel]');
             const logoList = document.querySelector('.favicon-list');
             const mobileQuery = window.matchMedia('(max-width: 1024px)');
@@ -1003,6 +1057,7 @@
             }
 
             setActive(idFromHash(), { alignLogo: true });
+            projectsReady = true;
 
             const observer = new IntersectionObserver((entries) => {
                 if (!isMobileLayout()) return;
